@@ -281,11 +281,11 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>最近在用 Python 写爬虫来下载漫画（见<a href="/tags/LANraragi/">之前几篇介绍 LANraragi 的文章</a>）。一本漫画的网页通常是这样的：</p>
+          <h1>序言</h1>
+<p>最近在用 Python 写爬虫来下载漫画（见<a href="/tags/LANraragi/">之前几篇介绍 LANraragi 的文章</a>）。一本漫画的网页通常是这样的：</p>
 <img src="/MarkDownImages/image-20240329132644183.png" alt="image-20240329132644183" style="zoom: 33%;" />
-
 <p>该网页上的所有数据可以用 BeautifulSoup 获得，而一个页面只需要一次通信。但是下载图片不一样，一张图片就需要一次通信，而且响应体往往很大。正如包子不会一个个地煮，图片也不用顺序地下载，否则太浪费时间了。</p>
-<p>AIOHTTP 是一个异步 HTTP 客户端&#x2F;服务端模块，很适合这一场景。通过异步编程，能够最大程度地榨取网络（和对方服务器）的性能。本文着眼于介绍 AIOHTTP 的基本使用和案例，不会详细阐述原理。</p>
+<p>AIOHTTP 是一个异步 HTTP 客户端/服务端模块，很适合这一场景。通过异步编程，能够最大程度地榨取网络（和对方服务器）的性能。本文着眼于介绍 AIOHTTP 的基本使用和案例，不会详细阐述原理。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2024/03/29/python-aiohttp-use/#more" rel="contents">
@@ -385,7 +385,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><blockquote>
+          <h1>题目</h1>
+<blockquote>
 <p>题目来源：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-postorder-traversal">889. 根据前序和后序遍历构造二叉树</a>（每日一题）</p>
 </blockquote>
 <blockquote>
@@ -500,8 +501,9 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>我使用 LANraragi 已经有一段时间了，期间发现了一些问题，都解决了，正好写一篇文章记录一下。读者可以参考我<a href="/2024/01/25/LANraragi-manga-server/">之前安装 LANraragi 的文章</a>。</p>
-<h1 id="问题1：挂载缩略图目录导致缩略图无法生成"><a href="#问题1：挂载缩略图目录导致缩略图无法生成" class="headerlink" title="问题1：挂载缩略图目录导致缩略图无法生成"></a>问题1：挂载缩略图目录导致缩略图无法生成</h1>
+          <h1>序言</h1>
+<p>我使用 LANraragi 已经有一段时间了，期间发现了一些问题，都解决了，正好写一篇文章记录一下。读者可以参考我<a href="/2024/01/25/LANraragi-manga-server/">之前安装 LANraragi 的文章</a>。</p>
+<h1>问题1：挂载缩略图目录导致缩略图无法生成</h1>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2024/02/20/LANraragi-Using-Experience/#more" rel="contents">
@@ -609,7 +611,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>Jellyfin 的设计理念是用户按照其媒体规则，创建对应层级的文件夹，放入媒体文件，再根据网络刮削器得到的元数据修改文件标题。但是这种规则过分强制了，以至于<strong>使用原始文件名作为标题</strong>的功能都没有。我们当然可以手动修改媒体标题，但这样太麻烦了。</p>
+          <h1>序言</h1>
+<p>Jellyfin 的设计理念是用户按照其媒体规则，创建对应层级的文件夹，放入媒体文件，再根据网络刮削器得到的元数据修改文件标题。但是这种规则过分强制了，以至于<strong>使用原始文件名作为标题</strong>的功能都没有。我们当然可以手动修改媒体标题，但这样太麻烦了。</p>
 <p>基于这种需求，我使用 <a target="_blank" rel="noopener" href="https://github.com/jellyfin/jellyfin-apiclient-python">jellyfin-apiclient-python</a> 写了一个脚本，来批量重命名某个媒体库下的所有媒体。同时，本文也列举了以往的一些方案。在我看来，以前的方案都不尽人意。</p>
           <!--noindex-->
             <div class="post-button">
@@ -718,7 +721,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><blockquote>
+          <h1>序言</h1>
+<blockquote>
 <p><a target="_blank" rel="noopener" href="https://jellyfin.org/">Jellyfin</a> 是一个开源的媒体服务器。我的用法是：在电脑上使用 qBittorrent 下载每日新番，启动 Jellyfin，然后在 iPad 上通过客户端看番。</p>
 </blockquote>
 <p>之前在 Windows 主机上安装了便捷版的 Jellyfin，因为 Linux 虚拟机没法使用显卡，无法硬件转码。后来发现，Android 和 IOS 的客户端支持大部分编码，服务器无需提供转码服务。正好我已经熟悉了 Jellyfin 的使用和配置，可以将 Jellyfin 迁移到 Docker 上去了。</p>

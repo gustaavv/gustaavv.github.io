@@ -22,17 +22,17 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"gustaavv.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#008000","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="序言在上一篇博文里，我成功搭建了 LANraragi 服务器，并且分享给了家庭局域网内的其他设备。但是，又产生了新的问题：  LANraragi 不需要登录就能访问其中的漫画； 就算 LANraragi 有登录的功能，用的也还是 HTTP 明文传输，相当于没有密码；  这些问题的根源是：可以联网的手机、智能家居都和 LANraragi 服务器在一个局域网内，这些设备并不可信，可能有后门（“用户自愿">
+    <meta name="description" content="序言 在上一篇博文里，我成功搭建了 LANraragi 服务器，并且分享给了家庭局域网内的其他设备。但是，又产生了新的问题：  LANraragi 不需要登录就能访问其中的漫画； 就算 LANraragi 有登录的功能，用的也还是 HTTP 明文传输，相当于没有密码；  这些问题的根源是：可以联网的手机、智能家居都和 LANraragi 服务器在一个局域网内，这些设备并不可信，可能有后门（“用户自">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在 Docker 中部署 Nginx，并在局域网配置 SSL 证书">
 <meta property="og:url" content="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/index.html">
 <meta property="og:site_name" content="Gustav&#39;s blog">
-<meta property="og:description" content="序言在上一篇博文里，我成功搭建了 LANraragi 服务器，并且分享给了家庭局域网内的其他设备。但是，又产生了新的问题：  LANraragi 不需要登录就能访问其中的漫画； 就算 LANraragi 有登录的功能，用的也还是 HTTP 明文传输，相当于没有密码；  这些问题的根源是：可以联网的手机、智能家居都和 LANraragi 服务器在一个局域网内，这些设备并不可信，可能有后门（“用户自愿">
+<meta property="og:description" content="序言 在上一篇博文里，我成功搭建了 LANraragi 服务器，并且分享给了家庭局域网内的其他设备。但是，又产生了新的问题：  LANraragi 不需要登录就能访问其中的漫画； 就算 LANraragi 有登录的功能，用的也还是 HTTP 明文传输，相当于没有密码；  这些问题的根源是：可以联网的手机、智能家居都和 LANraragi 服务器在一个局域网内，这些设备并不可信，可能有后门（“用户自">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20240131172736021.png">
-<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20240131172831043.png">
-<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/Screenshot_20240201_113254_Settings.png">
-<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/IMG_2032.PNG">
+<meta property="og:image" content="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/MarkDownImages/image-20240131172736021.png">
+<meta property="og:image" content="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/MarkDownImages/image-20240131172831043.png">
+<meta property="og:image" content="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/MarkDownImages/Screenshot_20240201_113254_Settings.png">
+<meta property="og:image" content="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/MarkDownImages/IMG_2032.PNG">
 <meta property="article:published_time" content="2024-01-31T06:03:43.000Z">
 <meta property="article:modified_time" content="2024-01-31T06:03:43.000Z">
 <meta property="article:author" content="Gustav">
@@ -40,7 +40,7 @@
 <meta property="article:tag" content="Nginx">
 <meta property="article:tag" content="SSL">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gustaavv.github.io/MarkDownImages/image-20240131172736021.png">
+<meta name="twitter:image" content="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/MarkDownImages/image-20240131172736021.png">
 
 
 <link rel="canonical" href="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/">
@@ -154,7 +154,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx-%E5%AE%B9%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">Nginx 容器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%BF%E5%88%B0%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">拿到默认配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-Compose"><span class="nav-number">2.2.</span> <span class="nav-text">Docker Compose</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SSL-%E8%AF%81%E4%B9%A6"><span class="nav-number">3.</span> <span class="nav-text">SSL 证书</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-CA"><span class="nav-number">3.1.</span> <span class="nav-text">创建 CA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E8%AF%81%E4%B9%A6%E4%BF%A1%E6%81%AF"><span class="nav-number">3.2.</span> <span class="nav-text">查看证书信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E4%BB%BB-CA"><span class="nav-number">3.3.</span> <span class="nav-text">信任 CA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows"><span class="nav-number">3.3.1.</span> <span class="nav-text">Windows</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android"><span class="nav-number">3.3.2.</span> <span class="nav-text">Android</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IOS"><span class="nav-number">3.3.3.</span> <span class="nav-text">IOS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AF%86%E9%92%A5"><span class="nav-number">3.4.</span> <span class="nav-text">创建服务器密钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8-CSR%EF%BC%88%E8%AF%81%E4%B9%A6%E7%AD%BE%E5%90%8D%E8%AF%B7%E6%B1%82%EF%BC%89"><span class="nav-number">3.5.</span> <span class="nav-text">创建服务器 CSR（证书签名请求）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CA-%E7%AD%BE%E5%AD%97"><span class="nav-number">3.6.</span> <span class="nav-text">CA 签字</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx-%E9%85%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">Nginx 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SSL"><span class="nav-number">4.1.</span> <span class="nav-text">SSL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Basic-Authentication"><span class="nav-number">4.2.</span> <span class="nav-text">Basic Authentication</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90%EF%BC%9ALanraragi"><span class="nav-number">5.</span> <span class="nav-text">例子：Lanraragi</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">Nginx 容器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%BF%E5%88%B0%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">拿到默认配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-Compose"><span class="nav-number">2.2.</span> <span class="nav-text">Docker Compose</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">SSL 证书</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-CA"><span class="nav-number">3.1.</span> <span class="nav-text">创建 CA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E8%AF%81%E4%B9%A6%E4%BF%A1%E6%81%AF"><span class="nav-number">3.2.</span> <span class="nav-text">查看证书信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E4%BB%BB-CA"><span class="nav-number">3.3.</span> <span class="nav-text">信任 CA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows"><span class="nav-number">3.3.1.</span> <span class="nav-text">Windows</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android"><span class="nav-number">3.3.2.</span> <span class="nav-text">Android</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IOS"><span class="nav-number">3.3.3.</span> <span class="nav-text">IOS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AF%86%E9%92%A5"><span class="nav-number">3.4.</span> <span class="nav-text">创建服务器密钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8-CSR%EF%BC%88%E8%AF%81%E4%B9%A6%E7%AD%BE%E5%90%8D%E8%AF%B7%E6%B1%82%EF%BC%89"><span class="nav-number">3.5.</span> <span class="nav-text">创建服务器 CSR（证书签名请求）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CA-%E7%AD%BE%E5%AD%97"><span class="nav-number">3.6.</span> <span class="nav-text">CA 签字</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">Nginx 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SSL"><span class="nav-number">4.1.</span> <span class="nav-text">SSL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Basic-Authentication"><span class="nav-number">4.2.</span> <span class="nav-text">Basic Authentication</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">例子：Lanraragi</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -314,7 +314,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>在上一篇博文里，我成功搭建了 LANraragi 服务器，并且分享给了家庭局域网内的其他设备。但是，又产生了新的问题：</p>
+    <div class="post-body" itemprop="articleBody"><h1>序言</h1>
+<p>在上一篇博文里，我成功搭建了 LANraragi 服务器，并且分享给了家庭局域网内的其他设备。但是，又产生了新的问题：</p>
 <ul>
 <li>LANraragi 不需要登录就能访问其中的漫画；</li>
 <li>就算 LANraragi 有登录的功能，用的也还是 HTTP 明文传输，相当于没有密码；</li>
@@ -327,108 +328,113 @@
 </ul>
 <p>因此，重点在于 Nginx 的配置和 SSL 证书的配置。麻烦之处在于，我要给内网 IP 请求证书，并且这个 IP 没有对应的域名。这篇文章探讨了这些解决方案，同时也是我第一次接触 Nginx 和 SSL 证书的配置。</p>
 <span id="more"></span>
-
-<h1 id="Nginx-容器"><a href="#Nginx-容器" class="headerlink" title="Nginx 容器"></a>Nginx 容器</h1><h2 id="拿到默认配置文件"><a href="#拿到默认配置文件" class="headerlink" title="拿到默认配置文件"></a>拿到默认配置文件</h2><p>创建一个临时的容器，从里面复制 <code>nginx.conf</code></p>
+<h1>Nginx 容器</h1>
+<h2 id="拿到默认配置文件">拿到默认配置文件</h2>
+<p>创建一个临时的容器，从里面复制 <code>nginx.conf</code></p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name tmp-nginx-container -d nginx:1.24</span><br><span class="line">docker <span class="built_in">cp</span> tmp-nginx-container:/etc/nginx/nginx.conf /opt/nginx.conf</span><br><span class="line">docker <span class="built_in">rm</span> -f tmp-nginx-container</span><br></pre></td></tr></table></figure>
-
-<h2 id="Docker-Compose"><a href="#Docker-Compose" class="headerlink" title="Docker Compose"></a>Docker Compose</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">nginx:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx:1.24</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/nginx_ssl:/etc/nginx/ssl/:ro</span></span><br><span class="line">    <span class="attr">network_mode:</span> <span class="string">bridge</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">50443</span><span class="string">:443</span></span><br></pre></td></tr></table></figure>
-
+<h2 id="Docker-Compose">Docker Compose</h2>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">nginx:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx:1.24</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/nginx_ssl:/etc/nginx/ssl/:ro</span></span><br><span class="line">    <span class="attr">network_mode:</span> <span class="string">bridge</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">50443</span><span class="string">:443</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>除了配置文件，还要映射一个目录，存放 SSL 私钥和证书；</li>
 <li>网络模式要选桥接，不然访问不了其他容器；</li>
 <li>只映射了 <code>443</code> 端口，不准备开放 <code>80</code> 端口 ；</li>
 </ul>
-<h1 id="SSL-证书"><a href="#SSL-证书" class="headerlink" title="SSL 证书"></a>SSL 证书</h1><h2 id="创建-CA"><a href="#创建-CA" class="headerlink" title="创建 CA"></a>创建 CA</h2><p>创建 CA 密钥 <code>myCAPK.key</code> 和（自签名）证书 <code>myCACertificate.crt</code> </p>
+<h1>SSL 证书</h1>
+<h2 id="创建-CA">创建 CA</h2>
+<p>创建 CA 密钥 <code>myCAPK.key</code> 和（自签名）证书 <code>myCACertificate.crt</code></p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -x509 -sha256 -nodes -days 3650 -newkey rsa:4096 -keyout myCAPK.key -out myCACertificate.crt</span><br></pre></td></tr></table></figure>
-
 <p>用这个命令生成的私钥和证书可以直接作为 Nginx 的 SSL 配置。但是，如果一个新的服务器也需要配置 SSL 证书，那么我们就需要手动让客户端设备信任这个新的证书，很麻烦。</p>
 <p>如果把这个证书用作 CA 证书，那么只要设备信任了这个证书，使用 CA 签字的所有其他证书就自动地被信任了。因此，设备上只要手动添加一次 CA 证书。</p>
-<h2 id="查看证书信息"><a href="#查看证书信息" class="headerlink" title="查看证书信息"></a>查看证书信息</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -text -noout -<span class="keyword">in</span> myCACertificate.crt</span><br></pre></td></tr></table></figure>
-
-<h2 id="信任-CA"><a href="#信任-CA" class="headerlink" title="信任 CA"></a>信任 CA</h2><p>这个 CA 证书是我们自己创建的，系统是肯定不认的，我们需要安装到系统中。</p>
+<h2 id="查看证书信息">查看证书信息</h2>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -text -noout -<span class="keyword">in</span> myCACertificate.crt</span><br></pre></td></tr></table></figure>
+<h2 id="信任-CA">信任 CA</h2>
+<p>这个 CA 证书是我们自己创建的，系统是肯定不认的，我们需要安装到系统中。</p>
 <p>如果没有这一步，浏览器可以建立 HTTPS 连接，但会提示连接不安全。</p>
-<h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><p>控制面板 | internet 选项 | 内容 | 证书 </p>
-<p><img src="/MarkDownImages/image-20240131172736021.png" alt="image-20240131172736021"></p>
+<h3 id="Windows">Windows</h3>
+<p>控制面板 | internet 选项 | 内容 | 证书</p>
+<p><img src="MarkDownImages/image-20240131172736021.png" alt="image-20240131172736021"></p>
 <p>以根证书颁发机构的身份信任 CA</p>
-<p><img src="/MarkDownImages/image-20240131172831043.png" alt="image-20240131172831043"></p>
-<h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><p>不同系统安装证书的位置不一样，但基本的选项是一样的。这里以三星为例：</p>
+<p><img src="MarkDownImages/image-20240131172831043.png" alt="image-20240131172831043"></p>
+<h3 id="Android">Android</h3>
+<p>不同系统安装证书的位置不一样，但基本的选项是一样的。这里以三星为例：</p>
 <p>要么选 『CA 证书』，要么选 『VPN 和 app 用户证书』。不要选『WLAN 证书』，这个没用。</p>
-<p><img src="/MarkDownImages/Screenshot_20240201_113254_Settings.png" alt="Screenshot_20240201_113254_Settings"></p>
-<h3 id="IOS"><a href="#IOS" class="headerlink" title="IOS"></a>IOS</h3><blockquote>
+<p><img src="MarkDownImages/Screenshot_20240201_113254_Settings.png" alt="Screenshot_20240201_113254_Settings"></p>
+<h3 id="IOS">IOS</h3>
+<blockquote>
 <p>这里以 iPadOS 15.7 为例</p>
 </blockquote>
 <ol>
-<li><p>打开 email，将 CA 证书作为附件发给自己；</p>
+<li>
+<p>打开 email，将 CA 证书作为附件发给自己；</p>
 </li>
-<li><p>用 Safari 浏览器登录邮箱，点击附件，选择“下载描述文件”（此时弹出提示，进入设置界面确认安装）；</p>
+<li>
+<p>用 Safari 浏览器登录邮箱，点击附件，选择“下载描述文件”（此时弹出提示，进入设置界面确认安装）；</p>
 </li>
-<li><p>进入设置，选择“安装描述文件”，输入锁屏密码；</p>
+<li>
+<p>进入设置，选择“安装描述文件”，输入锁屏密码；</p>
 </li>
-<li><p>设置 | 通用 | 关于本机 | 证书信任设置：开启完全信任</p>
-<p> <img src="/MarkDownImages/IMG_2032.PNG" alt="IMG_2032"></p>
+<li>
+<p>设置 | 通用 | 关于本机 | 证书信任设置：开启完全信任</p>
+<p><img src="MarkDownImages/IMG_2032.PNG" alt="IMG_2032"></p>
 </li>
 </ol>
 <hr>
 <p>根据苹果的<a target="_blank" rel="noopener" href="https://support.apple.com/en-us/102028">新政策</a>，服务器证书不能超过 398 天，否则 SSL 连接出错（<code>NET::ERR_CERT_VALIDITY_TOO_LONG</code>）</p>
-<h2 id="创建服务器密钥"><a href="#创建服务器密钥" class="headerlink" title="创建服务器密钥"></a>创建服务器密钥</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -out nginx_server.key 4096</span><br></pre></td></tr></table></figure>
-
-<h2 id="创建服务器-CSR（证书签名请求）"><a href="#创建服务器-CSR（证书签名请求）" class="headerlink" title="创建服务器 CSR（证书签名请求）"></a>创建服务器 CSR（证书签名请求）</h2><p>创建 <code>openssl.cnf</code>，内容如下：</p>
+<h2 id="创建服务器密钥">创建服务器密钥</h2>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -out nginx_server.key 4096</span><br></pre></td></tr></table></figure>
+<h2 id="创建服务器-CSR（证书签名请求）">创建服务器 CSR（证书签名请求）</h2>
+<p>创建 <code>openssl.cnf</code>，内容如下：</p>
 <figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">authorityKeyIdentifier</span>=<span class="string">keyid,issuer</span></span><br><span class="line"><span class="attr">basicConstraints</span>=<span class="string">CA:FALSE</span></span><br><span class="line"><span class="attr">subjectAltName</span> = <span class="string">@alt_names</span></span><br><span class="line"><span class="attr">[alt_names]</span></span><br><span class="line"><span class="comment"># 虚拟机</span></span><br><span class="line"><span class="attr">DNS.1</span> = <span class="string">CentOS100</span></span><br><span class="line"><span class="attr">IP.1</span> = <span class="string">192.168.169.132</span></span><br><span class="line"><span class="comment"># 主机</span></span><br><span class="line"><span class="attr">IP.2</span> = <span class="string">192.168.0.105</span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>这个文件的配置其实很复杂，但是对于这个案例，只需要这几个配置项。</p>
 </blockquote>
 <ul>
-<li><code>DNS.x</code> 对应主机名&#x2F;域名；</li>
+<li><code>DNS.x</code> 对应主机名/域名；</li>
 <li><code>IP.x</code> 对应 IP 地址；</li>
 </ul>
 <blockquote>
-<p> <code>x</code> 都是正整数</p>
+<p><code>x</code> 都是正整数</p>
 </blockquote>
 <p>这里使用配置文件的唯一目的：在 CA 签字时，将服务器的域名和 IP 与证书绑定，表示这个证书确实属于该服务器，而不是别人伪装的。如果没有这个配置，浏览器会提示错误：<code>NET::ERR_CERT_COMMON_NAME_INVALID</code>。</p>
 <p>使用如下命令：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -new -key nginx_server.key -out nginx_server.csr</span><br></pre></td></tr></table></figure>
-
-<h2 id="CA-签字"><a href="#CA-签字" class="headerlink" title="CA 签字"></a>CA 签字</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -req -extfile openssl.cnf  -<span class="keyword">in</span> nginx_server.csr -CA /opt/MyOwnCA/myCACertificate.crt -CAkey /opt/MyOwnCA/myCAPK.key -CAcreateserial -out nginx_server.crt -days 3650</span><br></pre></td></tr></table></figure>
-
+<h2 id="CA-签字">CA 签字</h2>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -req -extfile openssl.cnf  -<span class="keyword">in</span> nginx_server.csr -CA /opt/MyOwnCA/myCACertificate.crt -CAkey /opt/MyOwnCA/myCAPK.key -CAcreateserial -out nginx_server.crt -days 3650</span><br></pre></td></tr></table></figure>
 <p>签字完毕后，就有了最终需要的私钥 <code>nginx_server.key</code> 和证书 <code>nginx_server.crt</code>。</p>
-<h1 id="Nginx-配置"><a href="#Nginx-配置" class="headerlink" title="Nginx 配置"></a>Nginx 配置</h1><h2 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h2><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> default_server ssl http2;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">443</span> ssl http2;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/nginx/ssl/nginx_server.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/nginx/ssl/nginx_server.key;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> /... &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> ...;  </span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<h1>Nginx 配置</h1>
+<h2 id="SSL">SSL</h2>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> default_server ssl http2;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">443</span> ssl http2;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/nginx/ssl/nginx_server.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/nginx/ssl/nginx_server.key;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> /... &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> ...;  </span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>这只是最基本的配置，实际有更多 SSL 的配置，但目前够用了。</p>
 </blockquote>
-<h2 id="Basic-Authentication"><a href="#Basic-Authentication" class="headerlink" title="Basic Authentication"></a>Basic Authentication</h2><p>1️⃣首先要创建用户名和密码：</p>
+<h2 id="Basic-Authentication">Basic Authentication</h2>
+<p>1️⃣首先要创建用户名和密码：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 没有该文件就先创建一个</span></span><br><span class="line"><span class="built_in">touch</span> /opt/docker/nginx_auth/.htpasswd-lanraragi</span><br><span class="line"><span class="comment"># 向这个配置文件里添加 alpha 用户</span></span><br><span class="line">htpasswd /opt/docker/nginx_auth/.htpasswd-lanraragi alpha</span><br></pre></td></tr></table></figure>
-
 <p>然后系统提示给 <code>alpha</code> 用户设置密码。要填加多个用户，用相同命令即可：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">htpasswd /opt/docker/nginx_auth/.htpasswd-lanraragi beta</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>在 CentOS 中，<code>htpasswd </code> 命令属于 <code>httpd-tools</code> 。如果没有安装，系统会提示安装。</p>
 </blockquote>
 <hr>
 <p>2️⃣在 Nginx 中配置：</p>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">location</span> /api &#123;</span><br><span class="line">    <span class="attribute">auth_basic</span>           <span class="string">&quot;Administrator’s Area&quot;</span>;</span><br><span class="line">    <span class="attribute">auth_basic_user_file</span> /etc/nginx/.htpasswd; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><code>auth_basic</code> 在登录界面会提示用户；</li>
 <li><code>auth_basic_user_file</code> 指向之前创建的 <code>.htpasswd</code>；</li>
 </ul>
 <p>也可以全局启用，但在具体的路径里关闭认证：</p>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="attribute">auth_basic</span>           <span class="string">&quot;Administrator’s Area&quot;</span>;</span><br><span class="line">    <span class="attribute">auth_basic_user_file</span> conf/.htpasswd;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> /public/ &#123;</span><br><span class="line">      <span class="attribute">auth_basic</span> <span class="literal">off</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="例子：Lanraragi"><a href="#例子：Lanraragi" class="headerlink" title="例子：Lanraragi"></a>例子：Lanraragi</h1><p>回到最初的需求：反向代理 Lanraragi，并提供登录功能。</p>
+<h1>例子：Lanraragi</h1>
+<p>回到最初的需求：反向代理 Lanraragi，并提供登录功能。</p>
 <p>Docker compose:</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">nginx:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx:1.24</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">nginx-lanraragi</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/docker/nginx_conf/nginx-lanraragi.conf:/etc/nginx/nginx.conf:ro</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/docker/nginx_ssl:/etc/nginx/ssl/:ro</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/docker/nginx_auth:/etc/nginx/auth/:ro</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">43000</span><span class="string">:443</span></span><br><span class="line">  <span class="attr">lanraragi:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">difegue/lanraragi:v.0.9.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">lanraragi</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/mnt/hgfs/doujinshiArchives:/home/koyomi/lanraragi/content:ro</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">lanraragi-database:/home/koyomi/lanraragi/database</span></span><br><span class="line">    <span class="attr">depends_on:</span> </span><br><span class="line">      <span class="bullet">-</span> <span class="string">nginx</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">lanraragi-database:</span></span><br></pre></td></tr></table></figure>
-
 <p>Nginx 配置：</p>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">user</span>  nginx;</span><br><span class="line"><span class="attribute">worker_processes</span>  auto;</span><br><span class="line"></span><br><span class="line"><span class="attribute">error_log</span>  /var/log/nginx/<span class="literal">error</span>.log <span class="literal">notice</span>;</span><br><span class="line"><span class="attribute">pid</span>        /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line"><span class="section">events</span> &#123;</span><br><span class="line">    <span class="attribute">worker_connections</span>  <span class="number">1024</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">include</span>       /etc/nginx/mime.types;</span><br><span class="line">    <span class="attribute">default_type</span>  application/octet-stream;</span><br><span class="line">    </span><br><span class="line">    <span class="attribute">log_format</span>  main  <span class="string">&#x27;<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] &quot;<span class="variable">$request</span>&quot; &#x27;</span></span><br><span class="line">                      <span class="string">&#x27;<span class="variable">$status</span> <span class="variable">$body_bytes_sent</span> &quot;<span class="variable">$http_referer</span>&quot; &#x27;</span></span><br><span class="line">                      <span class="string">&#x27;&quot;<span class="variable">$http_user_agent</span>&quot; &quot;<span class="variable">$http_x_forwarded_for</span>&quot;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">access_log</span>  /var/log/nginx/access.log  main;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">sendfile</span>        <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">keepalive_timeout</span>  <span class="number">65</span>;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span> <span class="number">443</span> default_server ssl http2;</span><br><span class="line">        <span class="attribute">listen</span> [::]:<span class="number">443</span> ssl http2;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">ssl_certificate</span> /etc/nginx/ssl/nginx_server.crt;</span><br><span class="line">        <span class="attribute">ssl_certificate_key</span> /etc/nginx/ssl/nginx_server.key;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">auth_basic</span>           <span class="string">&quot;Login to view any content&quot;</span>;</span><br><span class="line">        <span class="attribute">auth_basic_user_file</span> /etc/nginx/auth/.htpasswd-lanraragi;</span><br><span class="line"></span><br><span class="line">        <span class="section">location</span> / &#123;</span><br><span class="line">            <span class="comment"># 在同一个网络中，直接通过服务名访问</span></span><br><span class="line">            <span class="comment"># lanraragi 也不需要映射任何端口</span></span><br><span class="line">            <span class="attribute">proxy_pass</span> http://lanraragi:3000;</span><br><span class="line">            <span class="attribute">proxy_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">            <span class="attribute">proxy_set_header</span> Upgrade <span class="variable">$http_upgrade</span>;</span><br><span class="line">            <span class="attribute">http2_push_preload</span> <span class="literal">on</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>Lanraragi 本身的路由策略没法改，这意味着必须把 <code>/</code> 原封不动地映射到 Lanraragi 的 URI。也就是说，需要给 Lanraragi 一个单独的 Nginx 实例。</p>
 <p>从计算资源的角度，问题并不大，因为一个 Nginx 实例占用不到 20 MB 的内存。</p>
-<p>如果给每个现有的软件都用一个 Nginx ，那么这些 Nginx 实例可以共享一个 SSL 证书。毕竟访问 Linux 主机时，是通过端口区分 Nginx，而证书是和 IP &#x2F; 域名 绑定的。尽管可以这么做，我不太清楚这是不是最佳实践。但在家庭局域网的场景中，这显然够用了。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<p>如果给每个现有的软件都用一个 Nginx ，那么这些 Nginx 实例可以共享一个 SSL 证书。毕竟访问 Linux 主机时，是通过端口区分 Nginx，而证书是和 IP / 域名 绑定的。尽管可以这么做，我不太清楚这是不是最佳实践。但在家庭局域网的场景中，这显然够用了。</p>
+<h1>参考</h1>
+<ul>
 <li>ChatGPT</li>
 <li><a target="_blank" rel="noopener" href="https://mindsers.blog/en/post/https-using-nginx-certbot-docker/">HTTPS using Nginx and Let’s encrypt in Docker</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.baeldung.com/openssl-self-signed-cert">Creating a Self-Signed Certificate With OpenSSL</a></li>
@@ -437,7 +443,7 @@
 <li><a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-in-ubuntu-16-04">How To Create a Self-Signed SSL Certificate for Nginx in Ubuntu 16.04</a></li>
 <li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/10175812/how-to-generate-a-self-signed-ssl-certificate-using-openssl">How to generate a self-signed SSL certificate using OpenSSL?</a></li>
 <li><a target="_blank" rel="noopener" href="https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-http-basic-authentication/">Restricting Access with HTTP Basic Authentication</a></li>
-<li><a target="_blank" rel="noopener" href="https://support.hcltechsw.com/csm?id=kb_article&sysparm_article=KB0098768">在iOS设备上安装根证书(CA)</a></li>
+<li><a target="_blank" rel="noopener" href="https://support.hcltechsw.com/csm?id=kb_article&amp;sysparm_article=KB0098768">在iOS设备上安装根证书(CA)</a></li>
 <li><a target="_blank" rel="noopener" href="https://discussions.apple.com/thread/253667401?sortBy=best">Enabling self-signed certificates in iOS 15</a></li>
 <li><a target="_blank" rel="noopener" href="https://support.apple.com/en-us/102028">Apple: About upcoming limits on trusted certificates</a></li>
 </ul>

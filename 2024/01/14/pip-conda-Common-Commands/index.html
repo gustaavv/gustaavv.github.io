@@ -22,12 +22,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"gustaavv.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#008000","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="pip 安装 script-house，版本为 0.0.2  1pip install script-house&#x3D;&#x3D;0.0.2   如果默认安装最新版，则不需要写 &#x3D;&#x3D;0.0.2  所有要安装的依赖也可以写在一行：  1pip install script-house&#x3D;&#x3D;0.0.2 pydantic&#x3D;&#x3D;2.5.3 pymongo&#x3D;&#x3D;4.6.1">
+    <meta name="description" content="pip   安装 script-house，版本为 0.0.2  1pip install script-house&#x3D;&#x3D;0.0.2 如果默认安装最新版，则不需要写 &#x3D;&#x3D;0.0.2 所有要安装的依赖也可以写在一行：  1pip install script-house&#x3D;&#x3D;0.0.2 pydantic&#x3D;&#x3D;2.5.3 pymongo&#x3D;&#x3D;4.6.1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pip &amp; conda 常用指令">
 <meta property="og:url" content="https://gustaavv.github.io/2024/01/14/pip-conda-Common-Commands/index.html">
 <meta property="og:site_name" content="Gustav&#39;s blog">
-<meta property="og:description" content="pip 安装 script-house，版本为 0.0.2  1pip install script-house&#x3D;&#x3D;0.0.2   如果默认安装最新版，则不需要写 &#x3D;&#x3D;0.0.2  所有要安装的依赖也可以写在一行：  1pip install script-house&#x3D;&#x3D;0.0.2 pydantic&#x3D;&#x3D;2.5.3 pymongo&#x3D;&#x3D;4.6.1">
+<meta property="og:description" content="pip   安装 script-house，版本为 0.0.2  1pip install script-house&#x3D;&#x3D;0.0.2 如果默认安装最新版，则不需要写 &#x3D;&#x3D;0.0.2 所有要安装的依赖也可以写在一行：  1pip install script-house&#x3D;&#x3D;0.0.2 pydantic&#x3D;&#x3D;2.5.3 pymongo&#x3D;&#x3D;4.6.1">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-01-14T07:26:28.000Z">
 <meta property="article:modified_time" content="2024-01-14T07:26:28.000Z">
@@ -149,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pip"><span class="nav-number">1.</span> <span class="nav-text">pip</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#conda"><span class="nav-number">2.</span> <span class="nav-text">conda</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">pip</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">conda</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -306,80 +306,92 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="pip"><a href="#pip" class="headerlink" title="pip"></a>pip</h1><ol>
-<li><p>安装 <code>script-house</code>，版本为 <code>0.0.2</code></p>
+    <div class="post-body" itemprop="articleBody"><h1>pip</h1>
+<ol>
+<li>
+<p>安装 <code>script-house</code>，版本为 <code>0.0.2</code></p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install script-house==0.0.2</span><br></pre></td></tr></table></figure>
-
-<p> 如果默认安装最新版，则不需要写 <code>==0.0.2</code></p>
-<p> 所有要安装的依赖也可以写在一行：</p>
- <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install script-house==0.0.2 pydantic==2.5.3 pymongo==4.6.1</span><br></pre></td></tr></table></figure></li>
+<p>如果默认安装最新版，则不需要写 <code>==0.0.2</code></p>
+<p>所有要安装的依赖也可以写在一行：</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install script-house==0.0.2 pydantic==2.5.3 pymongo==4.6.1</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
 <span id="more"></span>
-
 <ol start="2">
-<li><p>列出所有依赖</p>
+<li>
+<p>列出所有依赖</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip list</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>以 <code>requirements.txt</code> 的格式列出当前依赖</p>
+<li>
+<p>以 <code>requirements.txt</code> 的格式列出当前依赖</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip freeze</span><br></pre></td></tr></table></figure>
-
-<p> <code>pip freeze</code> 的结果是 <code>pip list</code> 的子集。<code>pip list</code> 通常还包括 <code>pip</code> 、<code>setuptools</code> 和 <code>wheel</code> 这些基础依赖；</p>
-<p> <code>pip freeze</code> 的目的是导出该项目的依赖，方便他人使用。而 <code>pip list</code> 仅仅只是展示。</p>
+<p><code>pip freeze</code> 的结果是 <code>pip list</code> 的子集。<code>pip list</code> 通常还包括 <code>pip</code> 、<code>setuptools</code> 和 <code>wheel</code> 这些基础依赖；</p>
+<p><code>pip freeze</code> 的目的是导出该项目的依赖，方便他人使用。而 <code>pip list</code> 仅仅只是展示。</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip freeze &gt; requirements.txt</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>从 <code>requirements.txt</code> 中安装所有依赖</p>
+<li>
+<p>从 <code>requirements.txt</code> 中安装所有依赖</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>删除某一依赖</p>
+<li>
+<p>删除某一依赖</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip uninstall script-house</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>删除某些依赖</p>
+<li>
+<p>删除某些依赖</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip uninstall -r req.txt -y</span><br></pre></td></tr></table></figure>
-
-<p> <code>-y</code> 表示自动确认删除</p>
-<p> 如何删除当前环境的所有依赖？</p>
- <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip freeze &gt; req</span><br><span class="line">pip uninstall <span class="literal">-r</span> req <span class="literal">-y</span></span><br><span class="line"><span class="built_in">del</span> req</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h1 id="conda"><a href="#conda" class="headerlink" title="conda"></a>conda</h1><ol>
-<li><p>在 Linux 安装好 conda，通常需要先执行  <code>conda init</code>，才能使用 conda 命令</p>
+<p><code>-y</code> 表示自动确认删除</p>
+<p>如何删除当前环境的所有依赖？</p>
+ <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip freeze &gt; req</span><br><span class="line">pip uninstall <span class="literal">-r</span> req <span class="literal">-y</span></span><br><span class="line"><span class="built_in">del</span> req</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>列出所有环境</p>
+</ol>
+<h1>conda</h1>
+<ol>
+<li>
+<p>在 Linux 安装好 conda，通常需要先执行  <code>conda init</code>，才能使用 conda 命令</p>
+</li>
+<li>
+<p>列出所有环境</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda <span class="built_in">env</span> list</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>新建环境</p>
+<li>
+<p>新建环境</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda create -n &lt;环境名&gt; python=3.8</span><br></pre></td></tr></table></figure>
-
-<p> 基本命令就是 <code>conda create -n &lt;环境名&gt;</code>，但通常要指定 python 版本。相比 venv，conda 环境会额外安装 OS 相关的一些基础依赖。</p>
+<p>基本命令就是 <code>conda create -n &lt;环境名&gt;</code>，但通常要指定 python 版本。相比 venv，conda 环境会额外安装 OS 相关的一些基础依赖。</p>
 </li>
-<li><p>进入环境</p>
+<li>
+<p>进入环境</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda activate &lt;环境名&gt;</span><br></pre></td></tr></table></figure>
-
-<p> 如果是 Windows，不需要写 <code>conda</code></p>
+<p>如果是 Windows，不需要写 <code>conda</code></p>
 </li>
-<li><p>退出环境</p>
+<li>
+<p>退出环境</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda deactivate</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>删除环境</p>
+<li>
+<p>删除环境</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda remove -n &lt;环境名&gt; --all</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>查看基本信息</p>
+<li>
+<p>查看基本信息</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda info</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>安装依赖</p>
+<li>
+<p>安装依赖</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 -c pytorch -c conda-forge</span><br></pre></td></tr></table></figure>
-
-<p> 和 pip 类似，也是 <code>依赖==版本号</code>的形式 ；<code>-c</code> 参数是指定下载源（channel），因为默认 channel 经常会查找失败</p>
+<p>和 pip 类似，也是 <code>依赖==版本号</code>的形式 ；<code>-c</code> 参数是指定下载源（channel），因为默认 channel 经常会查找失败</p>
 </li>
-<li><p>从配置文件（通常叫 <code>environment.yml</code> ）中创建环境：</p>
+<li>
+<p>从配置文件（通常叫 <code>environment.yml</code> ）中创建环境：</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda <span class="built_in">env</span> create -f environment.yml</span><br></pre></td></tr></table></figure>
-
-<p> 配置文件内容：</p>
+<p>配置文件内容：</p>
  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">&lt;环境名&gt;</span></span><br><span class="line"><span class="attr">channels:</span> <span class="comment"># -c 参数，指定下载源</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">pytorch</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">conda-forge</span></span><br><span class="line"><span class="attr">dependencies:</span> <span class="comment"># dependencies 默认用 conda install</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">python=3.8</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">numpy</span> </span><br><span class="line">  <span class="bullet">-</span> <span class="string">pandas</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">matplotlib</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">pip:</span> <span class="comment"># 下面的依赖用 pip install </span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">imageio</span></span><br></pre></td></tr></table></figure>
-
-<p> 根据经验，不建议通过这种方式安装，因为 channel 不一定靠谱</p>
+<p>根据经验，不建议通过这种方式安装，因为 channel 不一定靠谱</p>
 </li>
-<li><p>关闭自动进入 base 环境。如果开启，每个新建的 shell 都会自动进入 base 环境。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda config --<span class="built_in">set</span> auto_activate_base <span class="literal">false</span></span><br></pre></td></tr></table></figure></li>
+<li>
+<p>关闭自动进入 base 环境。如果开启，每个新建的 shell 都会自动进入 base 环境。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda config --<span class="built_in">set</span> auto_activate_base <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+</li>
 </ol>
 
     </div>

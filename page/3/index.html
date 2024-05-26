@@ -281,7 +281,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>在上一篇博文里，我成功搭建了 LANraragi 服务器，并且分享给了家庭局域网内的其他设备。但是，又产生了新的问题：</p>
+          <h1>序言</h1>
+<p>在上一篇博文里，我成功搭建了 LANraragi 服务器，并且分享给了家庭局域网内的其他设备。但是，又产生了新的问题：</p>
 <ul>
 <li>LANraragi 不需要登录就能访问其中的漫画；</li>
 <li>就算 LANraragi 有登录的功能，用的也还是 HTTP 明文传输，相当于没有密码；</li>
@@ -400,12 +401,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>最近在研究家庭媒体库，教程大多以 NAS 为主机，实际上大多数软件都跑在 Docker 上。</p>
-<p>现在有如下看漫画&#x2F;同人志的需求：</p>
+          <h1>序言</h1>
+<p>最近在研究家庭媒体库，教程大多以 NAS 为主机，实际上大多数软件都跑在 Docker 上。</p>
+<p>现在有如下看漫画/同人志的需求：</p>
 <ul>
 <li>电脑上存有大量的漫画的压缩包，想要各种设备能访问这些资源。—— 服务端软件，能够以 HTTP 的方式传输图片。</li>
 <li>漫画的目录管理以我为主，而不能以服务端软件的规则为主。</li>
-<li>手机 &#x2F; pad 浏览漫画时，操作方便易用。—— 客户端好用，或者直接提供 web 端。</li>
+<li>手机 / pad 浏览漫画时，操作方便易用。—— 客户端好用，或者直接提供 web 端。</li>
 <li>客户端有随机选择漫画功能。—— 收集的漫画太多了，出于消磨时间的目的，随便挑一本看最方便。</li>
 </ul>
 <p>综上，我选择了 <a target="_blank" rel="noopener" href="https://github.com/Difegue/LANraragi">LANraragi</a>。尽管 <a target="_blank" rel="noopener" href="https://komga.org/">Komga</a>、<a target="_blank" rel="noopener" href="https://www.kavitareader.com/#home">Kavita</a> 和 <a target="_blank" rel="noopener" href="https://github.com/Suwayomi/Tachidesk-Sorayomi">Tachidesk (Sorayomi)</a> 也都是开源的漫画服务器，但都不尽如人意。</p>
@@ -517,13 +519,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="pip"><a href="#pip" class="headerlink" title="pip"></a>pip</h1><ol>
-<li><p>安装 <code>script-house</code>，版本为 <code>0.0.2</code></p>
+          <h1>pip</h1>
+<ol>
+<li>
+<p>安装 <code>script-house</code>，版本为 <code>0.0.2</code></p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install script-house==0.0.2</span><br></pre></td></tr></table></figure>
-
-<p> 如果默认安装最新版，则不需要写 <code>==0.0.2</code></p>
-<p> 所有要安装的依赖也可以写在一行：</p>
- <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install script-house==0.0.2 pydantic==2.5.3 pymongo==4.6.1</span><br></pre></td></tr></table></figure></li>
+<p>如果默认安装最新版，则不需要写 <code>==0.0.2</code></p>
+<p>所有要安装的依赖也可以写在一行：</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install script-house==0.0.2 pydantic==2.5.3 pymongo==4.6.1</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
           <!--noindex-->
             <div class="post-button">
@@ -628,7 +632,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>VS Code 的 Remote SSH 插件提供了远程连接其他主机的功能。连接就需要用户名和密码，而密钥可以在每次登录时不输入密码、直接登录。</p>
+          <h1>序言</h1>
+<p>VS Code 的 Remote SSH 插件提供了远程连接其他主机的功能。连接就需要用户名和密码，而密钥可以在每次登录时不输入密码、直接登录。</p>
 <p>但是，VS Code 实际上只是提供了 GUI，而 SSH 如何使用密钥登录，则是另一码事。两者不应该混为一谈。</p>
 <p>本文将主要讲解 SSH 密钥在本机和远程机器上如何配置。之后，讲解 VS Code Remote SSH 插件的使用。</p>
           <!--noindex-->
@@ -734,12 +739,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>Python 以其模块丰富而著称。但是，不同于 Java 开发中 Maven 使用 group Id、artifact Id 和 version 来唯一确定一个依赖。在实践中，绝大多数 Python 项目<strong>只</strong>通过模块名来区分模块。<code>pip install &lt;module&gt;</code>，一个模块就装好了。那么模块的版本呢？大部分项目的 requirements 都不会提及版本，造成后来者跑项目时不停地报错。</p>
+          <h1>序言</h1>
+<p>Python 以其模块丰富而著称。但是，不同于 Java 开发中 Maven 使用 group Id、artifact Id 和 version 来唯一确定一个依赖。在实践中，绝大多数 Python 项目<strong>只</strong>通过模块名来区分模块。<code>pip install &lt;module&gt;</code>，一个模块就装好了。那么模块的版本呢？大部分项目的 requirements 都不会提及版本，造成后来者跑项目时不停地报错。</p>
 <p>因此，弱化版本号的概念无疑<strong>弊大于利</strong>。如何解决？使用 venv（虚拟环境）。</p>
 <p>如果直接使用 <code>pip install</code> ，那么所有 Python 项目共用这些模块，会产生版本会兼容。venv 将原始的 Python 环境拷贝一份。虚拟环境的运行只依赖于拷贝后的 Python，安装的模块也只会存在于该虚拟环境中。多个虚拟环境间相互隔离。</p>
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>1️⃣创建  venv :</p>
+<h1>使用</h1>
+<p>1️⃣创建  venv :</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python <span class="literal">-m</span> venv C:\Users\Gustav\Desktop\test\venv</span><br></pre></td></tr></table></figure>
-
 <p><code>C:\Users\Gustav\Desktop\test\venv</code> 目录就是该虚拟环境</p>
           <!--noindex-->
             <div class="post-button">

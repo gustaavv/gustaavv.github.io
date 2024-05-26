@@ -22,16 +22,16 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"gustaavv.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#008000","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="序言VS Code 的 Remote SSH 插件提供了远程连接其他主机的功能。连接就需要用户名和密码，而密钥可以在每次登录时不输入密码、直接登录。 但是，VS Code 实际上只是提供了 GUI，而 SSH 如何使用密钥登录，则是另一码事。两者不应该混为一谈。 本文将主要讲解 SSH 密钥在本机和远程机器上如何配置。之后，讲解 VS Code Remote SSH 插件的使用。">
+    <meta name="description" content="序言 VS Code 的 Remote SSH 插件提供了远程连接其他主机的功能。连接就需要用户名和密码，而密钥可以在每次登录时不输入密码、直接登录。 但是，VS Code 实际上只是提供了 GUI，而 SSH 如何使用密钥登录，则是另一码事。两者不应该混为一谈。 本文将主要讲解 SSH 密钥在本机和远程机器上如何配置。之后，讲解 VS Code Remote SSH 插件的使用。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VS Code Remote SSH 密钥登录">
 <meta property="og:url" content="https://gustaavv.github.io/2024/01/01/VS-Code-Remote-SSH-Login-By-Key/index.html">
 <meta property="og:site_name" content="Gustav&#39;s blog">
-<meta property="og:description" content="序言VS Code 的 Remote SSH 插件提供了远程连接其他主机的功能。连接就需要用户名和密码，而密钥可以在每次登录时不输入密码、直接登录。 但是，VS Code 实际上只是提供了 GUI，而 SSH 如何使用密钥登录，则是另一码事。两者不应该混为一谈。 本文将主要讲解 SSH 密钥在本机和远程机器上如何配置。之后，讲解 VS Code Remote SSH 插件的使用。">
+<meta property="og:description" content="序言 VS Code 的 Remote SSH 插件提供了远程连接其他主机的功能。连接就需要用户名和密码，而密钥可以在每次登录时不输入密码、直接登录。 但是，VS Code 实际上只是提供了 GUI，而 SSH 如何使用密钥登录，则是另一码事。两者不应该混为一谈。 本文将主要讲解 SSH 密钥在本机和远程机器上如何配置。之后，讲解 VS Code Remote SSH 插件的使用。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20240101130622357.png">
-<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20240101130733756.png">
-<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20240101130804525.png">
+<meta property="og:image" content="https://gustaavv.github.io/2024/01/01/VS-Code-Remote-SSH-Login-By-Key/MarkDownImages/image-20240101130622357.png">
+<meta property="og:image" content="https://gustaavv.github.io/2024/01/01/VS-Code-Remote-SSH-Login-By-Key/MarkDownImages/image-20240101130733756.png">
+<meta property="og:image" content="https://gustaavv.github.io/2024/01/01/VS-Code-Remote-SSH-Login-By-Key/MarkDownImages/image-20240101130804525.png">
 <meta property="article:published_time" content="2024-01-01T04:27:56.000Z">
 <meta property="article:modified_time" content="2024-01-01T04:27:56.000Z">
 <meta property="article:author" content="Gustav">
@@ -39,7 +39,7 @@
 <meta property="article:tag" content="VS Code">
 <meta property="article:tag" content="SSH">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gustaavv.github.io/MarkDownImages/image-20240101130622357.png">
+<meta name="twitter:image" content="https://gustaavv.github.io/2024/01/01/VS-Code-Remote-SSH-Login-By-Key/MarkDownImages/image-20240101130622357.png">
 
 
 <link rel="canonical" href="https://gustaavv.github.io/2024/01/01/VS-Code-Remote-SSH-Login-By-Key/">
@@ -153,7 +153,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E6%9C%BA-SSH-%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">本机 SSH 配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E4%B8%BB%E6%9C%BA-SSH-%E9%85%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">远程主机 SSH 配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">5.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VS-Code-%E9%85%8D%E7%BD%AE"><span class="nav-number">6.</span> <span class="nav-text">VS Code 配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">本机 SSH 配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">远程主机 SSH 配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">6.</span> <span class="nav-text">VS Code 配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -289,35 +289,40 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>VS Code 的 Remote SSH 插件提供了远程连接其他主机的功能。连接就需要用户名和密码，而密钥可以在每次登录时不输入密码、直接登录。</p>
+    <div class="post-body" itemprop="articleBody"><h1>序言</h1>
+<p>VS Code 的 Remote SSH 插件提供了远程连接其他主机的功能。连接就需要用户名和密码，而密钥可以在每次登录时不输入密码、直接登录。</p>
 <p>但是，VS Code 实际上只是提供了 GUI，而 SSH 如何使用密钥登录，则是另一码事。两者不应该混为一谈。</p>
 <p>本文将主要讲解 SSH 密钥在本机和远程机器上如何配置。之后，讲解 VS Code Remote SSH 插件的使用。</p>
 <span id="more"></span>
-
-<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><ul>
+<h1>环境</h1>
+<ul>
 <li>本机：Windows 10</li>
 <li>远程机器：本地虚拟机 CentOS 8，root 用户</li>
 </ul>
-<h1 id="本机-SSH-配置"><a href="#本机-SSH-配置" class="headerlink" title="本机 SSH 配置"></a>本机 SSH 配置</h1><p>使用 <code>ssh-keygen</code> 命令，会在 <code>C:\users\&lt;user&gt;\.ssh</code> 目录下创建<strong>本机</strong>的 RSA 公私钥：</p>
+<h1>本机 SSH 配置</h1>
+<p>使用 <code>ssh-keygen</code> 命令，会在 <code>C:\users\&lt;user&gt;\.ssh</code> 目录下创建<strong>本机</strong>的 RSA 公私钥：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Users\Gustav\.ssh&gt; <span class="built_in">dir</span></span><br><span class="line">    目录: C:\Users\Gustav\.ssh</span><br><span class="line">Mode                 LastWriteTime         Length Name</span><br><span class="line"><span class="literal">----</span>                 <span class="literal">-------------</span>         <span class="literal">------</span> <span class="literal">----</span></span><br><span class="line"><span class="literal">-a----</span>          <span class="number">2024</span>/<span class="number">1</span>/<span class="number">1</span>     <span class="number">12</span>:<span class="number">26</span>             <span class="number">91</span> config</span><br><span class="line"><span class="literal">-a----</span>         <span class="number">2023</span>/<span class="number">9</span>/<span class="number">30</span>     <span class="number">18</span>:<span class="number">03</span>           <span class="number">2610</span> id_rsa</span><br><span class="line"><span class="literal">-a----</span>         <span class="number">2023</span>/<span class="number">9</span>/<span class="number">30</span>     <span class="number">18</span>:<span class="number">03</span>            <span class="number">576</span> id_rsa.pub</span><br><span class="line"><span class="literal">-a----</span>        <span class="number">2023</span>/<span class="number">12</span>/<span class="number">18</span>     <span class="number">20</span>:<span class="number">42</span>           <span class="number">1398</span> known_hosts</span><br><span class="line"><span class="literal">-a----</span>         <span class="number">2023</span>/<span class="number">9</span>/<span class="number">30</span>     <span class="number">18</span>:<span class="number">03</span>             <span class="number">92</span> known_hosts.old</span><br></pre></td></tr></table></figure>
-
 <p><code>id_rsa</code> 是私钥，<code>id_rsa.pub</code> 是公钥</p>
-<h1 id="远程主机-SSH-配置"><a href="#远程主机-SSH-配置" class="headerlink" title="远程主机 SSH 配置"></a>远程主机 SSH 配置</h1><p>将<strong>本机</strong>的 <code>id_rsa.pub</code> 上传到 Linux 远程主机的 <code>~/ssh</code> 目录，并改名为 <code>authorized_keys</code></p>
+<h1>远程主机 SSH 配置</h1>
+<p>将<strong>本机</strong>的 <code>id_rsa.pub</code> 上传到 Linux 远程主机的 <code>~/ssh</code> 目录，并改名为 <code>authorized_keys</code></p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@CentOS100 .ssh]<span class="comment"># ll</span></span><br><span class="line">total 16</span><br><span class="line">-rw-r--r--. 1 root root 576 Jan  1 11:50 authorized_keys</span><br><span class="line">-rw-------. 1 root root 411 Jul  1  2023 id_ed25519</span><br><span class="line">-rw-r--r--. 1 root root  96 Jul  1  2023 id_ed25519.pub</span><br><span class="line">-rw-r--r--. 1 root root 880 Dec 18 21:07 known_hosts</span><br></pre></td></tr></table></figure>
-
-<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><p>以上步骤，就是 SSH 密钥登录的全部配置。</p>
+<h1>测试</h1>
+<p>以上步骤，就是 SSH 密钥登录的全部配置。</p>
 <p>打开本机的PowerShell，使用 <code>ssh &lt;user&gt;@&lt;ip&gt;</code> 测试连接。应该能够直接登录，不需要输入密码。</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Users\Gustav&gt; ssh root@CentOS100</span><br><span class="line">Activate the web console with: systemctl enable <span class="literal">--now</span> cockpit.socket</span><br><span class="line"></span><br><span class="line">Last login: Mon Jan  <span class="number">1</span> <span class="number">12</span>:<span class="number">26</span>:<span class="number">15</span> <span class="number">2024</span> from &lt;ip&gt;</span><br><span class="line">[<span class="type">root</span>@<span class="type">CentOS100</span> ~]<span class="comment"># pwd</span></span><br><span class="line">/root</span><br></pre></td></tr></table></figure>
-
-<h1 id="VS-Code-配置"><a href="#VS-Code-配置" class="headerlink" title="VS Code 配置"></a>VS Code 配置</h1><ol>
-<li><p>安装 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh">Remote - SSH</a> 插件：</p>
-<p> <img src="/MarkDownImages/image-20240101130622357.png" alt="image-20240101130622357"></p>
+<h1>VS Code 配置</h1>
+<ol>
+<li>
+<p>安装 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh">Remote - SSH</a> 插件：</p>
+<p><img src="MarkDownImages/image-20240101130622357.png" alt="image-20240101130622357"></p>
 </li>
-<li><p>依次点击这3个按钮，进入配置文件：</p>
-<p> <img src="/MarkDownImages/image-20240101130733756.png" alt="image-20240101130733756"></p>
+<li>
+<p>依次点击这3个按钮，进入配置文件：</p>
+<p><img src="MarkDownImages/image-20240101130733756.png" alt="image-20240101130733756"></p>
 </li>
-<li><p>填写配置文件（这个文件其实是主机的 SSH 配置）：</p>
-<p> <img src="/MarkDownImages/image-20240101130804525.png" alt="image-20240101130804525"></p>
+<li>
+<p>填写配置文件（这个文件其实是主机的 SSH 配置）：</p>
+<p><img src="MarkDownImages/image-20240101130804525.png" alt="image-20240101130804525"></p>
 <ul>
 <li><code>Host</code>：识别这个远程连接的 Id，可以随便起个名字；</li>
 <li><code>HostName</code>：远程主机的域名或 IP；</li>
@@ -332,7 +337,8 @@
 <li>在这个案例中，<code>IdentityFile</code> 其实没必要配置。因为 <code>authorized_keys</code> 就是本机的公钥，而 SSH 默认使用本机的私钥尝试连接；</li>
 <li>一般情况下，<code>authorized_keys</code> 不会是本机的公钥，此时 <code>IdentityFile</code> 必须要配置，否则就要输入密码；</li>
 </ul>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<h1>参考</h1>
+<ul>
 <li><a target="_blank" rel="noopener" href="https://medium.com/@sean4deepak/using-ssh-key-authentication-in-visual-studio-codes-remote-ssh-extension-4e5b922448e7">Using SSH Key Authentication in Visual Studio Code’ s Remote SSH Extension</a></li>
 <li><a target="_blank" rel="noopener" href="https://adamtheautomator.com/add-ssh-key-to-vs-code/">Add SSH Key to VS Code and Connect to a Host</a></li>
 <li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/48328446/id-rsa-pub-file-ssh-error-invalid-format">id_rsa.pub file SSH Error: invalid format</a></li>

@@ -22,14 +22,14 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"gustaavv.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#008000","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="序言Jellyfin 的设计理念是用户按照其媒体规则，创建对应层级的文件夹，放入媒体文件，再根据网络刮削器得到的元数据修改文件标题。但是这种规则过分强制了，以至于使用原始文件名作为标题的功能都没有。我们当然可以手动修改媒体标题，但这样太麻烦了。 基于这种需求，我使用 jellyfin-apiclient-python 写了一个脚本，来批量重命名某个媒体库下的所有媒体。同时，本文也列举了以往的一些方">
+    <meta name="description" content="序言 Jellyfin 的设计理念是用户按照其媒体规则，创建对应层级的文件夹，放入媒体文件，再根据网络刮削器得到的元数据修改文件标题。但是这种规则过分强制了，以至于使用原始文件名作为标题的功能都没有。我们当然可以手动修改媒体标题，但这样太麻烦了。 基于这种需求，我使用 jellyfin-apiclient-python 写了一个脚本，来批量重命名某个媒体库下的所有媒体。同时，本文也列举了以往的一些">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jellyfin 显示原始文件名">
 <meta property="og:url" content="https://gustaavv.github.io/2024/02/17/jellyfin-original-filename/index.html">
 <meta property="og:site_name" content="Gustav&#39;s blog">
-<meta property="og:description" content="序言Jellyfin 的设计理念是用户按照其媒体规则，创建对应层级的文件夹，放入媒体文件，再根据网络刮削器得到的元数据修改文件标题。但是这种规则过分强制了，以至于使用原始文件名作为标题的功能都没有。我们当然可以手动修改媒体标题，但这样太麻烦了。 基于这种需求，我使用 jellyfin-apiclient-python 写了一个脚本，来批量重命名某个媒体库下的所有媒体。同时，本文也列举了以往的一些方">
+<meta property="og:description" content="序言 Jellyfin 的设计理念是用户按照其媒体规则，创建对应层级的文件夹，放入媒体文件，再根据网络刮削器得到的元数据修改文件标题。但是这种规则过分强制了，以至于使用原始文件名作为标题的功能都没有。我们当然可以手动修改媒体标题，但这样太麻烦了。 基于这种需求，我使用 jellyfin-apiclient-python 写了一个脚本，来批量重命名某个媒体库下的所有媒体。同时，本文也列举了以往的一些">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20240217135326419.png">
+<meta property="og:image" content="https://gustaavv.github.io/2024/02/17/jellyfin-original-filename/MarkDownImages/image-20240217135326419.png">
 <meta property="article:published_time" content="2024-02-17T05:36:25.000Z">
 <meta property="article:modified_time" content="2024-02-17T05:36:25.000Z">
 <meta property="article:author" content="Gustav">
@@ -37,7 +37,7 @@
 <meta property="article:tag" content="Jellyfin">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gustaavv.github.io/MarkDownImages/image-20240217135326419.png">
+<meta name="twitter:image" content="https://gustaavv.github.io/2024/02/17/jellyfin-original-filename/MarkDownImages/image-20240217135326419.png">
 
 
 <link rel="canonical" href="https://gustaavv.github.io/2024/02/17/jellyfin-original-filename/">
@@ -151,7 +151,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%B2%E6%9C%89%E6%96%B9%E6%A1%88-1"><span class="nav-number">2.</span> <span class="nav-text">已有方案 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%B2%E6%9C%89%E6%96%B9%E6%A1%88-2"><span class="nav-number">3.</span> <span class="nav-text">已有方案 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E6%96%B9%E6%A1%88"><span class="nav-number">4.</span> <span class="nav-text">我的方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">已有方案 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">已有方案 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">我的方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -322,32 +322,35 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>Jellyfin 的设计理念是用户按照其媒体规则，创建对应层级的文件夹，放入媒体文件，再根据网络刮削器得到的元数据修改文件标题。但是这种规则过分强制了，以至于<strong>使用原始文件名作为标题</strong>的功能都没有。我们当然可以手动修改媒体标题，但这样太麻烦了。</p>
+    <div class="post-body" itemprop="articleBody"><h1>序言</h1>
+<p>Jellyfin 的设计理念是用户按照其媒体规则，创建对应层级的文件夹，放入媒体文件，再根据网络刮削器得到的元数据修改文件标题。但是这种规则过分强制了，以至于<strong>使用原始文件名作为标题</strong>的功能都没有。我们当然可以手动修改媒体标题，但这样太麻烦了。</p>
 <p>基于这种需求，我使用 <a target="_blank" rel="noopener" href="https://github.com/jellyfin/jellyfin-apiclient-python">jellyfin-apiclient-python</a> 写了一个脚本，来批量重命名某个媒体库下的所有媒体。同时，本文也列举了以往的一些方案。在我看来，以前的方案都不尽人意。</p>
 <span id="more"></span>
-
-<h1 id="已有方案-1"><a href="#已有方案-1" class="headerlink" title="已有方案 1"></a>已有方案 1</h1><p>创建媒体库时选择『音乐视频』，同时选择『优先使用内置的标题而不是文件名』。</p>
+<h1>已有方案 1</h1>
+<p>创建媒体库时选择『音乐视频』，同时选择『优先使用内置的标题而不是文件名』。</p>
 <p>这个“内置标题”是什么？—— 打开一个视频的『属性』，进入『详细信息』。</p>
-<p><img src="/MarkDownImages/image-20240217135326419.png" alt="image-20240217135326419"></p>
+<p><img src="MarkDownImages/image-20240217135326419.png" alt="image-20240217135326419"></p>
 <p>在『标题』一栏填写的任何内容，都会如实地作为媒体标题显示在 Jellyfin 客户端上，不会有任何修改。</p>
 <p>这种做法有两个问题：</p>
 <p>1️⃣几乎所有的动漫搬运组在发布时，都会填入『标题』属性。如上图，『标题』里只有番名，没有剧集号。</p>
 <p>这个问题其实很好解决，我们可以把文件名复制到『标题』中，也可以把『标题』清空。无论哪种方法，最终都会显示原始文件名。Python 的话可以使用 <a target="_blank" rel="noopener" href="https://github.com/quodlibet/mutagen">mutagen</a> 模块自动化处理。</p>
 <p>2️⃣『音乐视频』这种类型的媒体库无法显示文件夹结构。事实上，只有『混合电影和电视剧』才会以纯文件夹的形式展示。这一点我无法接受。</p>
-<h1 id="已有方案-2"><a href="#已有方案-2" class="headerlink" title="已有方案 2"></a>已有方案 2</h1><p>直接修改数据库，参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/toumingbai/p/15514526.html">『jellyfin手动修正标题为文件（夹）名』</a>。</p>
+<h1>已有方案 2</h1>
+<p>直接修改数据库，参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/toumingbai/p/15514526.html">『jellyfin手动修正标题为文件（夹）名』</a>。</p>
 <p>绕过 Service 层直接操作数据库，太危险了，完全不考虑这种方案。</p>
-<h1 id="我的方案"><a href="#我的方案" class="headerlink" title="我的方案"></a>我的方案</h1><p>既然方案 2 直接操作数据库不好，我们为何不使用 Jellyfin API？</p>
+<h1>我的方案</h1>
+<p>既然方案 2 直接操作数据库不好，我们为何不使用 Jellyfin API？</p>
 <p>首先要确定哪个功能用哪个 API。不要先看官网的文档，而是直接浏览器 F12 抓包，然后再回查文档。不过大部分情况下文档依旧没用，因为基本没有描述。此时我们基本只能靠猜测和实验了。</p>
 <p>万幸，<a target="_blank" rel="noopener" href="https://github.com/jellyfin/jellyfin-apiclient-python">jellyfin-apiclient-python</a> 提供了现成的 API，不需要从 <code>requests</code> 开始写。我很快写好了脚本：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> jellyfin_apiclient_python <span class="keyword">import</span> JellyfinClient</span><br><span class="line"><span class="keyword">from</span> jellyfin_apiclient_python.api <span class="keyword">import</span> API</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rename_to_filename</span>(<span class="params">jellyfin: API, item_id: <span class="built_in">str</span></span>):</span><br><span class="line">    metadata: <span class="built_in">dict</span> = jellyfin.get_item(item_id)</span><br><span class="line">    <span class="keyword">assert</span> metadata[<span class="string">&#x27;Id&#x27;</span>] == item_id</span><br><span class="line"></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">len</span>(metadata[<span class="string">&#x27;MediaSources&#x27;</span>]) == <span class="number">1</span></span><br><span class="line">    path: <span class="built_in">str</span> = metadata[<span class="string">&#x27;MediaSources&#x27;</span>][<span class="number">0</span>][<span class="string">&#x27;Path&#x27;</span>]</span><br><span class="line">    filename = path.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 只修改 Name，其他信息不变</span></span><br><span class="line">    metadata.update(&#123;<span class="string">&#x27;Name&#x27;</span>: filename&#125;)</span><br><span class="line">    <span class="keyword">return</span> jellyfin.items(<span class="string">&#x27;/&#x27;</span> + item_id, action=<span class="string">&#x27;POST&#x27;</span>, params=<span class="literal">None</span>, json=metadata)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rename_items_in_library</span>(<span class="params">jellyfin: API, library_id: <span class="built_in">str</span></span>):</span><br><span class="line">    <span class="comment"># get_items_by_letter 会递归地查所有子文件夹中的元素</span></span><br><span class="line">    res = jellyfin.get_items_by_letter(parent_id=library_id)</span><br><span class="line">    res = res[<span class="string">&#x27;Items&#x27;</span>]</span><br><span class="line">    item_count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> r <span class="keyword">in</span> res:</span><br><span class="line">        <span class="keyword">if</span> r[<span class="string">&#x27;Type&#x27;</span>] == <span class="string">&#x27;Folder&#x27;</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        rename_to_filename(jellyfin, r[<span class="string">&#x27;Id&#x27;</span>])</span><br><span class="line">        item_count += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;total renamed item count: <span class="subst">&#123;item_count&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">client = JellyfinClient()</span><br><span class="line"><span class="comment"># 这些客户端信息可以改成你自己的，不过没影响</span></span><br><span class="line">client.config.app(<span class="string">&#x27;pycharm&#x27;</span>, <span class="string">&#x27;0.0.1&#x27;</span>, <span class="string">&#x27;pycharm&#x27;</span>, <span class="string">&#x27;kufhskdf&#x27;</span>)</span><br><span class="line">client.config.data[<span class="string">&quot;auth.ssl&quot;</span>] = <span class="literal">True</span></span><br><span class="line">client.authenticate(&#123;<span class="string">&quot;Servers&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;AccessToken&quot;</span>: <span class="string">&quot;xxx&quot;</span>,  <span class="comment"># 去『控制台 | API 密钥』创建一个</span></span><br><span class="line">        <span class="string">&quot;address&quot;</span>: <span class="string">&quot;zzz&quot;</span>, <span class="comment"># Jellyfin 服务器的地址</span></span><br><span class="line">        <span class="string">&quot;DateLastAccessed&quot;</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">&quot;UserId&quot;</span>: <span class="string">&quot;yyy&quot;</span>  <span class="comment"># 这个用户需要有管理媒体库的权限</span></span><br><span class="line">    &#125;</span><br><span class="line">]&#125;, discover=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(client.logged_in)</span><br><span class="line"></span><br><span class="line">rename_items_in_library(client.jellyfin, <span class="string">&#x27;uuu&#x27;</span>)  <span class="comment"># 填入媒体库的 id</span></span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>话说回来，这个模块的文档写得也不咋地，我从 Issues 中才知道怎么连接服务器。</p>
 </blockquote>
 <p>我的 Jellyfin 服务器的证书是自己搞的，Python 的 SSL 好像没办法使用操作系统安装的证书。可以设置环境变量 <code>REQUESTS_CA_BUNDLE=证书地址</code> 来解决。</p>
 <p>使用我的方案，就完美地解决了上述两种方案的缺点。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/jellyfin/comments/pcptfz/possible_to_use_original_filenames_only/?utm_source=share&utm_medium=web2x&context=3">Possible to use original filenames only?</a></li>
+<h1>参考</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/jellyfin/comments/pcptfz/possible_to_use_original_filenames_only/?utm_source=share&amp;utm_medium=web2x&amp;context=3">Possible to use original filenames only?</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/toumingbai/p/15514526.html">jellyfin手动修正标题为文件（夹）名</a></li>
 <li><a target="_blank" rel="noopener" href="https://github.com/jellyfin/jellyfin-apiclient-python">jellyfin-apiclient-python</a></li>
 </ul>
