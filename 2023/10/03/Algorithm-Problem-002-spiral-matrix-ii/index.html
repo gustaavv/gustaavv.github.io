@@ -29,9 +29,9 @@
 <meta property="og:site_name" content="Gustav&#39;s blog">
 <meta property="og:description" content="题目  题目来源：59. 螺旋矩阵 II  给你一个正整数 n ，生成一个包含 1 到 n^2 所有元素，且元素按顺时针顺序螺旋排列的 n x n 正方形矩阵 matrix 。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gustaavv.github.io/2023/10/03/Algorithm-Problem-002-spiral-matrix-ii/MarkDownImages/spiraln.jpg">
-<meta property="og:image" content="https://gustaavv.github.io/2023/10/03/Algorithm-Problem-002-spiral-matrix-ii/MarkDownImages/spiraln.jpg">
-<meta property="og:image" content="https://gustaavv.github.io/2023/10/03/Algorithm-Problem-002-spiral-matrix-ii/MarkDownImages/spiraln.jpg">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/spiraln.jpg">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/spiraln.jpg">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/spiraln.jpg">
 <meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20231003171918667.png">
 <meta property="article:published_time" content="2023-10-03T08:33:31.000Z">
 <meta property="article:modified_time" content="2023-10-03T08:33:31.000Z">
@@ -39,7 +39,7 @@
 <meta property="article:tag" content="模拟">
 <meta property="article:tag" content="数组">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gustaavv.github.io/2023/10/03/Algorithm-Problem-002-spiral-matrix-ii/MarkDownImages/spiraln.jpg">
+<meta name="twitter:image" content="https://gustaavv.github.io/MarkDownImages/spiraln.jpg">
 
 
 <link rel="canonical" href="https://gustaavv.github.io/2023/10/03/Algorithm-Problem-002-spiral-matrix-ii/">
@@ -296,7 +296,7 @@
 <p>输入：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
 <p>输出：</p>
-<p><img src="MarkDownImages/spiraln.jpg" alt="img"></p>
+<p><img src="/MarkDownImages/spiraln.jpg" alt="img"></p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span><span class="punctuation">[</span><span class="number">1</span><span class="punctuation">,</span><span class="number">2</span><span class="punctuation">,</span><span class="number">3</span><span class="punctuation">]</span><span class="punctuation">,</span><span class="punctuation">[</span><span class="number">8</span><span class="punctuation">,</span><span class="number">9</span><span class="punctuation">,</span><span class="number">4</span><span class="punctuation">]</span><span class="punctuation">,</span><span class="punctuation">[</span><span class="number">7</span><span class="punctuation">,</span><span class="number">6</span><span class="punctuation">,</span><span class="number">5</span><span class="punctuation">]</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
 <h2 id="示例-2">示例 2</h2>
 <p>输入：</p>
@@ -307,7 +307,7 @@
 <p>这道题是一道典型的模拟题，我们需要按照遍历整个矩阵。</p>
 <h2 id="思路-1">思路 1</h2>
 <p>我自己的做法是将矩阵分层（<code>layer</code>），一层一层地遍历。比如，当 $n = 3$ 时，矩阵为</p>
-<p><img src="MarkDownImages/spiraln.jpg" alt="img"></p>
+<p><img src="/MarkDownImages/spiraln.jpg" alt="img"></p>
 <p>此时，我们定义第一层为 <code>layer = 0</code>，包含数字 1 - 8；第二层为 <code>layer = 1</code>，包含数字 9；</p>
 <p>遍历每一层时，依次编写向右（1、2）、向下（3、4）、向左（5、6）、向右（7、8）的循环代码</p>
 <p>这种方法的重点在于找数学规律，找到 <code>layer</code> 和当前遍历的某一行/某一列的大小关系</p>
@@ -317,7 +317,7 @@
 <h2 id="思路-2">思路 2</h2>
 <p>由于我们要生成一个矩阵（<strong>非常规则</strong>的图形），我们往往会从<strong>宏观</strong>的角度控制遍历，即思路 1。所谓宏观，即知道全局，它体现在我的解法的找数学规律，也体现在大佬的解法的控制四个边界。</p>
 <p>那我们不妨从<strong>微观</strong>角度出发：假如我们自己站在一个<strong>巨大的、看不到边界的</strong>棋盘上，要去填入这些数字，我们会怎么填？我们<strong>只能看到四周的格子</strong>上的数字。此时，宏观的方法不再奏效，我们应该怎么做？</p>
-<p><img src="MarkDownImages/spiraln.jpg" alt="img"></p>
+<p><img src="/MarkDownImages/spiraln.jpg" alt="img"></p>
 <p>假设我们站在格子 1 上（面朝右），往前走，边走边写数字。当走到了格子 3，发现前面无路可走。因为要顺时针填入数字，我们不妨右拐（面朝下），此时面向的格子，就是要填入数字 4 的格子。</p>
 <p>同理，当我们走到了格子 8（面朝上），此时前面的格子已经填入了数字 1。我们再次右拐（面朝右），此时面向的格子，就是要填入数字 9 的格子。</p>
 <p>因此，在代码中，我们不妨<strong>只关心 agent 当前的坐标</strong>，让他<strong>认准一个方向一直走</strong>，直到遇到边界、或者已经填入了数字，<strong>此时右拐即可</strong>。</p>

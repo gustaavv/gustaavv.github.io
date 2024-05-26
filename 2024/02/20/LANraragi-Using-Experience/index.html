@@ -29,8 +29,8 @@
 <meta property="og:site_name" content="Gustav&#39;s blog">
 <meta property="og:description" content="序言 我使用 LANraragi 已经有一段时间了，期间发现了一些问题，都解决了，正好写一篇文章记录一下。读者可以参考我之前安装 LANraragi 的文章。 问题1：挂载缩略图目录导致缩略图无法生成">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gustaavv.github.io/2024/02/20/LANraragi-Using-Experience/MarkDownImages/image-20240220111456968.png">
-<meta property="og:image" content="https://gustaavv.github.io/2024/02/20/LANraragi-Using-Experience/MarkDownImages/image-20240220131323937.png">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20240220111456968.png">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20240220131323937.png">
 <meta property="article:published_time" content="2024-02-20T03:06:09.000Z">
 <meta property="article:modified_time" content="2024-02-20T03:06:09.000Z">
 <meta property="article:author" content="Gustav">
@@ -39,7 +39,7 @@
 <meta property="article:tag" content="Jellyfin">
 <meta property="article:tag" content="LANraragi">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gustaavv.github.io/2024/02/20/LANraragi-Using-Experience/MarkDownImages/image-20240220111456968.png">
+<meta name="twitter:image" content="https://gustaavv.github.io/MarkDownImages/image-20240220111456968.png">
 
 
 <link rel="canonical" href="https://gustaavv.github.io/2024/02/20/LANraragi-Using-Experience/">
@@ -332,7 +332,7 @@
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">lanraragi:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">difegue/lanraragi:v.0.9.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">lanraragi</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/mnt/hgfs/doujinshiArchives:/home/koyomi/lanraragi/content:ro</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">lanraragi-database:/home/koyomi/lanraragi/database</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">lanraragi-thumbnail:/home/koyomi/lanraragi/thumb</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">lanraragi-database:</span></span><br><span class="line">  <span class="attr">lanraragi-thumbnail:</span></span><br></pre></td></tr></table></figure>
 <p><code>lanraragi-thumbnail</code> 就是存放缩略图的 volume。</p>
 <p>启动容器，发现缩略图无法生成。进入『Minion Console』，发现如下错误：</p>
-<p><img src="MarkDownImages/image-20240220111456968.png" alt="image-20240220111456968"></p>
+<p><img src="/MarkDownImages/image-20240220111456968.png" alt="image-20240220111456968"></p>
 <p>为什么 <code>mkdir</code> 会没有权限呢？进入容器：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/home/koyomi/lanraragi <span class="comment"># ls -lah</span></span><br><span class="line">total 192K   </span><br><span class="line">drwxr-sr-x    1 koyomi   koyomi      4.0K Feb 20 02:14 .</span><br><span class="line">drwxr-sr-x    1 koyomi   koyomi      4.0K Feb 20 02:14 ..</span><br><span class="line">-rw-r--r--    1 root     koyomi        52 Oct 29 21:19 config.log</span><br><span class="line">drwxrwxrwx    1 root     root       16.0K Feb 17 11:44 content</span><br><span class="line">drwxr-xr-x    3 koyomi   root        4.0K Feb 20 03:10 database</span><br><span class="line">drwxr-sr-x    3 koyomi   koyomi      4.0K Oct 31 00:58 lib</span><br><span class="line">drwxr-sr-x    2 koyomi   koyomi      4.0K Feb 20 02:14 <span class="built_in">log</span></span><br><span class="line">-rw-r--r--    1 koyomi   koyomi       186 Oct 31 00:58 lrr.conf</span><br><span class="line">-rw-r--r--    1 koyomi   koyomi         8 Feb 20 02:14 oshino</span><br><span class="line">-rw-r--r--    1 koyomi   koyomi     97.6K Oct 29 21:02 package-lock.json</span><br><span class="line">-rw-r--r--    1 koyomi   koyomi      2.1K Oct 27 23:07 package.json</span><br><span class="line">drwxr-sr-x    1 root     koyomi      4.0K Feb 20 02:14 public</span><br><span class="line">drwxr-sr-x    2 koyomi   koyomi      4.0K Oct 31 00:58 script</span><br><span class="line">drwxr-sr-x    3 koyomi   koyomi      4.0K Oct 31 00:58 templates</span><br><span class="line">drwxr-sr-x    4 koyomi   koyomi      4.0K Oct 31 00:58 tests</span><br><span class="line">drwxr-xr-x  257 root     root        4.0K Feb 20 02:19 thumb</span><br><span class="line">drwxr-sr-x    1 koyomi   koyomi      4.0K Oct 31 00:59 tools</span><br></pre></td></tr></table></figure>
 <p>注意 <code>thumb</code> 目录，它是由 <code>root</code> 用户创建，但运行 LANraragi 的 <code>koyomi</code> 用户没有对该目录的写权限。授权即可：</p>
@@ -369,7 +369,7 @@ If Shinobu is dead or unresponsive, you can reboot her by clicking this button.<
 </ul>
 <h1>收获</h1>
 <p>这个脚本挺好用的：</p>
-<p><img src="MarkDownImages/image-20240220131323937.png" alt="image-20240220131323937"></p>
+<p><img src="/MarkDownImages/image-20240220131323937.png" alt="image-20240220131323937"></p>
 <p>我的漫画目录结构是：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">├── 作者1</span><br><span class="line">│   ├── 漫画压缩包1</span><br><span class="line">│   └── 漫画压缩包2</span><br><span class="line">└── 作者2</span><br><span class="line">    ├── 漫画压缩包1</span><br><span class="line">    └── 漫画压缩包2</span><br></pre></td></tr></table></figure>
 <p>这个脚本可以将对应的漫画划分到某一个作者的 Category 中。尽管我没有给漫画打 tag，以作者作为 Category 却起到了相同效果，让我可以根据作者选择漫画。</p>

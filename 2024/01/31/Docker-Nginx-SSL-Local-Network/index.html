@@ -29,10 +29,10 @@
 <meta property="og:site_name" content="Gustav&#39;s blog">
 <meta property="og:description" content="序言 在上一篇博文里，我成功搭建了 LANraragi 服务器，并且分享给了家庭局域网内的其他设备。但是，又产生了新的问题：  LANraragi 不需要登录就能访问其中的漫画； 就算 LANraragi 有登录的功能，用的也还是 HTTP 明文传输，相当于没有密码；  这些问题的根源是：可以联网的手机、智能家居都和 LANraragi 服务器在一个局域网内，这些设备并不可信，可能有后门（“用户自">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/MarkDownImages/image-20240131172736021.png">
-<meta property="og:image" content="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/MarkDownImages/image-20240131172831043.png">
-<meta property="og:image" content="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/MarkDownImages/Screenshot_20240201_113254_Settings.png">
-<meta property="og:image" content="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/MarkDownImages/IMG_2032.PNG">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20240131172736021.png">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20240131172831043.png">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/Screenshot_20240201_113254_Settings.png">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/IMG_2032.PNG">
 <meta property="article:published_time" content="2024-01-31T06:03:43.000Z">
 <meta property="article:modified_time" content="2024-01-31T06:03:43.000Z">
 <meta property="article:author" content="Gustav">
@@ -40,7 +40,7 @@
 <meta property="article:tag" content="Nginx">
 <meta property="article:tag" content="SSL">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/MarkDownImages/image-20240131172736021.png">
+<meta name="twitter:image" content="https://gustaavv.github.io/MarkDownImages/image-20240131172736021.png">
 
 
 <link rel="canonical" href="https://gustaavv.github.io/2024/01/31/Docker-Nginx-SSL-Local-Network/">
@@ -352,13 +352,13 @@
 <p>如果没有这一步，浏览器可以建立 HTTPS 连接，但会提示连接不安全。</p>
 <h3 id="Windows">Windows</h3>
 <p>控制面板 | internet 选项 | 内容 | 证书</p>
-<p><img src="MarkDownImages/image-20240131172736021.png" alt="image-20240131172736021"></p>
+<p><img src="/MarkDownImages/image-20240131172736021.png" alt="image-20240131172736021"></p>
 <p>以根证书颁发机构的身份信任 CA</p>
-<p><img src="MarkDownImages/image-20240131172831043.png" alt="image-20240131172831043"></p>
+<p><img src="/MarkDownImages/image-20240131172831043.png" alt="image-20240131172831043"></p>
 <h3 id="Android">Android</h3>
 <p>不同系统安装证书的位置不一样，但基本的选项是一样的。这里以三星为例：</p>
 <p>要么选 『CA 证书』，要么选 『VPN 和 app 用户证书』。不要选『WLAN 证书』，这个没用。</p>
-<p><img src="MarkDownImages/Screenshot_20240201_113254_Settings.png" alt="Screenshot_20240201_113254_Settings"></p>
+<p><img src="/MarkDownImages/Screenshot_20240201_113254_Settings.png" alt="Screenshot_20240201_113254_Settings"></p>
 <h3 id="IOS">IOS</h3>
 <blockquote>
 <p>这里以 iPadOS 15.7 为例</p>
@@ -375,7 +375,7 @@
 </li>
 <li>
 <p>设置 | 通用 | 关于本机 | 证书信任设置：开启完全信任</p>
-<p><img src="MarkDownImages/IMG_2032.PNG" alt="IMG_2032"></p>
+<p><img src="/MarkDownImages/IMG_2032.PNG" alt="IMG_2032"></p>
 </li>
 </ol>
 <hr>

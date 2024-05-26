@@ -29,16 +29,16 @@
 <meta property="og:site_name" content="Gustav&#39;s blog">
 <meta property="og:description" content="题目  题目来源：1424. 对角线遍历 II  给你一个列表 nums ，里面每一个元素都是一个整数列表。请你依照下面各图的规则，按顺序返回 nums 中对角线上的整数。 示例 1   输入：nums &#x3D; [[1,2,3,4,5],[6,7],[8],[9,10,11],[12,13,14,15,16]] 输出：[1,6,2,8,7,3,9,4,12,10,5,13,11,14,15,16]">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/Algorithm-Problem-003-diagonal-traverse-ii/MarkDownImages/image-20231029115351760.png">
-<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/Algorithm-Problem-003-diagonal-traverse-ii/MarkDownImages/image-20231029115127660.png">
-<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/Algorithm-Problem-003-diagonal-traverse-ii/MarkDownImages/image-20231029115351760.png">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20231029115351760.png">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20231029115127660.png">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20231029115351760.png">
 <meta property="article:published_time" content="2023-10-29T03:44:28.000Z">
 <meta property="article:modified_time" content="2023-10-29T03:44:28.000Z">
 <meta property="article:author" content="Gustav">
 <meta property="article:tag" content="模拟">
 <meta property="article:tag" content="数组">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gustaavv.github.io/2023/10/29/Algorithm-Problem-003-diagonal-traverse-ii/MarkDownImages/image-20231029115351760.png">
+<meta name="twitter:image" content="https://gustaavv.github.io/MarkDownImages/image-20231029115351760.png">
 
 
 <link rel="canonical" href="https://gustaavv.github.io/2023/10/29/Algorithm-Problem-003-diagonal-traverse-ii/">
@@ -290,14 +290,14 @@
 </blockquote>
 <p>给你一个列表 <code>nums</code> ，里面每一个元素都是一个整数列表。请你依照下面各图的规则，按顺序返回 <code>nums</code> 中对角线上的整数。</p>
 <h2 id="示例-1">示例 1</h2>
-<p><img src="MarkDownImages/image-20231029115351760.png" alt="image-20231029115351760"></p>
+<p><img src="/MarkDownImages/image-20231029115351760.png" alt="image-20231029115351760"></p>
 <blockquote>
 <p>输入：nums = <code>[[1,2,3,4,5],[6,7],[8],[9,10,11],[12,13,14,15,16]]</code>
 输出：<code>[1,6,2,8,7,3,9,4,12,10,5,13,11,14,15,16]</code></p>
 </blockquote>
 <span id="more"></span>
 <h2 id="示例-2">示例 2</h2>
-<p><img src="MarkDownImages/image-20231029115127660.png" alt="image-20231029115127660"></p>
+<p><img src="/MarkDownImages/image-20231029115127660.png" alt="image-20231029115127660"></p>
 <blockquote>
 <p>输入：nums = <code>[[1,2,3],[4,5,6],[7,8,9]]</code>
 输出：<code>[1,4,2,7,5,3,8,6,9]</code></p>
@@ -319,7 +319,7 @@
 <p>如果 <code>nums</code> 是个矩阵，那这题是一道简单模拟题，按照对角线遍历即可，时间复杂度为 $O(mn)$。</p>
 <p>但是，<code>nums</code> 的行数 $m \le 10^5$，列数 $n \le 10^5$，$O(mn)$ 的时间复杂度会超时。因此，我们不应该把 <code>nums</code> 当作一个矩阵来遍历，否则会访问大量的空格子。</p>
 <p>观察示例1：</p>
-<p><img src="MarkDownImages/image-20231029115351760.png" alt="image-20231029115351760"></p>
+<p><img src="/MarkDownImages/image-20231029115351760.png" alt="image-20231029115351760"></p>
 <p>观察1️⃣：对于任意的 $k \in \mathbb{N}$，第 $k + 1$ 条对角线的元素遍历顺序是从左下到右上，即 $(k, 0), (k - 1,1),\cdots,(0,k)$。因此，如果我们要获得第 $k + 1$ 条对角线上的元素，我们应该<strong>倒序遍历</strong> <code>nums</code> 中每一行的对应元素。</p>
 <p>观察2️⃣：易得，对于<code>nums</code>中的每一行 <code>nums[j]</code>，其中的元素都属于不同的对角线，因此是<strong>相互独立</strong>的。</p>
 <p>观察3️⃣：<strong>倒序遍历</strong> <code>nums</code> 中每一行时：</p>

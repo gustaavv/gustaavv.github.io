@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Gustav&#39;s blog">
 <meta property="og:description" content="介绍 Azure Pipelines 是 Azure DevOps（SaaS 平台）的一个组件，是一个自动化 CI&#x2F;CD 的“流水线”。类似的技术有GitHub Actions 和 Jenkins。 作为使用者，我们只需要在 YAML 中定义各个任务，触发 Pipeline，Azure Pipelines 就能帮我们自动执行这些任务。 那么，任务是怎么被执行的呢？是否存在并行任务上限？我们怎样设计">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gustaavv.github.io/2023/10/06/Azure-Pipelines-Architecture/MarkDownImages/key-pipeline-concepts-overview-ca80c85c.png">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/key-pipeline-concepts-overview-ca80c85c.png">
 <meta property="article:published_time" content="2023-10-06T12:11:59.000Z">
 <meta property="article:modified_time" content="2023-10-06T12:11:59.000Z">
 <meta property="article:author" content="Gustav">
@@ -37,7 +37,7 @@
 <meta property="article:tag" content="Azure Pipelines">
 <meta property="article:tag" content="架构">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gustaavv.github.io/2023/10/06/Azure-Pipelines-Architecture/MarkDownImages/key-pipeline-concepts-overview-ca80c85c.png">
+<meta name="twitter:image" content="https://gustaavv.github.io/MarkDownImages/key-pipeline-concepts-overview-ca80c85c.png">
 
 
 <link rel="canonical" href="https://gustaavv.github.io/2023/10/06/Azure-Pipelines-Architecture/">
@@ -293,7 +293,7 @@
 <p>那么，任务是怎么被执行的呢？是否存在并行任务上限？我们怎样设计更高效地定义 YAML，从而让一次 Pipeline 更快地跑完呢？—— 本文将从任务调度的角度，解析 Azure Pipelines 的架构。在探讨的过程中，上述问题自然能得到解答。</p>
 <span id="more"></span>
 <h1>Azure Pipelines 术语</h1>
-<p><img src="MarkDownImages/key-pipeline-concepts-overview-ca80c85c.png" alt="img"></p>
+<p><img src="/MarkDownImages/key-pipeline-concepts-overview-ca80c85c.png" alt="img"></p>
 <p><strong>对于 Azure Pipelines 的使用者</strong>，一个 YAML 文件唯一定义了一条 Pipeline 的运行逻辑：</p>
 <ul>
 <li>一条 Pipeline 可以包含多个 Stage</li>

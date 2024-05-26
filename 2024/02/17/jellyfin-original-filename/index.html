@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Gustav&#39;s blog">
 <meta property="og:description" content="序言 Jellyfin 的设计理念是用户按照其媒体规则，创建对应层级的文件夹，放入媒体文件，再根据网络刮削器得到的元数据修改文件标题。但是这种规则过分强制了，以至于使用原始文件名作为标题的功能都没有。我们当然可以手动修改媒体标题，但这样太麻烦了。 基于这种需求，我使用 jellyfin-apiclient-python 写了一个脚本，来批量重命名某个媒体库下的所有媒体。同时，本文也列举了以往的一些">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gustaavv.github.io/2024/02/17/jellyfin-original-filename/MarkDownImages/image-20240217135326419.png">
+<meta property="og:image" content="https://gustaavv.github.io/MarkDownImages/image-20240217135326419.png">
 <meta property="article:published_time" content="2024-02-17T05:36:25.000Z">
 <meta property="article:modified_time" content="2024-02-17T05:36:25.000Z">
 <meta property="article:author" content="Gustav">
@@ -37,7 +37,7 @@
 <meta property="article:tag" content="Jellyfin">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gustaavv.github.io/2024/02/17/jellyfin-original-filename/MarkDownImages/image-20240217135326419.png">
+<meta name="twitter:image" content="https://gustaavv.github.io/MarkDownImages/image-20240217135326419.png">
 
 
 <link rel="canonical" href="https://gustaavv.github.io/2024/02/17/jellyfin-original-filename/">
@@ -329,7 +329,7 @@
 <h1>已有方案 1</h1>
 <p>创建媒体库时选择『音乐视频』，同时选择『优先使用内置的标题而不是文件名』。</p>
 <p>这个“内置标题”是什么？—— 打开一个视频的『属性』，进入『详细信息』。</p>
-<p><img src="MarkDownImages/image-20240217135326419.png" alt="image-20240217135326419"></p>
+<p><img src="/MarkDownImages/image-20240217135326419.png" alt="image-20240217135326419"></p>
 <p>在『标题』一栏填写的任何内容，都会如实地作为媒体标题显示在 Jellyfin 客户端上，不会有任何修改。</p>
 <p>这种做法有两个问题：</p>
 <p>1️⃣几乎所有的动漫搬运组在发布时，都会填入『标题』属性。如上图，『标题』里只有番名，没有剧集号。</p>
