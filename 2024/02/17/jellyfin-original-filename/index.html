@@ -151,7 +151,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">已有方案 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">已有方案 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">我的方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%B2%E6%9C%89%E6%96%B9%E6%A1%88-1"><span class="nav-number">2.</span> <span class="nav-text">已有方案 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%B2%E6%9C%89%E6%96%B9%E6%A1%88-2"><span class="nav-number">3.</span> <span class="nav-text">已有方案 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E6%96%B9%E6%A1%88"><span class="nav-number">4.</span> <span class="nav-text">我的方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -329,11 +329,11 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1>序言</h1>
+    <div class="post-body" itemprop="articleBody"><h1 id="序言">序言</h1>
 <p>Jellyfin 的设计理念是用户按照其媒体规则，创建对应层级的文件夹，放入媒体文件，再根据网络刮削器得到的元数据修改文件标题。但是这种规则过分强制了，以至于<strong>使用原始文件名作为标题</strong>的功能都没有。我们当然可以手动修改媒体标题，但这样太麻烦了。</p>
 <p>基于这种需求，我使用 <a target="_blank" rel="noopener" href="https://github.com/jellyfin/jellyfin-apiclient-python">jellyfin-apiclient-python</a> 写了一个脚本，来批量重命名某个媒体库下的所有媒体。同时，本文也列举了以往的一些方案。在我看来，以前的方案都不尽人意。</p>
 <span id="more"></span>
-<h1>已有方案 1</h1>
+<h1 id="已有方案-1">已有方案 1</h1>
 <p>创建媒体库时选择『音乐视频』，同时选择『优先使用内置的标题而不是文件名』。</p>
 <p>这个“内置标题”是什么？—— 打开一个视频的『属性』，进入『详细信息』。</p>
 <p><img src="/MarkDownImages/image-20240217135326419.png" alt="image-20240217135326419"></p>
@@ -342,10 +342,10 @@
 <p>1️⃣几乎所有的动漫搬运组在发布时，都会填入『标题』属性。如上图，『标题』里只有番名，没有剧集号。</p>
 <p>这个问题其实很好解决，我们可以把文件名复制到『标题』中，也可以把『标题』清空。无论哪种方法，最终都会显示原始文件名。Python 的话可以使用 <a target="_blank" rel="noopener" href="https://github.com/quodlibet/mutagen">mutagen</a> 模块自动化处理。</p>
 <p>2️⃣『音乐视频』这种类型的媒体库无法显示文件夹结构。事实上，只有『混合电影和电视剧』才会以纯文件夹的形式展示。这一点我无法接受。</p>
-<h1>已有方案 2</h1>
+<h1 id="已有方案-2">已有方案 2</h1>
 <p>直接修改数据库，参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/toumingbai/p/15514526.html">『jellyfin手动修正标题为文件（夹）名』</a>。</p>
 <p>绕过 Service 层直接操作数据库，太危险了，完全不考虑这种方案。</p>
-<h1>我的方案</h1>
+<h1 id="我的方案">我的方案</h1>
 <p>既然方案 2 直接操作数据库不好，我们为何不使用 Jellyfin API？</p>
 <p>首先要确定哪个功能用哪个 API。不要先看官网的文档，而是直接浏览器 F12 抓包，然后再回查文档。不过大部分情况下文档依旧没用，因为基本没有描述。此时我们基本只能靠猜测和实验了。</p>
 <p>万幸，<a target="_blank" rel="noopener" href="https://github.com/jellyfin/jellyfin-apiclient-python">jellyfin-apiclient-python</a> 提供了现成的 API，不需要从 <code>requests</code> 开始写。我很快写好了脚本：</p>
@@ -355,7 +355,7 @@
 </blockquote>
 <p>我的 Jellyfin 服务器的证书是自己搞的，Python 的 SSL 好像没办法使用操作系统安装的证书。可以设置环境变量 <code>REQUESTS_CA_BUNDLE=证书地址</code> 来解决。</p>
 <p>使用我的方案，就完美地解决了上述两种方案的缺点。</p>
-<h1>参考</h1>
+<h1 id="参考">参考</h1>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/jellyfin/comments/pcptfz/possible_to_use_original_filenames_only/?utm_source=share&amp;utm_medium=web2x&amp;context=3">Possible to use original filenames only?</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/toumingbai/p/15514526.html">jellyfin手动修正标题为文件（夹）名</a></li>

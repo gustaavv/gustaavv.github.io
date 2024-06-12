@@ -38,8 +38,8 @@
 <meta property="article:published_time" content="2024-02-11T10:06:19.000Z">
 <meta property="article:modified_time" content="2024-02-11T10:06:19.000Z">
 <meta property="article:author" content="Gustav">
-<meta property="article:tag" content="Docker">
 <meta property="article:tag" content="NAS">
+<meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Jellyfin">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://gustaavv.github.io/MarkDownImages/image-20240213140202762.png">
@@ -156,7 +156,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">Jellyfin 安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">Jellyfin 设置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8-%E7%94%A8%E6%88%B7"><span class="nav-number">3.1.</span> <span class="nav-text">服务器 | 用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7-%E8%81%94%E7%BD%91"><span class="nav-number">3.2.</span> <span class="nav-text">高级 | 联网</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">SSL 证书</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">局域网设置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">6.</span> <span class="nav-text">一些 Bug</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E4%BD%93%E9%97%AE%E9%A2%981"><span class="nav-number">6.1.</span> <span class="nav-text">字体问题1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E4%BD%93%E9%97%AE%E9%A2%982"><span class="nav-number">6.2.</span> <span class="nav-text">字体问题2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%A6%E5%8F%B7%E9%93%BE%E6%8E%A5"><span class="nav-number">6.3.</span> <span class="nav-text">符号链接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">7.</span> <span class="nav-text">Docker 知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EXPOSE"><span class="nav-number">7.1.</span> <span class="nav-text">EXPOSE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cache-Memory"><span class="nav-number">7.2.</span> <span class="nav-text">Cache Memory</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jellyfin-%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">Jellyfin 安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jellyfin-%E8%AE%BE%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">Jellyfin 设置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8-%E7%94%A8%E6%88%B7"><span class="nav-number">3.1.</span> <span class="nav-text">服务器 | 用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7-%E8%81%94%E7%BD%91"><span class="nav-number">3.2.</span> <span class="nav-text">高级 | 联网</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SSL-%E8%AF%81%E4%B9%A6"><span class="nav-number">4.</span> <span class="nav-text">SSL 证书</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B1%80%E5%9F%9F%E7%BD%91%E8%AE%BE%E7%BD%AE"><span class="nav-number">5.</span> <span class="nav-text">局域网设置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B-Bug"><span class="nav-number">6.</span> <span class="nav-text">一些 Bug</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E4%BD%93%E9%97%AE%E9%A2%981"><span class="nav-number">6.1.</span> <span class="nav-text">字体问题1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E4%BD%93%E9%97%AE%E9%A2%982"><span class="nav-number">6.2.</span> <span class="nav-text">字体问题2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%A6%E5%8F%B7%E9%93%BE%E6%8E%A5"><span class="nav-number">6.3.</span> <span class="nav-text">符号链接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-%E7%9F%A5%E8%AF%86"><span class="nav-number">7.</span> <span class="nav-text">Docker 知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EXPOSE"><span class="nav-number">7.1.</span> <span class="nav-text">EXPOSE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cache-Memory"><span class="nav-number">7.2.</span> <span class="nav-text">Cache Memory</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -341,7 +341,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1>序言</h1>
+    <div class="post-body" itemprop="articleBody"><h1 id="序言">序言</h1>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://jellyfin.org/">Jellyfin</a> 是一个开源的媒体服务器。我的用法是：在电脑上使用 qBittorrent 下载每日新番，启动 Jellyfin，然后在 iPad 上通过客户端看番。</p>
 </blockquote>
@@ -349,7 +349,7 @@
 <p>虽然 Jellyfin 软件是跨平台的，但是它的配置还是 OS-dependent 的，更何况我是要从 Windows 迁移到 Docker 中去。尽管有一个<a target="_blank" rel="noopener" href="https://github.com/MMMZZZZ/Jellyfin-Migrator">第三方脚本</a>可以使用，但保险起见，我还是重新配置了一遍，反正也不多。</p>
 <p>这篇文章主要讲解了如何用 Docker 安装 Jellyfin、期间碰到的问题及其解决方案。</p>
 <span id="more"></span>
-<h1>Jellyfin 安装</h1>
+<h1 id="Jellyfin-安装">Jellyfin 安装</h1>
 <p>先创建两个容器卷：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker volume create jellyfin-config</span><br><span class="line">docker volume create jellyfin-cache</span><br></pre></td></tr></table></figure>
 <p>Docker Compose:</p>
@@ -408,7 +408,7 @@
 <p><code>TZ=Asia/Shanghai</code>：设置时区，使得日志的时间和本机的一致；</p>
 </li>
 </ul>
-<h1>Jellyfin 设置</h1>
+<h1 id="Jellyfin-设置">Jellyfin 设置</h1>
 <p>因为是重新安装，所以配置都要从头走一遍，这里只讲一些重点。</p>
 <h2 id="服务器-用户">服务器 | 用户</h2>
 <p>不允许转码：就算客户端不支持编码，也不能用服务端的软解，不然压力太大了。</p>
@@ -421,11 +421,11 @@
 <p>勾选『启用 HTTPS』，然后重启容器。</p>
 <p><img src="/MarkDownImages/image-20240213140600270.png" alt="image-20240213140600270"></p>
 <p>没必要开启『强制 HTTPS 』，因为防火墙最终只会允许局域网其他设备访问 HTTPS 端口；本机还是可以通过 HTTP 访问 Jellyfin。</p>
-<h1>SSL 证书</h1>
+<h1 id="SSL-证书">SSL 证书</h1>
 <p>首先要有密钥 <code>jellyfin-priv-key.key</code> 和证书 <code>jellyfin.crt</code>（参考<a href="/2024/01/31/Docker-Nginx-SSL-Local-Network/#SSL-%E8%AF%81%E4%B9%A6">上一篇文章</a>）</p>
 <p>然后使用以下命令生成 <code>.pfx</code> 文件即可：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl pkcs12 -<span class="built_in">export</span> -out jellyfin.pfx -inkey jellyfin-priv-key.key -<span class="keyword">in</span> jellyfin.crt  -passout pass:</span><br></pre></td></tr></table></figure>
-<h1>局域网设置</h1>
+<h1 id="局域网设置">局域网设置</h1>
 <blockquote>
 <p>再次说一下我的网络环境：</p>
 <p>Windows 主机，通过 VMware 安装了 Linux，Docker 运行在该虚拟机上。</p>
@@ -447,7 +447,7 @@
 </ol>
 <hr>
 <p>Windows 的 Jellyfin 开放 58920 端口，更换为 Docker 版后也是这个端口，即都可以在浏览器上通过 <code>https://主机IP:58920</code> 访问 web 客户端。这样可以“骗过” Google Password Manager，直接使用以前的账户和密码。</p>
-<h1>一些 Bug</h1>
+<h1 id="一些-Bug">一些 Bug</h1>
 <h2 id="字体问题1">字体问题1</h2>
 <p>创建好容器后，进入容器，执行以下命令：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update &amp;&amp; apt install fonts-noto-cjk-extra</span><br></pre></td></tr></table></figure>
@@ -468,7 +468,7 @@
 <p>更要命的是，这么做会导致视频无法播放，Jellyfin 读媒体数据时会报错。—— 我怀疑这是符号链接的锅，因为很多讲 NAS 的文章都使用硬链接，而不是符号链接。但我不喜欢用硬链接，更何况是在 Windows 上。</p>
 <p>但是给文件夹创建符号链接是可以的。比如说共享文件夹为 <code>jellyfin-docker-media</code>，我们可以通过给其他路径的 <code>films</code>、<code>animes</code> 文件夹制作符号链接，将它们都汇总到 <code>jellyfin-docker-media</code> 下。这相当于加了一层封装，减少了虚拟机共享文件夹的数目。</p>
 <p>实际上我就是这么做的，Docker-compose 中的 <code>/mnt/hgfs/jellyfin-media</code>，就是主机的 <code>jellyfin-docker-media</code> 共享文件夹。</p>
-<h1>Docker 知识</h1>
+<h1 id="Docker-知识">Docker 知识</h1>
 <p>通过安装 Jellyfin，我在实操中加深了对 Docker 的理解。</p>
 <h2 id="EXPOSE">EXPOSE</h2>
 <p>Dockerfile 中的 <code>EXPOSE</code> 关键字，我一直以为只有用了这个关键字，启动容器时才可以映射对应端口，实则不然。</p>
@@ -488,7 +488,7 @@
 <blockquote>
 <p><code>Inactive(file)</code> — The amount of file cache memory, in kibibytes, that is newly loaded from the disk, or is a candidate for reclaiming.</p>
 </blockquote>
-<h1>参考</h1>
+<h1 id="参考">参考</h1>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/624670198">在Docker下安装Jellyfin并正确开启硬件解码</a></li>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/640489824">Docker部署开源流媒体软件Jellyfin</a></li>
@@ -525,8 +525,8 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/Docker/" rel="tag"><i class="fa fa-tag"></i> Docker</a>
               <a href="/tags/NAS/" rel="tag"><i class="fa fa-tag"></i> NAS</a>
+              <a href="/tags/Docker/" rel="tag"><i class="fa fa-tag"></i> Docker</a>
               <a href="/tags/Jellyfin/" rel="tag"><i class="fa fa-tag"></i> Jellyfin</a>
           </div>
 

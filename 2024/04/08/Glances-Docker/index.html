@@ -33,8 +33,8 @@
 <meta property="article:published_time" content="2024-04-08T02:52:53.000Z">
 <meta property="article:modified_time" content="2024-04-08T02:52:53.000Z">
 <meta property="article:author" content="Gustav">
-<meta property="article:tag" content="Docker">
 <meta property="article:tag" content="NAS">
+<meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Glances">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://gustaavv.github.io/MarkDownImages/image-20240408112645115.png">
@@ -151,7 +151,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">Glances 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">Docker 安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Glances-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">Glances 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">Docker 安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -336,7 +336,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1>Glances 介绍</h1>
+    <div class="post-body" itemprop="articleBody"><h1 id="Glances-介绍">Glances 介绍</h1>
 <p>Dashy 中有很多 widgets 可以配置，其中比较实用的是资源监控。面板上展示 CPU 使用率，这对我没啥用 —— 我更关心是哪个程序导致了 CPU 高占用。但是这个功能所依赖的 Glances 软件，却非常实用。</p>
 <p>Glances 类似于 top 命令，可以展示系统资源使用情况。但是，它更优秀：</p>
 <ul>
@@ -347,14 +347,14 @@
 <p><img src="/MarkDownImages/image-20240408112645115.png" alt="image-20240408112645115"></p>
 <p>Glances 比较轻量级，只会展示当前的资源情况，不会记录历史数据。而我需要的正是这种轻量级又全面的资源监控软件。</p>
 <span id="more"></span>
-<h1>Docker 安装</h1>
+<h1 id="Docker-安装">Docker 安装</h1>
 <p>为什么要用 Docker 安装？官方的首选方式是用 pip 安装：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install --user glances</span><br></pre></td></tr></table></figure>
 <p>这会破坏本地的 Python 环境，所以还是要 Docker 吧。</p>
 <p>docker compose:</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">glances:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.io/nicolargo/glances:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">glances</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock:ro</span></span><br><span class="line">    <span class="attr">network_mode:</span> <span class="string">bridge</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">61208</span><span class="number">-61209</span><span class="string">:61208-61209</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">GLANCES_OPT=-w</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Asia/Shanghai</span></span><br><span class="line">    <span class="attr">pid:</span> <span class="string">host</span></span><br></pre></td></tr></table></figure>
 <p>之后浏览器访问 61208 端口。</p>
-<h1>参考</h1>
+<h1 id="参考">参考</h1>
 <ul>
 <li><strong><a target="_blank" rel="noopener" href="https://github.com/nicolargo/glances">Glances</a></strong></li>
 </ul>
@@ -384,8 +384,8 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/Docker/" rel="tag"><i class="fa fa-tag"></i> Docker</a>
               <a href="/tags/NAS/" rel="tag"><i class="fa fa-tag"></i> NAS</a>
+              <a href="/tags/Docker/" rel="tag"><i class="fa fa-tag"></i> Docker</a>
               <a href="/tags/Glances/" rel="tag"><i class="fa fa-tag"></i> Glances</a>
           </div>
 

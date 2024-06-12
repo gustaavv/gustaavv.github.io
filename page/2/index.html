@@ -281,7 +281,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1>序言</h1>
+          <h1 id="序言">序言</h1>
 <p>Metabase 是一个开源的数据分析工具，操作简单，可以连接到多种数据源。虽然数据分析能力没有 Excel 强大，Metabase 也足够日常使用了。并且，我更擅长写 SQL，而不是操作 Excel，因此 Metabase 是个很好的选择。</p>
           <!--noindex-->
             <div class="post-button">
@@ -391,9 +391,9 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>对于开发者，安装 MySQL 不是什么难事，但是往往步骤比较多。我记录了一个 Docker compose 模板，能直接启动一个配置好的 MySQL 容器，用于开发。</p>
-<h1>Docker compose</h1>
+<h1 id="Docker-compose">Docker compose</h1>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:5.7</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">mysql</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">&#x27;123456&#x27;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">43306</span><span class="string">:3306</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql_data:/var/lib/mysql</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">mysqld</span> <span class="string">--character-set-server=utf8</span> <span class="string">--collation-server=utf8_general_ci</span> <span class="string">--character-set-client-handshake=FALSE</span></span><br><span class="line">    <span class="attr">healthcheck:</span></span><br><span class="line">      <span class="attr">test:</span> <span class="string">out=$$(mysqladmin</span> <span class="string">ping</span> <span class="string">-h</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="string">-u</span> <span class="string">root</span> <span class="string">--password=$$MYSQL_ROOT_PASSWORD);</span> <span class="string">echo</span> <span class="string">$$out</span> <span class="string">|</span> <span class="string">grep</span> <span class="string">&#x27;mysqld is alive&#x27;</span> <span class="string">||</span> &#123; <span class="string">echo</span> <span class="string">$$out;</span> <span class="string">exit</span> <span class="number">1</span><span class="string">;</span> &#125;</span><br><span class="line">      <span class="attr">start_period:</span> <span class="string">0s</span></span><br><span class="line">      <span class="attr">interval:</span> <span class="string">5s</span></span><br><span class="line">      <span class="attr">timeout:</span> <span class="string">3s</span></span><br><span class="line">      <span class="attr">retries:</span> <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">mysql_data:</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h1>配置说明</h1>
+<h1 id="配置说明">配置说明</h1>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2024/04/12/MySQL-Docker/#more" rel="contents">
@@ -501,7 +501,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1>Glances 介绍</h1>
+          <h1 id="Glances-介绍">Glances 介绍</h1>
 <p>Dashy 中有很多 widgets 可以配置，其中比较实用的是资源监控。面板上展示 CPU 使用率，这对我没啥用 —— 我更关心是哪个程序导致了 CPU 高占用。但是这个功能所依赖的 Glances 软件，却非常实用。</p>
 <p>Glances 类似于 top 命令，可以展示系统资源使用情况。但是，它更优秀：</p>
 <ul>
@@ -618,12 +618,12 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1>序言</h1>
+          <h1 id="序言">序言</h1>
 <p><a target="_blank" rel="noopener" href="https://github.com/Lissy93/dashy">Dashy</a> 是一个开源的个性化 dashboard 软件，需要自主部署。我的使用场景是放置常用网站的链接。这篇博文主要记录安装和使用时遇到的一些问题。</p>
 <blockquote>
 <p>dashboard 翻译为仪表盘？我总觉得有点奇怪🤔</p>
 </blockquote>
-<h1>安装</h1>
+<h1 id="安装">安装</h1>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2024/04/04/Dashy-install-and-config/#more" rel="contents">
@@ -727,7 +727,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1>序言</h1>
+          <h1 id="序言">序言</h1>
 <p>最近在用 Python 写爬虫来下载漫画（见<a href="/tags/LANraragi/">之前几篇介绍 LANraragi 的文章</a>）。一本漫画的网页通常是这样的：</p>
 <img src="/MarkDownImages/image-20240329132644183.png" alt="image-20240329132644183" style="zoom: 33%;" />
 <p>该网页上的所有数据可以用 BeautifulSoup 获得，而一个页面只需要一次通信。但是下载图片不一样，一张图片就需要一次通信，而且响应体往往很大。正如包子不会一个个地煮，图片也不用顺序地下载，否则太浪费时间了。</p>

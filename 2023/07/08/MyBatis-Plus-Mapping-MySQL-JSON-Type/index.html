@@ -152,7 +152,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">案例演示</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8"><span class="nav-number">2.1.</span> <span class="nav-text">数据库表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96"><span class="nav-number">2.2.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#entity"><span class="nav-number">2.3.</span> <span class="nav-text">entity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mapper-xml"><span class="nav-number">2.4.</span> <span class="nav-text">mapper.xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">2.5.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E6%BC%94%E7%A4%BA"><span class="nav-number">2.</span> <span class="nav-text">案例演示</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8"><span class="nav-number">2.1.</span> <span class="nav-text">数据库表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96"><span class="nav-number">2.2.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#entity"><span class="nav-number">2.3.</span> <span class="nav-text">entity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mapper-xml"><span class="nav-number">2.4.</span> <span class="nav-text">mapper.xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">2.5.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">4.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -305,7 +305,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1>序言</h1>
+    <div class="post-body" itemprop="articleBody"><h1 id="序言">序言</h1>
 <p>MySQL 支持 JSON 类型的字段。相比字符串类型的字段， JSON 类型有如下好处：</p>
 <ul>
 <li>自动检查 JSON 语法是否正确</li>
@@ -313,7 +313,7 @@
 </ul>
 <p>在逻辑上，JSON 与 POJO 无异。Spring MVC 已经实现了 Controller 层两者的自动转化，这体现在请求参数和返回值上。那么，Repository 层如何实现两者的自动转换呢？</p>
 <p>本文展示了通过使用 MyBatis-Plus，<strong>无侵入式</strong>地实现持久层 JSON 与 POJO 的自动映射（ORM， Object Relational Mapping）</p>
-<h1>案例演示</h1>
+<h1 id="案例演示">案例演示</h1>
 <h2 id="数据库表">数据库表</h2>
 <span id="more"></span>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `person` (</span><br><span class="line">  `id` bigint NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `name` varchar(255) NOT NULL,</span><br><span class="line">  `log` json NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB;</span><br></pre></td></tr></table></figure>
@@ -334,10 +334,10 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PersonController</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> PersonMapper personMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping(&quot;/json&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">testJSON2BeanMap</span><span class="params">(<span class="meta">@RequestBody</span> Person person)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> personMapper.insert(person);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/json/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Person <span class="title function_">getPersonById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> personMapper.selectById(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>测试两个方法，没报错就说明成功，插入时可以再查看一下数据库。</p>
 <p>在<a href="#%E5%BA%8F%E8%A8%80">序言</a>中提到的<strong>无侵入式ORM</strong>，是指我们不需要在代码中手动地执行 JSON 与 PersonLog 的转换。</p>
-<h1>总结</h1>
+<h1 id="总结">总结</h1>
 <p>本文展示了通过使用 MyBatis-Plus<strong>无侵入式</strong>实现持久层 JSON 与 POJO 的自动映射。</p>
 <p>我对这一问题的研究源自实习时业务的要求。当我查询网上的资料时，发现帖子的表述都不太完整、直观，于是我记录下了解决方案，写成了这篇文章。</p>
-<h1>参考文章</h1>
+<h1 id="参考文章">参考文章</h1>
 <p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/json.html">The JSON Data Type</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33360626/article/details/119836835">mybatis-plus处理mysql中json格式方法</a></p>
 
