@@ -77,68 +77,6 @@
       </tags>
   </entry>
   <entry>
-    <title>算法题006：根据前序和后序遍历构造二叉树</title>
-    <url>/2024/02/22/Algorithm-Problem-006-construct-binary-tree-from-preorder-and-postorder-traversal/</url>
-    <content><![CDATA[<h1 id="题目">题目</h1>
-<blockquote>
-<p>题目来源：<a href="https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-postorder-traversal">889. 根据前序和后序遍历构造二叉树</a>（每日一题）</p>
-</blockquote>
-<blockquote>
-<p><strong>题目描述</strong>：</p>
-<p>给定两个整数数组，<code>preorder</code> 和 <code>postorder</code> ，其中 <code>preorder</code> 是一个具有 <strong>无重复</strong> 值的二叉树的前序遍历，<code>postorder</code> 是同一棵树的后序遍历，重构并返回二叉树。</p>
-<p>如果存在多个答案，您可以返回其中 <strong>任何</strong> 一个。</p>
-</blockquote>
-<span id="more"></span>
-<blockquote>
-<p><strong>示例 1：</strong></p>
-<p><img src="https://assets.leetcode.com/uploads/2021/07/24/lc-prepost.jpg" alt="img"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：preorder = [1,2,4,5,3,6,7], postorder = [4,5,2,6,7,3,1]</span><br><span class="line">输出：[1,2,3,4,5,6,7]</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: preorder = [1], postorder = [1]</span><br><span class="line">输出: [1]</span><br></pre></td></tr></table></figure>
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>1 &lt;= preorder.length &lt;= 30</code></li>
-<li><code>1 &lt;= preorder[i] &lt;= preorder.length</code></li>
-<li><code>preorder</code> 中所有值都 <strong>不同</strong></li>
-<li><code>postorder.length == preorder.length</code></li>
-<li><code>1 &lt;= postorder[i] &lt;= postorder.length</code></li>
-<li><code>postorder</code> 中所有值都 <strong>不同</strong></li>
-<li>保证 <code>preorder</code> 和 <code>postorder</code> 是同一棵二叉树的前序遍历和后序遍历</li>
-</ul>
-</blockquote>
-<h1 id="思路">思路</h1>
-<p>首先，<strong>前序和后序构造的二叉树不唯一</strong>，因此不存在确定的规则，自由反而带来了坏处。与之相对的，『中序和前序』以及『中序和后序』只对应唯一的二叉树，规则明确，按照规则写代码即可。因此，我们要自定义规则。</p>
-<p>回忆用『中序和前序』构造二叉树，我们顺序遍历前序列表，每遍历一个值，创建对应节点，然后根据中序确定其子树。这可以理解为前序创建，中序校验。</p>
-<p>同理，在这道题中，我们也是“顺序遍历前序列表，每遍历一个值，创建对应节点”，但是根据后序确定 <strong>该节点的位置</strong> （而不是其子树）—— 前序创建，后序校验。</p>
-<p>前序是“中左右”，每遍历前序列表一个节点，我们都可以尝试把它放到左子节点。而后序是“左右中”，<strong>假设在后序列表中节点 A 在 B 之后，那么 A 绝对不可能在 B 的左子树中。</strong></p>
-<p>例如，观察示例 1 的节点 <code>5</code>。顺序遍历前序列表，我们尝试把 <code>5</code> 作为 <code>4</code> 的左子节点。但是在后序列表中，<code>5</code> 在 <code>4</code> 之后，那么这种尝试是不允许的。 <strong><code>5</code> 只可能在 <code>4</code> 的某一个祖先的右子树中</strong>，在这里是 <code>2</code> 的右节点。</p>
-<p>因此，我们需要追踪<strong>从根节点到上一个遍历到的节点的一条路径</strong>，将它们存入一个栈中。</p>
-<ul>
-<li>只要当前节点和栈顶节点不满足上述后序约束，就出栈，直到满足为止。此时，当前节点是栈顶节点的右子节点。</li>
-<li>如果已经满足约束，当前节点直接成为栈顶节点的左子节点。</li>
-</ul>
-<h1 id="代码">代码</h1>
-<p>上述思路是一个大致描述，还是要注意一些细节。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode() : val(0), left(nullptr), right(nullptr) &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">constructFromPrePost</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; preorder, vector&lt;<span class="type">int</span>&gt;&amp; postorder)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = preorder.<span class="built_in">size</span>();</span><br><span class="line">        <span class="comment">// 只操作 vector 尾部，相当于 stack</span></span><br><span class="line">        vector&lt;TreeNode*&gt; ve;</span><br><span class="line">        unordered_map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; mp;</span><br><span class="line">        <span class="comment">// 和『中序和前序』一样，将校验列表的 &lt;元素, 索引&gt; 存入哈希表</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            mp[postorder[i]] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> v: preorder) &#123;</span><br><span class="line">            TreeNode* cur = <span class="keyword">new</span> <span class="built_in">TreeNode</span>(v);</span><br><span class="line">            <span class="comment">// 只有第一个元素（根节点）才可能触发这个条件</span></span><br><span class="line">            <span class="keyword">if</span> (ve.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                ve.<span class="built_in">push_back</span>(cur);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">bool</span> popped = <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">while</span>((!ve.<span class="built_in">empty</span>()) &amp;&amp; (mp[v] &gt; mp[ve.<span class="built_in">back</span>()-&gt;val])) &#123;</span><br><span class="line">                ve.<span class="built_in">pop_back</span>();</span><br><span class="line">                popped = <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (!popped) &#123;</span><br><span class="line">                ve.<span class="built_in">back</span>()-&gt;left = cur;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                ve.<span class="built_in">back</span>()-&gt;right = cur;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 存入当前节点，用于下一个节点的判断</span></span><br><span class="line">            ve.<span class="built_in">push_back</span>(cur);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 第一个节点永远是根节点，且不会被弹出</span></span><br><span class="line">        <span class="keyword">return</span> ve.<span class="built_in">front</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>时间复杂度：$O(n)$</p>
-<ul>
-<li>顺序遍历 <code>preorder</code> 和 <code>postorder</code>；</li>
-<li>所有节点只会进出 <code>ve</code> 一次；</li>
-</ul>
-<p>空间复杂度：$O(n)$</p>
-<ul>
-<li><code>mp</code> 存放了 $n$ 个节点的值及其索引；</li>
-<li>最坏的情况，所有节点都进入 <code>ve</code>；</li>
-</ul>
-]]></content>
-      <categories>
-        <category>算法题</category>
-      </categories>
-      <tags>
-        <tag>树</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>算法题003：对角线遍历 II</title>
     <url>/2023/10/29/Algorithm-Problem-003-diagonal-traverse-ii/</url>
     <content><![CDATA[<h1 id="题目">题目</h1>
@@ -427,6 +365,68 @@
       </tags>
   </entry>
   <entry>
+    <title>算法题006：根据前序和后序遍历构造二叉树</title>
+    <url>/2024/02/22/Algorithm-Problem-006-construct-binary-tree-from-preorder-and-postorder-traversal/</url>
+    <content><![CDATA[<h1 id="题目">题目</h1>
+<blockquote>
+<p>题目来源：<a href="https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-postorder-traversal">889. 根据前序和后序遍历构造二叉树</a>（每日一题）</p>
+</blockquote>
+<blockquote>
+<p><strong>题目描述</strong>：</p>
+<p>给定两个整数数组，<code>preorder</code> 和 <code>postorder</code> ，其中 <code>preorder</code> 是一个具有 <strong>无重复</strong> 值的二叉树的前序遍历，<code>postorder</code> 是同一棵树的后序遍历，重构并返回二叉树。</p>
+<p>如果存在多个答案，您可以返回其中 <strong>任何</strong> 一个。</p>
+</blockquote>
+<span id="more"></span>
+<blockquote>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2021/07/24/lc-prepost.jpg" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：preorder = [1,2,4,5,3,6,7], postorder = [4,5,2,6,7,3,1]</span><br><span class="line">输出：[1,2,3,4,5,6,7]</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: preorder = [1], postorder = [1]</span><br><span class="line">输出: [1]</span><br></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= preorder.length &lt;= 30</code></li>
+<li><code>1 &lt;= preorder[i] &lt;= preorder.length</code></li>
+<li><code>preorder</code> 中所有值都 <strong>不同</strong></li>
+<li><code>postorder.length == preorder.length</code></li>
+<li><code>1 &lt;= postorder[i] &lt;= postorder.length</code></li>
+<li><code>postorder</code> 中所有值都 <strong>不同</strong></li>
+<li>保证 <code>preorder</code> 和 <code>postorder</code> 是同一棵二叉树的前序遍历和后序遍历</li>
+</ul>
+</blockquote>
+<h1 id="思路">思路</h1>
+<p>首先，<strong>前序和后序构造的二叉树不唯一</strong>，因此不存在确定的规则，自由反而带来了坏处。与之相对的，『中序和前序』以及『中序和后序』只对应唯一的二叉树，规则明确，按照规则写代码即可。因此，我们要自定义规则。</p>
+<p>回忆用『中序和前序』构造二叉树，我们顺序遍历前序列表，每遍历一个值，创建对应节点，然后根据中序确定其子树。这可以理解为前序创建，中序校验。</p>
+<p>同理，在这道题中，我们也是“顺序遍历前序列表，每遍历一个值，创建对应节点”，但是根据后序确定 <strong>该节点的位置</strong> （而不是其子树）—— 前序创建，后序校验。</p>
+<p>前序是“中左右”，每遍历前序列表一个节点，我们都可以尝试把它放到左子节点。而后序是“左右中”，<strong>假设在后序列表中节点 A 在 B 之后，那么 A 绝对不可能在 B 的左子树中。</strong></p>
+<p>例如，观察示例 1 的节点 <code>5</code>。顺序遍历前序列表，我们尝试把 <code>5</code> 作为 <code>4</code> 的左子节点。但是在后序列表中，<code>5</code> 在 <code>4</code> 之后，那么这种尝试是不允许的。 <strong><code>5</code> 只可能在 <code>4</code> 的某一个祖先的右子树中</strong>，在这里是 <code>2</code> 的右节点。</p>
+<p>因此，我们需要追踪<strong>从根节点到上一个遍历到的节点的一条路径</strong>，将它们存入一个栈中。</p>
+<ul>
+<li>只要当前节点和栈顶节点不满足上述后序约束，就出栈，直到满足为止。此时，当前节点是栈顶节点的右子节点。</li>
+<li>如果已经满足约束，当前节点直接成为栈顶节点的左子节点。</li>
+</ul>
+<h1 id="代码">代码</h1>
+<p>上述思路是一个大致描述，还是要注意一些细节。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode() : val(0), left(nullptr), right(nullptr) &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">constructFromPrePost</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; preorder, vector&lt;<span class="type">int</span>&gt;&amp; postorder)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = preorder.<span class="built_in">size</span>();</span><br><span class="line">        <span class="comment">// 只操作 vector 尾部，相当于 stack</span></span><br><span class="line">        vector&lt;TreeNode*&gt; ve;</span><br><span class="line">        unordered_map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; mp;</span><br><span class="line">        <span class="comment">// 和『中序和前序』一样，将校验列表的 &lt;元素, 索引&gt; 存入哈希表</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            mp[postorder[i]] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> v: preorder) &#123;</span><br><span class="line">            TreeNode* cur = <span class="keyword">new</span> <span class="built_in">TreeNode</span>(v);</span><br><span class="line">            <span class="comment">// 只有第一个元素（根节点）才可能触发这个条件</span></span><br><span class="line">            <span class="keyword">if</span> (ve.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                ve.<span class="built_in">push_back</span>(cur);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">bool</span> popped = <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">while</span>((!ve.<span class="built_in">empty</span>()) &amp;&amp; (mp[v] &gt; mp[ve.<span class="built_in">back</span>()-&gt;val])) &#123;</span><br><span class="line">                ve.<span class="built_in">pop_back</span>();</span><br><span class="line">                popped = <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (!popped) &#123;</span><br><span class="line">                ve.<span class="built_in">back</span>()-&gt;left = cur;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                ve.<span class="built_in">back</span>()-&gt;right = cur;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 存入当前节点，用于下一个节点的判断</span></span><br><span class="line">            ve.<span class="built_in">push_back</span>(cur);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 第一个节点永远是根节点，且不会被弹出</span></span><br><span class="line">        <span class="keyword">return</span> ve.<span class="built_in">front</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：$O(n)$</p>
+<ul>
+<li>顺序遍历 <code>preorder</code> 和 <code>postorder</code>；</li>
+<li>所有节点只会进出 <code>ve</code> 一次；</li>
+</ul>
+<p>空间复杂度：$O(n)$</p>
+<ul>
+<li><code>mp</code> 存放了 $n$ 个节点的值及其索引；</li>
+<li>最坏的情况，所有节点都进入 <code>ve</code>；</li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法题</category>
+      </categories>
+      <tags>
+        <tag>树</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Azure Pipelines 架构解析</title>
     <url>/2023/10/06/Azure-Pipelines-Architecture/</url>
     <content><![CDATA[<h1 id="介绍">介绍</h1>
@@ -547,6 +547,54 @@
         <tag>NAS</tag>
         <tag>Docker</tag>
         <tag>Dashy</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何访问 Docker 容器？IP 地址还是容器名？</title>
+    <url>/2024/06/11/Docker-Accessing-Containers-IP-or-Container-Name/</url>
+    <content><![CDATA[<h1 id="序言">序言</h1>
+<p>本文包括了多种访问 Docker 容器的情况，探讨了每种情况应该使用容器的 IP 地址还是容器名。本文的内容对于熟练使用 Docker 的人不值一提，但在实践中，我常常忘记这些基本概念，浪费了不少时间。因此，我决定以 cheat sheet 的形式写一篇博文。本文的大部分内容由 ChatGPT 生成的。</p>
+<p>总的来说，记住以下两点就够了：</p>
+<ul>
+<li>尽管我们喜欢用容器名访问容器，但这个 DNS 服务是由 docker 提供的，因此<strong>只能被容器使用</strong>。</li>
+<li>对于端口映射 <code>-p 8080:80</code> ：用容器名/容器 IP 访问容器时，用容器的端口 <code>80</code>；用主机访问容器时，用主机的端口 <code>8080</code>。</li>
+</ul>
+<span id="more"></span>
+<h1 id="从容器中访问目标容器">从容器中访问目标容器</h1>
+<p>此时要区分两个容器是否在一个 docker network 中。</p>
+<h2 id="两者在同一个网络中">两者在同一个网络中</h2>
+<p>情况一：两个容器属于同一个 Compose</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mywebapp</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql</span></span><br></pre></td></tr></table></figure>
+<p>情况二：创建容器时使用 <code>--network</code> 选项使两个容器在一个网络中。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker network create my_network</span><br><span class="line">docker run -d --name web --network my_network mywebapp</span><br><span class="line">docker run -d --name db --network my_network mysql</span><br></pre></td></tr></table></figure>
+<p>两种情况下，都可以通过容器名访问（使用容器端口）。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl http://web:80</span><br></pre></td></tr></table></figure>
+<p><strong>注意，如果目标容器在 bridge 网络中，则不属于这种情况。需要通过 IP 访问。</strong></p>
+<h2 id="两者不在同一个网络中">两者不在同一个网络中</h2>
+<p>需要使用目标容器的 IP。</p>
+<p>首先获得容器 IP，然后通过 IP 访问：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">CONTAINER_IP=$(docker inspect -f &#x27;&#123;&#123;range .NetworkSettings.Networks&#125;&#125;&#123;&#123;.IPAddress&#125;&#125;&#123;&#123;end&#125;&#125;&#x27; 容器)</span><br><span class="line">curl http://$CONTAINER_IP:80</span><br></pre></td></tr></table></figure>
+<h1 id="从本地主机访问目标容器">从本地主机访问目标容器</h1>
+<p>有两种方式：</p>
+<p>一、通过容器 IP 访问。</p>
+<p>二、使用本地端口访问：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl http://localhost:8080</span><br></pre></td></tr></table></figure>
+<p>注意，这里是本机端口，不再是容器端口。</p>
+<h1 id="从外部主机访问目标容器">从外部主机访问目标容器</h1>
+<p>使用本地主机的 IP 访问：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl http://host_ip:8080</span><br></pre></td></tr></table></figure>
+<h1 id="参考">参考</h1>
+<ul>
+<li>ChatGPT</li>
+</ul>
+]]></content>
+      <categories>
+        <category>tech</category>
+        <category>Docker</category>
+        <category>cheat sheet</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
@@ -684,91 +732,6 @@
       </categories>
       <tags>
         <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何访问 Docker 容器？IP 地址还是容器名？</title>
-    <url>/2024/06/11/Docker-Accessing-Containers-IP-or-Container-Name/</url>
-    <content><![CDATA[<h1 id="序言">序言</h1>
-<p>本文包括了多种访问 Docker 容器的情况，探讨了每种情况应该使用容器的 IP 地址还是容器名。本文的内容对于熟练使用 Docker 的人不值一提，但在实践中，我常常忘记这些基本概念，浪费了不少时间。因此，我决定以 cheat sheet 的形式写一篇博文。本文的大部分内容由 ChatGPT 生成的。</p>
-<p>总的来说，记住以下两点就够了：</p>
-<ul>
-<li>尽管我们喜欢用容器名访问容器，但这个 DNS 服务是由 docker 提供的，因此<strong>只能被容器使用</strong>。</li>
-<li>对于端口映射 <code>-p 8080:80</code> ：用容器名/容器 IP 访问容器时，用容器的端口 <code>80</code>；用主机访问容器时，用主机的端口 <code>8080</code>。</li>
-</ul>
-<span id="more"></span>
-<h1 id="从容器中访问目标容器">从容器中访问目标容器</h1>
-<p>此时要区分两个容器是否在一个 docker network 中。</p>
-<h2 id="两者在同一个网络中">两者在同一个网络中</h2>
-<p>情况一：两个容器属于同一个 Compose</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mywebapp</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql</span></span><br></pre></td></tr></table></figure>
-<p>情况二：创建容器时使用 <code>--network</code> 选项使两个容器在一个网络中。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker network create my_network</span><br><span class="line">docker run -d --name web --network my_network mywebapp</span><br><span class="line">docker run -d --name db --network my_network mysql</span><br></pre></td></tr></table></figure>
-<p>两种情况下，都可以通过容器名访问（使用容器端口）。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl http://web:80</span><br></pre></td></tr></table></figure>
-<p><strong>注意，如果目标容器在 bridge 网络中，则不属于这种情况。需要通过 IP 访问。</strong></p>
-<h2 id="两者不在同一个网络中">两者不在同一个网络中</h2>
-<p>需要使用目标容器的 IP。</p>
-<p>首先获得容器 IP，然后通过 IP 访问：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">CONTAINER_IP=$(docker inspect -f &#x27;&#123;&#123;range .NetworkSettings.Networks&#125;&#125;&#123;&#123;.IPAddress&#125;&#125;&#123;&#123;end&#125;&#125;&#x27; 容器)</span><br><span class="line">curl http://$CONTAINER_IP:80</span><br></pre></td></tr></table></figure>
-<h1 id="从本地主机访问目标容器">从本地主机访问目标容器</h1>
-<p>有两种方式：</p>
-<p>一、通过容器 IP 访问。</p>
-<p>二、使用本地端口访问：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl http://localhost:8080</span><br></pre></td></tr></table></figure>
-<p>注意，这里是本机端口，不再是容器端口。</p>
-<h1 id="从外部主机访问目标容器">从外部主机访问目标容器</h1>
-<p>使用本地主机的 IP 访问：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl http://host_ip:8080</span><br></pre></td></tr></table></figure>
-<h1 id="参考">参考</h1>
-<ul>
-<li>ChatGPT</li>
-</ul>
-]]></content>
-      <categories>
-        <category>tech</category>
-        <category>Docker</category>
-        <category>cheat sheet</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在 Docker 中安装 Glances</title>
-    <url>/2024/04/08/Glances-Docker/</url>
-    <content><![CDATA[<h1 id="Glances-介绍">Glances 介绍</h1>
-<p>Dashy 中有很多 widgets 可以配置，其中比较实用的是资源监控。面板上展示 CPU 使用率，这对我没啥用 —— 我更关心是哪个程序导致了 CPU 高占用。但是这个功能所依赖的 Glances 软件，却非常实用。</p>
-<p>Glances 类似于 top 命令，可以展示系统资源使用情况。但是，它更优秀：</p>
-<ul>
-<li>数据展示更全面、更人性化；</li>
-<li>可以展示每个容器的资源使用情况 —— 在这一点上，它胜过了 Portainer。Portainer 只能以<strong>图表</strong>形式展示<strong>一个</strong>容器的资源使用情况。</li>
-<li>可以用服务器模式启动。我们可以通过浏览器监控资源使用情况，很方便。</li>
-</ul>
-<p><img src="/MarkDownImages/image-20240408112645115.png" alt="image-20240408112645115"></p>
-<p>Glances 比较轻量级，只会展示当前的资源情况，不会记录历史数据。而我需要的正是这种轻量级又全面的资源监控软件。</p>
-<span id="more"></span>
-<h1 id="Docker-安装">Docker 安装</h1>
-<p>为什么要用 Docker 安装？官方的首选方式是用 pip 安装：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install --user glances</span><br></pre></td></tr></table></figure>
-<p>这会破坏本地的 Python 环境，所以还是要 Docker 吧。</p>
-<p>docker compose:</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">glances:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.io/nicolargo/glances:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">glances</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock:ro</span></span><br><span class="line">    <span class="attr">network_mode:</span> <span class="string">bridge</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">61208</span><span class="number">-61209</span><span class="string">:61208-61209</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">GLANCES_OPT=-w</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Asia/Shanghai</span></span><br><span class="line">    <span class="attr">pid:</span> <span class="string">host</span></span><br></pre></td></tr></table></figure>
-<p>之后浏览器访问 61208 端口。</p>
-<h1 id="参考">参考</h1>
-<ul>
-<li><strong><a href="https://github.com/nicolargo/glances">Glances</a></strong></li>
-</ul>
-]]></content>
-      <categories>
-        <category>tech</category>
-        <category>NAS</category>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>NAS</tag>
-        <tag>Docker</tag>
-        <tag>Glances</tag>
       </tags>
   </entry>
   <entry>
@@ -919,6 +882,134 @@
       </tags>
   </entry>
   <entry>
+    <title>在 Docker 中安装 Glances</title>
+    <url>/2024/04/08/Glances-Docker/</url>
+    <content><![CDATA[<h1 id="Glances-介绍">Glances 介绍</h1>
+<p>Dashy 中有很多 widgets 可以配置，其中比较实用的是资源监控。面板上展示 CPU 使用率，这对我没啥用 —— 我更关心是哪个程序导致了 CPU 高占用。但是这个功能所依赖的 Glances 软件，却非常实用。</p>
+<p>Glances 类似于 top 命令，可以展示系统资源使用情况。但是，它更优秀：</p>
+<ul>
+<li>数据展示更全面、更人性化；</li>
+<li>可以展示每个容器的资源使用情况 —— 在这一点上，它胜过了 Portainer。Portainer 只能以<strong>图表</strong>形式展示<strong>一个</strong>容器的资源使用情况。</li>
+<li>可以用服务器模式启动。我们可以通过浏览器监控资源使用情况，很方便。</li>
+</ul>
+<p><img src="/MarkDownImages/image-20240408112645115.png" alt="image-20240408112645115"></p>
+<p>Glances 比较轻量级，只会展示当前的资源情况，不会记录历史数据。而我需要的正是这种轻量级又全面的资源监控软件。</p>
+<span id="more"></span>
+<h1 id="Docker-安装">Docker 安装</h1>
+<p>为什么要用 Docker 安装？官方的首选方式是用 pip 安装：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install --user glances</span><br></pre></td></tr></table></figure>
+<p>这会破坏本地的 Python 环境，所以还是要 Docker 吧。</p>
+<p>docker compose:</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">glances:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.io/nicolargo/glances:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">glances</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock:ro</span></span><br><span class="line">    <span class="attr">network_mode:</span> <span class="string">bridge</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">61208</span><span class="number">-61209</span><span class="string">:61208-61209</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">GLANCES_OPT=-w</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Asia/Shanghai</span></span><br><span class="line">    <span class="attr">pid:</span> <span class="string">host</span></span><br></pre></td></tr></table></figure>
+<p>之后浏览器访问 61208 端口。</p>
+<h1 id="参考">参考</h1>
+<ul>
+<li><strong><a href="https://github.com/nicolargo/glances">Glances</a></strong></li>
+</ul>
+]]></content>
+      <categories>
+        <category>tech</category>
+        <category>NAS</category>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>NAS</tag>
+        <tag>Docker</tag>
+        <tag>Glances</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>自动化追番：从 AutoBangumi 回到 qBittorrent RSS</title>
+    <url>/2024/06/29/From-AutoBangumi-Back-to-qBittorrent-RSS/</url>
+    <content><![CDATA[<h1 id="序言">序言</h1>
+<p><a href="https://github.com/EstrellaXD/Auto_Bangumi">AutoBangumi</a> 是一款“基于 RSS 的全自动追番整理下载工具”<strong>（以下简称 AB）</strong>，很适合我这种同时使用 <a href="https://github.com/c0re100/qBittorrent-Enhanced-Edition">qBittorrent</a> <strong>（以下简称 QB）</strong> 和 Jellyfin 的用户。在使用 AB 追了一个季度的番剧后，我对于 AB、Jellyfin等软件以及 RSS、刮削等概念有了更深的理解。尽管 AB 提供了自动化，但引入它也增加了追番流程的复杂度 —— 尤其表现在 AB 出问题时。</p>
+<p>回顾以往使用 QB RSS 功能的经历，加上新的理解，我选择不再使用 AB，而是使用 QB RSS 来代替。尽管在每个季度追新番时的步骤增加了一些，但整个系统的复杂度和资源占用量降低了。总的来说，我对这个改变是满意的。</p>
+<h1 id="自动化追番流程">自动化追番流程</h1>
+<pre><code class="highlight mermaid">flowchart LR
+subgraph g1[RSS订阅器]
+a1[AB] ~~~ a2[QB ]
+end
+subgraph g2[RSS下载器]
+b1[AB] ~~~ b2[QB]
+end
+subgraph g3[torrent下载器]
+c1[QB] ~~~ c3[Transmission ]
+end
+subgraph g4[下载后任务（可选）]
+d1[邮件通知下载完成] ~~~ d2[修改下载视频名] ~~~ d3[创建硬链接]
+end
+
+subgraph g5[Jellyfin（插件）刮削]
+e1[Bangumi] ~~~  e2[AniDB] ~~~ e3[TMDB]
+end
+g1--&gt;g2--&gt;g3--&gt;g4--&gt;g5</code></pre>
+<span id="more"></span>
+<p>如图，整个自动化追番流程分为五个步骤：</p>
+<ol>
+<li>RSS 订阅器：通过订阅 Mikan 等网站的 RSS 链接，获取一部番剧每一集的信息（其中最重要的是 torrent 信息）。RSS 订阅器的作用是定时获取最新的内容，因此更常见的使用场景是获取新的文章。</li>
+<li>RSS 下载器：根据 RSS 订阅器获取的新的剧集信息，下载番剧。RSS 下载器知道哪些是已经下载了的，哪些是待下载的，因此总是下载新的剧集。</li>
+<li>torrent 下载器 —— 没啥好介绍的。</li>
+<li>下载后任务（可选）：这个 post-download tasks 的涵盖范围极广。以下是一些可能的下载后任务：
+<ul>
+<li>QB 可以设置『torrent 完成时运行外部程序』，通过脚本执行任意功能，调用任意其他程序，比如邮件通知。</li>
+<li>AB、Sonarr 等软件可以在下载后更新视频名称，使之适合刮削。</li>
+<li>如果下载目录和 Jellyfin 媒体目录是分离的，为了节省硬盘寿命，可以在媒体目录中创建对应视频文件的硬链接，而不是移动视频文件本身。（硬链接只能在同一文件系统内使用）</li>
+</ul>
+</li>
+<li>Jellyfin（插件）刮削：Jellyfin 定期扫描媒体库，如果用户选择自动刮削（即从网络获取元数据），那么 Jellyfin 会根据视频名称尝试获取元数据（有可能失败）。这一部分的功能是由 Jellyfin 插件实现的，默认的是 TMDB，但 Bangumi 和 AniDB 的效果更好。</li>
+</ol>
+<h1 id="AB-的作用">AB 的作用</h1>
+<p>当我们要订阅一部新番时，首先获得 RSS 链接，然后点击『添加 RSS』：
+<img src="/MDImgs/From-AutoBangumi-Back-to-qBittorrent-RSS/image.png" alt="alt text" style="zoom:50%;" /></p>
+<p>然后在主页可以看到该动漫的信息：
+<img src="/MDImgs/From-AutoBangumi-Back-to-qBittorrent-RSS/image-1.png" alt="alt text"></p>
+<p>AB 会自动订阅该 RSS，同时在 RSS 下载器中添加一条新的规则。当有了新的一集后，RSS 下载器将视频下载到 <code>动漫目录/番剧名/Season 1/</code> 下。下载完成后，AB 会将视频重命名。</p>
+<ul>
+<li><code>动漫目录</code> 是我们预先在 AB 中配置的，是 QB 的下载目录；</li>
+<li><code>番剧名/Season 1/</code> 是 AB 自动生成的，为了符合 Jellyfin 媒体库的结构；</li>
+<li>视频重命名是 AB 自动进行的，为了方便 Jellyfin 刮削；</li>
+</ul>
+<p>可以看到，AB 确实是高度自动化的，成功实现了『 RSS 链接与 torrent 下载器之间』和『torrent 下载器与 Jellyfin 之间』的自动化。但是，在实际使用时，我没有开启视频重命名的功能，Jellyfin 依旧可以准确识别。因此，AB 在我看来只是一个方便的 RSS 订阅器和 RSS 下载器。</p>
+<h1 id="使用-QB-RSS-代替-AB">使用 QB RSS 代替 AB</h1>
+<p>了解了 AB 的作用后，不难发现 QB RSS 功能可以平替 AB。好处是显而易见的：</p>
+<ul>
+<li>系统中的组件减少了，资源占用和复杂度降低了；</li>
+<li>QB RSS 订阅器可以展示目前已有的番剧信息，而 AB 不能；</li>
+<li>QB RSS 下载器功能更加强大；</li>
+</ul>
+<p>唯一的缺点是不能展示番剧的海报，这可以接受。</p>
+<p>QB 订阅一部新番的流程如下：</p>
+<ol>
+<li>订阅番剧的 RSS 链接：
+<img src="/MDImgs/From-AutoBangumi-Back-to-qBittorrent-RSS/image-2.png" alt="alt text" style="zoom:50%;" /></li>
+<li>在 RSS 下载器中创建新的规则：
+<img src="/MDImgs/From-AutoBangumi-Back-to-qBittorrent-RSS/image-3.png" alt="alt text">
+<ul>
+<li>规则定义：比如只要 1080p 或者只要简中字幕；</li>
+<li>保存到其他目录：仿照 AB 的操作，设置为 <code>动漫目录/番剧名/Season 1/</code>。如果是第二季就写 <code>Season 2</code>；</li>
+<li>选择刚才创建的 RSS 订阅规则；</li>
+<li>点击保存；</li>
+</ul>
+</li>
+</ol>
+<p>mikan 的 RSS 链接的最小粒度是 <code>(bangumiId, subgroupid)</code> 的二元组，即 <code>(番剧, 搬运组/字幕组)</code>。当然，我们也可以选择由 <code>bangumiId</code> 确定的 RSS 链接，此时会包括所有搬运组/字幕组。</p>
+<p>下载规则是和番剧绑定的，因此其中可以包括多个搬运组/字幕组。但 Jellyfin 会如何识别多个同一集的视频？我没有尝试过。</p>
+]]></content>
+      <categories>
+        <category>tech</category>
+        <category>NAS</category>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>NAS</tag>
+        <tag>Docker</tag>
+        <tag>Jellyfin</tag>
+        <tag>RSS</tag>
+        <tag>AutoBangumi</tag>
+        <tag>qBittorrent</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo自定义404页面</title>
     <url>/2023/07/04/Hexo-custom-404/</url>
     <content><![CDATA[<h1 id="自定义-404-页面">自定义 404 页面</h1>
@@ -946,6 +1037,247 @@
       </categories>
       <tags>
         <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在 Docker 中安装 Jellyfin</title>
+    <url>/2024/02/11/Jellyfin-Docker/</url>
+    <content><![CDATA[<h1 id="序言">序言</h1>
+<blockquote>
+<p><a href="https://jellyfin.org/">Jellyfin</a> 是一个开源的媒体服务器。我的用法是：在电脑上使用 qBittorrent 下载每日新番，启动 Jellyfin，然后在 iPad 上通过客户端看番。</p>
+</blockquote>
+<p>之前在 Windows 主机上安装了便捷版的 Jellyfin，因为 Linux 虚拟机没法使用显卡，无法硬件转码。后来发现，Android 和 IOS 的客户端支持大部分编码，服务器无需提供转码服务。正好我已经熟悉了 Jellyfin 的使用和配置，可以将 Jellyfin 迁移到 Docker 上去了。</p>
+<p>虽然 Jellyfin 软件是跨平台的，但是它的配置还是 OS-dependent 的，更何况我是要从 Windows 迁移到 Docker 中去。尽管有一个<a href="https://github.com/MMMZZZZ/Jellyfin-Migrator">第三方脚本</a>可以使用，但保险起见，我还是重新配置了一遍，反正也不多。</p>
+<p>这篇文章主要讲解了如何用 Docker 安装 Jellyfin、期间碰到的问题及其解决方案。</p>
+<span id="more"></span>
+<h1 id="Jellyfin-安装">Jellyfin 安装</h1>
+<p>先创建两个容器卷：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker volume create jellyfin-config</span><br><span class="line">docker volume create jellyfin-cache</span><br></pre></td></tr></table></figure>
+<p>Docker Compose:</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">jellyfin:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">jellyfin/jellyfin:10.8.13-1</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">jellyfin</span></span><br><span class="line">    <span class="attr">network_mode:</span> <span class="string">bridge</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">58096</span><span class="string">:8096</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">58920</span><span class="string">:8920</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">jellyfin-config:/config</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">jellyfin-cache:/cache</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/mnt/hgfs/jellyfin-media:/media:ro</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/docker/jellyfin_ssl/jellyfin.pfx:/ssl/jellyfin.pfx:ro</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Asia/Shanghai</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">jellyfin-config:</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">jellyfin-cache:</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>镜像要指定版本，<code>10.8.13</code> 是目前最新稳定版，而之后的版本都有 <code>unstable</code> 一词，最好别用 <code>latest</code>；</p>
+</li>
+<li>
+<p><code>8096</code> 是默认的 HTTP 端口，<code>8920</code> 是默认的 HTTPS 端口；</p>
+</li>
+<li>
+<p>Jellyfin 使用如下路径存储数据：</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>说明</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data Directory</td>
+<td>存放 Jellyfin 所有数据的目录，通常用来被其他目录引用</td>
+<td>环境变量 <code>JELLYFIN_DATA_DIR</code> 指定</td>
+</tr>
+<tr>
+<td>Configuration Directory</td>
+<td>存放配置文件</td>
+<td>环境变量 <code>JELLYFIN_CONFIG_DIR</code> 指定；如果没有，则使用 <code>&lt;Data Directory&gt;/config</code></td>
+</tr>
+<tr>
+<td>Cache Directory</td>
+<td>存放服务器缓存</td>
+<td>环境变量 <code>JELLYFIN_CACHE_DIR</code> 指定；如果没有，则使用 <code>&lt;Data Directory&gt;/cache</code></td>
+</tr>
+<tr>
+<td>Log Directory</td>
+<td>存放日志文件</td>
+<td>环境变量 <code>JELLYFIN_LOG_DIR</code> 指定；如果没有，则使用 <code>&lt;Data Directory&gt;/log</code></td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://hub.docker.com/layers/jellyfin/jellyfin/10.8.13-1/images/sha256-095e6d410d1d27b17cc4a961a9bab9fab5ffce6e49389d8ec685f65ab5538525?context=explore">Dockerfile</a> 中指定了这些环境变量：</p>
+  <figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ENV</span> DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=<span class="number">1</span> LC_ALL=en_US.UTF-<span class="number">8</span> LANG=en_US.UTF-<span class="number">8</span> LANGUAGE=en_US:en JELLYFIN_DATA_DIR=/config JELLYFIN_CACHE_DIR=/cache JELLYFIN_CONFIG_DIR=/config/config JELLYFIN_LOG_DIR=/config/log JELLYFIN_WEB_DIR=/jellyfin/jellyfin-web JELLYFIN_FFMPEG=/usr/lib/jellyfin-ffmpeg/ffmpeg</span><br></pre></td></tr></table></figure>
+<p>因此， <strong><code>/config</code> 和 <code>/cache</code> 包含了 Jellyfin 服务器的所有数据</strong> ，而这两个目录又分别挂载到 <code>jellyfin-config</code> 和 <code>jellyfin-cache</code>；</p>
+</li>
+<li>
+<p><code>/mnt/hgfs/jellyfin-media:/media:ro</code>：将本机的媒体文件挂载到 docker 中，路径随意；</p>
+</li>
+<li>
+<p><code>/opt/docker/jellyfin_ssl/jellyfin.pfx</code>：用来配置服务器的 SSL 证书，之后会讲；</p>
+</li>
+<li>
+<p><code>TZ=Asia/Shanghai</code>：设置时区，使得日志的时间和本机的一致；</p>
+</li>
+</ul>
+<h1 id="Jellyfin-设置">Jellyfin 设置</h1>
+<p>因为是重新安装，所以配置都要从头走一遍，这里只讲一些重点。</p>
+<h2 id="服务器-用户">服务器 | 用户</h2>
+<p>不允许转码：就算客户端不支持编码，也不能用服务端的软解，不然压力太大了。</p>
+<p>把<strong>每个用户</strong>的下面两个选项去掉；</p>
+<p><img src="/MarkDownImages/image-20240213140202762.png" alt="image-20240213140202762"></p>
+<p>对于『允许播放需转换但无需重新编码的视频』这个选项，许多文章把这个选项也去掉了，但好像没什么影响，就留着吧。</p>
+<h2 id="高级-联网">高级 | 联网</h2>
+<p>选择之前挂载的 <code>jellyfin.pfx</code> 文件作为 SSL 证书（如何生成该文件见下文）：</p>
+<p><img src="/MarkDownImages/image-20240213140616778.png" alt="image-20240213140616778"></p>
+<p>勾选『启用 HTTPS』，然后重启容器。</p>
+<p><img src="/MarkDownImages/image-20240213140600270.png" alt="image-20240213140600270"></p>
+<p>没必要开启『强制 HTTPS 』，因为防火墙最终只会允许局域网其他设备访问 HTTPS 端口；本机还是可以通过 HTTP 访问 Jellyfin。</p>
+<h1 id="SSL-证书">SSL 证书</h1>
+<p>首先要有密钥 <code>jellyfin-priv-key.key</code> 和证书 <code>jellyfin.crt</code>（参考<a href="/2024/01/31/Docker-Nginx-SSL-Local-Network/#SSL-%E8%AF%81%E4%B9%A6">上一篇文章</a>）</p>
+<p>然后使用以下命令生成 <code>.pfx</code> 文件即可：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">openssl pkcs12 -<span class="built_in">export</span> -out jellyfin.pfx -inkey jellyfin-priv-key.key -<span class="keyword">in</span> jellyfin.crt  -passout pass:</span><br></pre></td></tr></table></figure>
+<h1 id="局域网设置">局域网设置</h1>
+<blockquote>
+<p>再次说一下我的网络环境：</p>
+<p>Windows 主机，通过 VMware 安装了 Linux，Docker 运行在该虚拟机上。</p>
+<p>主机和其他设备共享家庭内网。</p>
+</blockquote>
+<p>之前在 Windows 上运行 Jellyfin，我直接允许 Jellyfin 访问专用网络（家庭内网）。即防火墙规则是授权给 Jellyfin 这个可执行文件，而不是某个端口。</p>
+<p>现在是在 Docker 中运行，要做如下更改：</p>
+<ol>
+<li>
+<p>添加虚拟机 NAT 映射，将 Linux 的 58920 映射到主机的 58920 端口；</p>
+<p><img src="/MarkDownImages/image-20240213141926681.png" alt="image-20240213141926681"></p>
+</li>
+<li>
+<p>新增防火墙入站规则：<code>58920/tcp</code>，专用网络；</p>
+</li>
+<li>
+<p>各个客户端重新连接新的服务器；</p>
+</li>
+</ol>
+<hr>
+<p>Windows 的 Jellyfin 开放 58920 端口，更换为 Docker 版后也是这个端口，即都可以在浏览器上通过 <code>https://主机IP:58920</code> 访问 web 客户端。这样可以“骗过” Google Password Manager，直接使用以前的账户和密码。</p>
+<h1 id="一些-Bug">一些 Bug</h1>
+<h2 id="字体问题1">字体问题1</h2>
+<p>创建好容器后，进入容器，执行以下命令：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">apt update &amp;&amp; apt install fonts-noto-cjk-extra</span><br></pre></td></tr></table></figure>
+<p>然后重启容器。</p>
+<p>不然的话，媒体库封面图的中文会变成方块。</p>
+<h2 id="字体问题2">字体问题2</h2>
+<p>包含 ASS 字幕的 MKV 在播放时，字幕都是方块。问题还是出在缺少字体。</p>
+<p>在『服务器 | 播放』中设置『备用字体文件路径』，并『启用备用字体』。</p>
+<p><img src="/MarkDownImages/image-20240502122456643.png" alt="image-20240502122456643"></p>
+<p>在这个目录内，放入一个 woff 字体。</p>
+<hr>
+<p>以 Windows 系统自带的微软雅黑为例：</p>
+<p>进入 <code>C:\Windows\Fonts</code> ，搜索 <code>yahei</code>，复制该字体，得到三个 <code>ttc</code> 文件。我们要将 <code>ttc</code> 转换为 <code>woff</code>。使用如下 Python 代码：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install fonttools</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> fontTools.ttLib <span class="keyword">import</span> TTFont</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">convert_ttf_to_woff</span>(<span class="params">ttf_path, woff_path</span>):</span><br><span class="line">    font = TTFont(ttf_path, fontNumber=<span class="number">0</span>)</span><br><span class="line">    font.save(woff_path, <span class="string">&quot;woff&quot;</span>)</span><br><span class="line"></span><br><span class="line">ttf_file = <span class="string">r&quot;./msyh.ttc&quot;</span></span><br><span class="line">woff_file = <span class="string">r&quot;./msyh.woff&quot;</span></span><br><span class="line"></span><br><span class="line">convert_ttf_to_woff(ttf_file, woff_file)</span><br></pre></td></tr></table></figure>
+<h2 id="符号链接">符号链接</h2>
+<p>通过 <code>mklink</code> 命令可以在 Windows 上创建链接。在 Windows 上运行 Jellyfin 时，为了不让 Jellyfin 修改媒体目录， 我使用 <a href="https://github.com/gustaavv/script-house/blob/master/script_house/ops/FileSystemOperation.py#L125"><code>walk_while_link</code> 函数</a> 给每个视频文件创建符号链接。但是虚拟机的共享文件夹可以设置只读，volume 也可以设置只读，因此使用 Docker 后没必要这么做。</p>
+<p>更要命的是，这么做会导致视频无法播放，Jellyfin 读媒体数据时会报错。—— 我怀疑这是符号链接的锅，因为很多讲 NAS 的文章都使用硬链接，而不是符号链接。但我不喜欢用硬链接，更何况是在 Windows 上。</p>
+<p>但是给文件夹创建符号链接是可以的。比如说共享文件夹为 <code>jellyfin-docker-media</code>，我们可以通过给其他路径的 <code>films</code>、<code>animes</code> 文件夹制作符号链接，将它们都汇总到 <code>jellyfin-docker-media</code> 下。这相当于加了一层封装，减少了虚拟机共享文件夹的数目。</p>
+<p>实际上我就是这么做的，Docker-compose 中的 <code>/mnt/hgfs/jellyfin-media</code>，就是主机的 <code>jellyfin-docker-media</code> 共享文件夹。</p>
+<h1 id="Docker-知识">Docker 知识</h1>
+<p>通过安装 Jellyfin，我在实操中加深了对 Docker 的理解。</p>
+<h2 id="EXPOSE">EXPOSE</h2>
+<p>Dockerfile 中的 <code>EXPOSE</code> 关键字，我一直以为只有用了这个关键字，启动容器时才可以映射对应端口，实则不然。</p>
+<blockquote>
+<p>The <code>EXPOSE</code> instruction <strong>informs</strong> Docker that the container listens on the specified network ports at runtime. You can specify whether the port listens on TCP or UDP, and the default is TCP if you don’t specify a protocol.</p>
+<p>The <code>EXPOSE</code> instruction <strong>doesn’t actually publish the port</strong>. It functions as a type of <strong>documentation</strong> between the person who builds the image and the person who runs the container, about which ports are intended to be published. To publish the port when running the container, use the <code>-p</code> flag on <code>docker run</code> to publish and map one or more ports, or the <code>-P</code> flag to publish all exposed ports and map them to high-order ports.</p>
+</blockquote>
+<p>上面两段话摘录自官网的文档。<code>EXPOSE</code> 只是一个文档性质的声明，而 <code>-p</code> 才是真正的端口映射，并且可以随意地映射容器的端口，没有限制。</p>
+<p>因此，我在<a href="/2024/01/31/Docker-Nginx-SSL-Local-Network/#Nginx-%E5%AE%B9%E5%99%A8">『在 Docker 中部署 Nginx，并在局域网配置 SSL 证书』</a> 的做法是无意义的，没必要为了 <code>EXPOSE</code> 新创建一个镜像。</p>
+<blockquote>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">FROM</span> nginx:<span class="number">1.24</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">443</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="Cache-Memory">Cache Memory</h2>
+<p>在 Portainer 的统计中，可以看到内存使用分为『Memory』和『Cache』。这两个分别是什么意思？哪个才是目前占用的内存？</p>
+<p><img src="/MarkDownImages/image-20240213085846776.png" alt="image-20240213085846776"></p>
+<p>简单来说，『Memory』是目前占用的内存，而『Cache』是<strong>曾经使用过</strong>的内存。Memory Cache 是 Docker 的一个属性，其值等于 <code>/proc/meminfo</code> 中 <code>Inactive(file)</code> 的值。</p>
+<blockquote>
+<p><code>Inactive(file)</code> — The amount of file cache memory, in kibibytes, that is newly loaded from the disk, or is a candidate for reclaiming.</p>
+</blockquote>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/624670198">在Docker下安装Jellyfin并正确开启硬件解码</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/640489824">Docker部署开源流媒体软件Jellyfin</a></li>
+<li><a href="https://jellyfin.org/docs/general/installation/container#using-docker-compose">Jellyfin doc installation</a></li>
+<li><a href="https://jellyfin.org/docs/general/networking/#self-signed-certificate">Jellyfin doc self-signed certificate</a></li>
+<li><a href="https://docs.docker.com/engine/reference/builder/#expose">Docker doc EXPOSE</a></li>
+<li><a href="https://www.reddit.com/r/portainer/comments/w6pvit/what_is_memory_cache_in_the_container_stats/">What is memory “cache” in the container stat’s?</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/637577131">解决jellyfin中文外挂字幕乱码 - 天高不算高的文章 - 知乎</a></li>
+<li><a href="https://echo.solo90.com/archives/1213.html">Jellyfin解决中文字幕乱码的问题！</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>tech</category>
+        <category>NAS</category>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>NAS</tag>
+        <tag>Docker</tag>
+        <tag>Jellyfin</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Jellyfin 自定义扫描频率</title>
+    <url>/2024/06/11/Jellyfin-custom-scan-frequency/</url>
+    <content><![CDATA[<h1 id="序言">序言</h1>
+<p>在<a href="/2024/02/20/LANraragi-Using-Experience">之前的文章</a>中，我提到“Jellyfin 计划任务『扫描媒体库』并不吃资源，频繁运行也没事”。实际上，这不准确。这个任务对于资源的占用取决于媒体/文件的数量。</p>
+<p>最近我写了一个项目，用来爬取视频，同时自动生成 nfo 文件和视频海报。在这个新的视频目录中，最多有 2000 个文件（大部分是 nfo 和海报图片，视频还没怎么下载），有四级子目录。但此时计划任务的 CPU 占用量已经大幅增加。这显然有问题。</p>
+<p>经过一番研究，我发现使用 crontab 定时调用 Jellyfin API，是目前唯一实现不同媒体库不同扫描频率的解决方案。</p>
+<span id="more"></span>
+<h1 id="步骤">步骤</h1>
+<h2 id="关闭计划任务">关闭计划任务</h2>
+<p>进入『控制台 | 计划任务 | 扫描媒体库』，删除现有任务：</p>
+<p><img src="/MarkDownImages/image-20240611131240942.png" alt="image-20240611131240942"></p>
+<h2 id="申请一个-API-密钥">申请一个 API 密钥</h2>
+<p>进入『控制台 | API 密钥』，创建一个：</p>
+<p><img src="/MarkDownImages/image-20240611131529710.png" alt="image-20240611131529710"></p>
+<h2 id="获得-API-端口">获得 API 端口</h2>
+<p>我建议直接用 F12 抓包：</p>
+<img src="/MarkDownImages/image-20240611131657198.png" alt="image-20240611131657198" style="zoom:50%;" />
+<p>点击『刷新』前，先按下 F12。然后找到对应的请求</p>
+<img src="/MarkDownImages/image-20240611131710749.png" alt="image-20240611131710749" style="zoom: 33%;" />
+<p><code>/Items/媒体库ID/Refresh?扫描参数</code>，这个 URL 可以直接拿来用。</p>
+<p><img src="/MarkDownImages/image-20240611131902161.png" alt="image-20240611131902161"></p>
+<h2 id="crontab">crontab</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">编辑</span></span><br><span class="line">crontab -e</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看</span></span><br><span class="line">crontab -l</span><br></pre></td></tr></table></figure>
+<p>curl 格式如下：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">curl -k -X POST <span class="string">&quot;https://IP地址:端口/Items/媒体库ID/Refresh?Recursive=true&amp;ImageRefreshMode=Default&amp;MetadataRefreshMode=Default&amp;ReplaceAllImages=false&amp;ReplaceAllMetadata=false&quot;</span> -H <span class="string">&quot;Authorization: MediaBrowser Token=API密钥&quot;</span></span><br></pre></td></tr></table></figure>
+<p>crontab 格式如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新番：每十分钟一次</span></span><br><span class="line">*/10 * * * * curl -k -X POST &quot;https://IP地址:端口/Items/媒体库ID/Refresh?Recursive=true&amp;ImageRefreshMode=Default&amp;MetadataRefreshMode=Default&amp;ReplaceAllImages=false&amp;ReplaceAllMetadata=false&quot; -H &quot;Authorization: MediaBrowser Token=API密钥&quot;</span><br></pre></td></tr></table></figure>
+<p>其他时间配置：</p>
+<ul>
+<li>每小时一次：<code>0 * * * *</code>；</li>
+<li>每周一次：比如 <code>0 17 * * 0</code>，每周天下午 5 点；</li>
+<li>每两周一次：比如 <code>0 11 1,15 * *</code>，每月1号和15号的早上11点；</li>
+</ul>
+<hr>
+<p>查看 crontab 的日志：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1. 使用journalctl</span> </span><br><span class="line">journalctl -u crond</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2. 直接查看日志文件，这个更全</span></span><br><span class="line">cat /var/log/cron</span><br></pre></td></tr></table></figure>
+<h1 id="实际效果">实际效果</h1>
+<p><img src="/MarkDownImages/image-20240611154250550.png" alt="image-20240611154250550"></p>
+<blockquote>
+<p>这个软件是 NetData，我之后会写一篇关于它的博文。</p>
+</blockquote>
+<p>红色的是扫描爬取的视频的媒体库，而蓝色的是扫描本季新番的媒体库。</p>
+<p>可以看到：</p>
+<ul>
+<li>
+<p>蓝色的平均值不超过 5%，因此每十分钟执行一次没问题 —— 这个频率也可以及时地让 Jellyfin 刮削新下载好的番剧。</p>
+</li>
+<li>
+<p>如果按照之前 Jellyfin 的计划任务，所有媒体库都一小时扫描一次，那么对 CPU 的占用显然太大了。</p>
+</li>
+</ul>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://www.reddit.com/r/jellyfin/comments/jjxbko/disabling_automatic_scan_per_library/">Disabling automatic scan per library</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>tech</category>
+        <category>NAS</category>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>NAS</tag>
+        <tag>Docker</tag>
+        <tag>Jellyfin</tag>
       </tags>
   </entry>
   <entry>
@@ -1252,165 +1584,66 @@
       </tags>
   </entry>
   <entry>
-    <title>在 Docker 中安装 Jellyfin</title>
-    <url>/2024/02/11/Jellyfin-Docker/</url>
+    <title>LANraragi 使用心得</title>
+    <url>/2024/02/20/LANraragi-Using-Experience/</url>
     <content><![CDATA[<h1 id="序言">序言</h1>
-<blockquote>
-<p><a href="https://jellyfin.org/">Jellyfin</a> 是一个开源的媒体服务器。我的用法是：在电脑上使用 qBittorrent 下载每日新番，启动 Jellyfin，然后在 iPad 上通过客户端看番。</p>
-</blockquote>
-<p>之前在 Windows 主机上安装了便捷版的 Jellyfin，因为 Linux 虚拟机没法使用显卡，无法硬件转码。后来发现，Android 和 IOS 的客户端支持大部分编码，服务器无需提供转码服务。正好我已经熟悉了 Jellyfin 的使用和配置，可以将 Jellyfin 迁移到 Docker 上去了。</p>
-<p>虽然 Jellyfin 软件是跨平台的，但是它的配置还是 OS-dependent 的，更何况我是要从 Windows 迁移到 Docker 中去。尽管有一个<a href="https://github.com/MMMZZZZ/Jellyfin-Migrator">第三方脚本</a>可以使用，但保险起见，我还是重新配置了一遍，反正也不多。</p>
-<p>这篇文章主要讲解了如何用 Docker 安装 Jellyfin、期间碰到的问题及其解决方案。</p>
+<p>我使用 LANraragi 已经有一段时间了，期间发现了一些问题，都解决了，正好写一篇文章记录一下。读者可以参考我<a href="/2024/01/25/LANraragi-manga-server/">之前安装 LANraragi 的文章</a>。</p>
+<h1 id="问题1：挂载缩略图目录导致缩略图无法生成">问题1：挂载缩略图目录导致缩略图无法生成</h1>
 <span id="more"></span>
-<h1 id="Jellyfin-安装">Jellyfin 安装</h1>
-<p>先创建两个容器卷：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker volume create jellyfin-config</span><br><span class="line">docker volume create jellyfin-cache</span><br></pre></td></tr></table></figure>
-<p>Docker Compose:</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">jellyfin:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">jellyfin/jellyfin:10.8.13-1</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">jellyfin</span></span><br><span class="line">    <span class="attr">network_mode:</span> <span class="string">bridge</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">58096</span><span class="string">:8096</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">58920</span><span class="string">:8920</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">jellyfin-config:/config</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">jellyfin-cache:/cache</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/mnt/hgfs/jellyfin-media:/media:ro</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/docker/jellyfin_ssl/jellyfin.pfx:/ssl/jellyfin.pfx:ro</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Asia/Shanghai</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">jellyfin-config:</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">jellyfin-cache:</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>安装 LANraragi 时，为了保证 <code>content</code> 目录只读，我将缩略图目录设置成了容器内部路径。这意味着，每次删除再重启该容器，都需要重新生成缩略图 —— 这样做浪费计算资源，也不符合 Docker 最佳实践。那就使用一个新的 volume 存放缩略图。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">lanraragi:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">difegue/lanraragi:v.0.9.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">lanraragi</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/mnt/hgfs/doujinshiArchives:/home/koyomi/lanraragi/content:ro</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">lanraragi-database:/home/koyomi/lanraragi/database</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">lanraragi-thumbnail:/home/koyomi/lanraragi/thumb</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">lanraragi-database:</span></span><br><span class="line">  <span class="attr">lanraragi-thumbnail:</span></span><br></pre></td></tr></table></figure>
+<p><code>lanraragi-thumbnail</code> 就是存放缩略图的 volume。</p>
+<p>启动容器，发现缩略图无法生成。进入『Minion Console』，发现如下错误：</p>
+<p><img src="/MarkDownImages/image-20240220111456968.png" alt="image-20240220111456968"></p>
+<p>为什么 <code>mkdir</code> 会没有权限呢？进入容器：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">/home/koyomi/lanraragi <span class="comment"># ls -lah</span></span><br><span class="line">total 192K   </span><br><span class="line">drwxr-sr-x    1 koyomi   koyomi      4.0K Feb 20 02:14 .</span><br><span class="line">drwxr-sr-x    1 koyomi   koyomi      4.0K Feb 20 02:14 ..</span><br><span class="line">-rw-r--r--    1 root     koyomi        52 Oct 29 21:19 config.log</span><br><span class="line">drwxrwxrwx    1 root     root       16.0K Feb 17 11:44 content</span><br><span class="line">drwxr-xr-x    3 koyomi   root        4.0K Feb 20 03:10 database</span><br><span class="line">drwxr-sr-x    3 koyomi   koyomi      4.0K Oct 31 00:58 lib</span><br><span class="line">drwxr-sr-x    2 koyomi   koyomi      4.0K Feb 20 02:14 <span class="built_in">log</span></span><br><span class="line">-rw-r--r--    1 koyomi   koyomi       186 Oct 31 00:58 lrr.conf</span><br><span class="line">-rw-r--r--    1 koyomi   koyomi         8 Feb 20 02:14 oshino</span><br><span class="line">-rw-r--r--    1 koyomi   koyomi     97.6K Oct 29 21:02 package-lock.json</span><br><span class="line">-rw-r--r--    1 koyomi   koyomi      2.1K Oct 27 23:07 package.json</span><br><span class="line">drwxr-sr-x    1 root     koyomi      4.0K Feb 20 02:14 public</span><br><span class="line">drwxr-sr-x    2 koyomi   koyomi      4.0K Oct 31 00:58 script</span><br><span class="line">drwxr-sr-x    3 koyomi   koyomi      4.0K Oct 31 00:58 templates</span><br><span class="line">drwxr-sr-x    4 koyomi   koyomi      4.0K Oct 31 00:58 tests</span><br><span class="line">drwxr-xr-x  257 root     root        4.0K Feb 20 02:19 thumb</span><br><span class="line">drwxr-sr-x    1 koyomi   koyomi      4.0K Oct 31 00:59 tools</span><br></pre></td></tr></table></figure>
+<p>注意 <code>thumb</code> 目录，它是由 <code>root</code> 用户创建，但运行 LANraragi 的 <code>koyomi</code> 用户没有对该目录的写权限。授权即可：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 thumb</span><br></pre></td></tr></table></figure>
+<p>然后在『Tags and Thumbnails』里点击『Generate Missing Thumbnails』。</p>
+<blockquote>
+<p>也可以看到， <code>content</code> 目录作为默认的漫画目录，被作者人为的提高了权限，因此默认使用 <code>content/thumb</code> 作为缩略图目录并不会产生这个问题。</p>
+</blockquote>
+<h1 id="问题2：无法实时监控文件变动">问题2：无法实时监控文件变动</h1>
+<p>见设置中的『Background Workers』：</p>
+<blockquote>
+<p>This File Watcher is responsible for monitoring your content directory and automatically handling new archives as they come.
+If Shinobu is dead or unresponsive, you can reboot her by clicking this button.</p>
+</blockquote>
+<p>本该实时监控文件变动，但我却用不了这个功能。原因在于该功能的底层使用了 <code>inotify</code> API：</p>
+<blockquote>
+<p>The inotify API provides a mechanism for monitoring filesystem events.  Inotify can be used to monitor individual files, or to monitor directories.  When a directory is monitored, inotify will return events for the directory itself, and for files inside the directory.</p>
+</blockquote>
+<p>如果文件系统不支持这个 API，那么 LANraragi 自然无法监控文件变动。</p>
+<p>我使用 VMware 的共享文件夹将漫画资源映射到 Linux 中，而共享文件夹底层的文件系统不支持 <code>inotify</code>。</p>
+<p>解决方法：点击『Restart File Watcher』，重启后会扫描整个 <code>content</code> 目录；或者写一个定时任务脚本，POST <code>/api/shinobu/restart</code>。</p>
+<hr>
+<p>其实很多软件都是用 <code>inotify</code> 来监控文件变动，因此这是一个普遍的问题。</p>
+<p>我的 Jellyfin 的媒体文件夹同样使用了 VMware 的共享文件夹，因此也有该问题。不过 Jellyfin 知名得多，我从相关帖子中很快发现了这个问题。更重要地是，Jellyfin 明确地写了只有支持 <code>inotify</code> 的文件系统才有这一功能，这一点值得其他软件作者写文档时借鉴。</p>
+<blockquote>
+<h2 id="Real-Time-Monitoring">Real Time Monitoring</h2>
+<p>This will let Jellyfin automatically update libraries when files are added or modified. Unfortunately, this feature is <strong>only supported on certain filesystems</strong>.</p>
+<p>For Linux systems, this is performed by inotify. NFS and rclone do not support inotify, but support can be provided by using a union file system such as mergerfs with your networked file systems.</p>
+</blockquote>
+<p>顺便提一下 Jellyfin 的解决方案：</p>
 <ul>
-<li>
-<p>镜像要指定版本，<code>10.8.13</code> 是目前最新稳定版，而之后的版本都有 <code>unstable</code> 一词，最好别用 <code>latest</code>；</p>
-</li>
-<li>
-<p><code>8096</code> 是默认的 HTTP 端口，<code>8920</code> 是默认的 HTTPS 端口；</p>
-</li>
-<li>
-<p>Jellyfin 使用如下路径存储数据：</p>
-<table>
-<thead>
-<tr>
-<th>目录</th>
-<th>说明</th>
-<th>路径</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Data Directory</td>
-<td>存放 Jellyfin 所有数据的目录，通常用来被其他目录引用</td>
-<td>环境变量 <code>JELLYFIN_DATA_DIR</code> 指定</td>
-</tr>
-<tr>
-<td>Configuration Directory</td>
-<td>存放配置文件</td>
-<td>环境变量 <code>JELLYFIN_CONFIG_DIR</code> 指定；如果没有，则使用 <code>&lt;Data Directory&gt;/config</code></td>
-</tr>
-<tr>
-<td>Cache Directory</td>
-<td>存放服务器缓存</td>
-<td>环境变量 <code>JELLYFIN_CACHE_DIR</code> 指定；如果没有，则使用 <code>&lt;Data Directory&gt;/cache</code></td>
-</tr>
-<tr>
-<td>Log Directory</td>
-<td>存放日志文件</td>
-<td>环境变量 <code>JELLYFIN_LOG_DIR</code> 指定；如果没有，则使用 <code>&lt;Data Directory&gt;/log</code></td>
-</tr>
-</tbody>
-</table>
-<p><a href="https://hub.docker.com/layers/jellyfin/jellyfin/10.8.13-1/images/sha256-095e6d410d1d27b17cc4a961a9bab9fab5ffce6e49389d8ec685f65ab5538525?context=explore">Dockerfile</a> 中指定了这些环境变量：</p>
-  <figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ENV</span> DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=<span class="number">1</span> LC_ALL=en_US.UTF-<span class="number">8</span> LANG=en_US.UTF-<span class="number">8</span> LANGUAGE=en_US:en JELLYFIN_DATA_DIR=/config JELLYFIN_CACHE_DIR=/cache JELLYFIN_CONFIG_DIR=/config/config JELLYFIN_LOG_DIR=/config/log JELLYFIN_WEB_DIR=/jellyfin/jellyfin-web JELLYFIN_FFMPEG=/usr/lib/jellyfin-ffmpeg/ffmpeg</span><br></pre></td></tr></table></figure>
-<p>因此， <strong><code>/config</code> 和 <code>/cache</code> 包含了 Jellyfin 服务器的所有数据</strong> ，而这两个目录又分别挂载到 <code>jellyfin-config</code> 和 <code>jellyfin-cache</code>；</p>
-</li>
-<li>
-<p><code>/mnt/hgfs/jellyfin-media:/media:ro</code>：将本机的媒体文件挂载到 docker 中，路径随意；</p>
-</li>
-<li>
-<p><code>/opt/docker/jellyfin_ssl/jellyfin.pfx</code>：用来配置服务器的 SSL 证书，之后会讲；</p>
-</li>
-<li>
-<p><code>TZ=Asia/Shanghai</code>：设置时区，使得日志的时间和本机的一致；</p>
-</li>
+<li>提高计划任务『扫描媒体库』的频率 —— 这个任务并不吃资源，频繁运行也没事；</li>
+<li>通过 API 执行刷新；</li>
 </ul>
-<h1 id="Jellyfin-设置">Jellyfin 设置</h1>
-<p>因为是重新安装，所以配置都要从头走一遍，这里只讲一些重点。</p>
-<h2 id="服务器-用户">服务器 | 用户</h2>
-<p>不允许转码：就算客户端不支持编码，也不能用服务端的软解，不然压力太大了。</p>
-<p>把<strong>每个用户</strong>的下面两个选项去掉；</p>
-<p><img src="/MarkDownImages/image-20240213140202762.png" alt="image-20240213140202762"></p>
-<p>对于『允许播放需转换但无需重新编码的视频』这个选项，许多文章把这个选项也去掉了，但好像没什么影响，就留着吧。</p>
-<h2 id="高级-联网">高级 | 联网</h2>
-<p>选择之前挂载的 <code>jellyfin.pfx</code> 文件作为 SSL 证书（如何生成该文件见下文）：</p>
-<p><img src="/MarkDownImages/image-20240213140616778.png" alt="image-20240213140616778"></p>
-<p>勾选『启用 HTTPS』，然后重启容器。</p>
-<p><img src="/MarkDownImages/image-20240213140600270.png" alt="image-20240213140600270"></p>
-<p>没必要开启『强制 HTTPS 』，因为防火墙最终只会允许局域网其他设备访问 HTTPS 端口；本机还是可以通过 HTTP 访问 Jellyfin。</p>
-<h1 id="SSL-证书">SSL 证书</h1>
-<p>首先要有密钥 <code>jellyfin-priv-key.key</code> 和证书 <code>jellyfin.crt</code>（参考<a href="/2024/01/31/Docker-Nginx-SSL-Local-Network/#SSL-%E8%AF%81%E4%B9%A6">上一篇文章</a>）</p>
-<p>然后使用以下命令生成 <code>.pfx</code> 文件即可：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">openssl pkcs12 -<span class="built_in">export</span> -out jellyfin.pfx -inkey jellyfin-priv-key.key -<span class="keyword">in</span> jellyfin.crt  -passout pass:</span><br></pre></td></tr></table></figure>
-<h1 id="局域网设置">局域网设置</h1>
-<blockquote>
-<p>再次说一下我的网络环境：</p>
-<p>Windows 主机，通过 VMware 安装了 Linux，Docker 运行在该虚拟机上。</p>
-<p>主机和其他设备共享家庭内网。</p>
-</blockquote>
-<p>之前在 Windows 上运行 Jellyfin，我直接允许 Jellyfin 访问专用网络（家庭内网）。即防火墙规则是授权给 Jellyfin 这个可执行文件，而不是某个端口。</p>
-<p>现在是在 Docker 中运行，要做如下更改：</p>
-<ol>
-<li>
-<p>添加虚拟机 NAT 映射，将 Linux 的 58920 映射到主机的 58920 端口；</p>
-<p><img src="/MarkDownImages/image-20240213141926681.png" alt="image-20240213141926681"></p>
-</li>
-<li>
-<p>新增防火墙入站规则：<code>58920/tcp</code>，专用网络；</p>
-</li>
-<li>
-<p>各个客户端重新连接新的服务器；</p>
-</li>
-</ol>
-<hr>
-<p>Windows 的 Jellyfin 开放 58920 端口，更换为 Docker 版后也是这个端口，即都可以在浏览器上通过 <code>https://主机IP:58920</code> 访问 web 客户端。这样可以“骗过” Google Password Manager，直接使用以前的账户和密码。</p>
-<h1 id="一些-Bug">一些 Bug</h1>
-<h2 id="字体问题1">字体问题1</h2>
-<p>创建好容器后，进入容器，执行以下命令：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">apt update &amp;&amp; apt install fonts-noto-cjk-extra</span><br></pre></td></tr></table></figure>
-<p>然后重启容器。</p>
-<p>不然的话，媒体库封面图的中文会变成方块。</p>
-<h2 id="字体问题2">字体问题2</h2>
-<p>包含 ASS 字幕的 MKV 在播放时，字幕都是方块。问题还是出在缺少字体。</p>
-<p>在『服务器 | 播放』中设置『备用字体文件路径』，并『启用备用字体』。</p>
-<p><img src="/MarkDownImages/image-20240502122456643.png" alt="image-20240502122456643"></p>
-<p>在这个目录内，放入一个 woff 字体。</p>
-<hr>
-<p>以 Windows 系统自带的微软雅黑为例：</p>
-<p>进入 <code>C:\Windows\Fonts</code> ，搜索 <code>yahei</code>，复制该字体，得到三个 <code>ttc</code> 文件。我们要将 <code>ttc</code> 转换为 <code>woff</code>。使用如下 Python 代码：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install fonttools</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> fontTools.ttLib <span class="keyword">import</span> TTFont</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">convert_ttf_to_woff</span>(<span class="params">ttf_path, woff_path</span>):</span><br><span class="line">    font = TTFont(ttf_path, fontNumber=<span class="number">0</span>)</span><br><span class="line">    font.save(woff_path, <span class="string">&quot;woff&quot;</span>)</span><br><span class="line"></span><br><span class="line">ttf_file = <span class="string">r&quot;./msyh.ttc&quot;</span></span><br><span class="line">woff_file = <span class="string">r&quot;./msyh.woff&quot;</span></span><br><span class="line"></span><br><span class="line">convert_ttf_to_woff(ttf_file, woff_file)</span><br></pre></td></tr></table></figure>
-<h2 id="符号链接">符号链接</h2>
-<p>通过 <code>mklink</code> 命令可以在 Windows 上创建链接。在 Windows 上运行 Jellyfin 时，为了不让 Jellyfin 修改媒体目录， 我使用 <a href="https://github.com/gustaavv/script-house/blob/master/script_house/ops/FileSystemOperation.py#L125"><code>walk_while_link</code> 函数</a> 给每个视频文件创建符号链接。但是虚拟机的共享文件夹可以设置只读，volume 也可以设置只读，因此使用 Docker 后没必要这么做。</p>
-<p>更要命的是，这么做会导致视频无法播放，Jellyfin 读媒体数据时会报错。—— 我怀疑这是符号链接的锅，因为很多讲 NAS 的文章都使用硬链接，而不是符号链接。但我不喜欢用硬链接，更何况是在 Windows 上。</p>
-<p>但是给文件夹创建符号链接是可以的。比如说共享文件夹为 <code>jellyfin-docker-media</code>，我们可以通过给其他路径的 <code>films</code>、<code>animes</code> 文件夹制作符号链接，将它们都汇总到 <code>jellyfin-docker-media</code> 下。这相当于加了一层封装，减少了虚拟机共享文件夹的数目。</p>
-<p>实际上我就是这么做的，Docker-compose 中的 <code>/mnt/hgfs/jellyfin-media</code>，就是主机的 <code>jellyfin-docker-media</code> 共享文件夹。</p>
-<h1 id="Docker-知识">Docker 知识</h1>
-<p>通过安装 Jellyfin，我在实操中加深了对 Docker 的理解。</p>
-<h2 id="EXPOSE">EXPOSE</h2>
-<p>Dockerfile 中的 <code>EXPOSE</code> 关键字，我一直以为只有用了这个关键字，启动容器时才可以映射对应端口，实则不然。</p>
-<blockquote>
-<p>The <code>EXPOSE</code> instruction <strong>informs</strong> Docker that the container listens on the specified network ports at runtime. You can specify whether the port listens on TCP or UDP, and the default is TCP if you don’t specify a protocol.</p>
-<p>The <code>EXPOSE</code> instruction <strong>doesn’t actually publish the port</strong>. It functions as a type of <strong>documentation</strong> between the person who builds the image and the person who runs the container, about which ports are intended to be published. To publish the port when running the container, use the <code>-p</code> flag on <code>docker run</code> to publish and map one or more ports, or the <code>-P</code> flag to publish all exposed ports and map them to high-order ports.</p>
-</blockquote>
-<p>上面两段话摘录自官网的文档。<code>EXPOSE</code> 只是一个文档性质的声明，而 <code>-p</code> 才是真正的端口映射，并且可以随意地映射容器的端口，没有限制。</p>
-<p>因此，我在<a href="/2024/01/31/Docker-Nginx-SSL-Local-Network/#Nginx-%E5%AE%B9%E5%99%A8">『在 Docker 中部署 Nginx，并在局域网配置 SSL 证书』</a> 的做法是无意义的，没必要为了 <code>EXPOSE</code> 新创建一个镜像。</p>
-<blockquote>
-<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">FROM</span> nginx:<span class="number">1.24</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">443</span></span><br></pre></td></tr></table></figure>
-</blockquote>
-<h2 id="Cache-Memory">Cache Memory</h2>
-<p>在 Portainer 的统计中，可以看到内存使用分为『Memory』和『Cache』。这两个分别是什么意思？哪个才是目前占用的内存？</p>
-<p><img src="/MarkDownImages/image-20240213085846776.png" alt="image-20240213085846776"></p>
-<p>简单来说，『Memory』是目前占用的内存，而『Cache』是<strong>曾经使用过</strong>的内存。Memory Cache 是 Docker 的一个属性，其值等于 <code>/proc/meminfo</code> 中 <code>Inactive(file)</code> 的值。</p>
-<blockquote>
-<p><code>Inactive(file)</code> — The amount of file cache memory, in kibibytes, that is newly loaded from the disk, or is a candidate for reclaiming.</p>
-</blockquote>
+<h1 id="收获">收获</h1>
+<p>这个脚本挺好用的：</p>
+<p><img src="/MarkDownImages/image-20240220131323937.png" alt="image-20240220131323937"></p>
+<p>我的漫画目录结构是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">├── 作者1</span><br><span class="line">│   ├── 漫画压缩包1</span><br><span class="line">│   └── 漫画压缩包2</span><br><span class="line">└── 作者2</span><br><span class="line">    ├── 漫画压缩包1</span><br><span class="line">    └── 漫画压缩包2</span><br></pre></td></tr></table></figure>
+<p>这个脚本可以将对应的漫画划分到某一个作者的 Category 中。尽管我没有给漫画打 tag，以作者作为 Category 却起到了相同效果，让我可以根据作者选择漫画。</p>
 <h1 id="参考">参考</h1>
 <ul>
-<li><a href="https://zhuanlan.zhihu.com/p/624670198">在Docker下安装Jellyfin并正确开启硬件解码</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/640489824">Docker部署开源流媒体软件Jellyfin</a></li>
-<li><a href="https://jellyfin.org/docs/general/installation/container#using-docker-compose">Jellyfin doc installation</a></li>
-<li><a href="https://jellyfin.org/docs/general/networking/#self-signed-certificate">Jellyfin doc self-signed certificate</a></li>
-<li><a href="https://docs.docker.com/engine/reference/builder/#expose">Docker doc EXPOSE</a></li>
-<li><a href="https://www.reddit.com/r/portainer/comments/w6pvit/what_is_memory_cache_in_the_container_stats/">What is memory “cache” in the container stat’s?</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/637577131">解决jellyfin中文外挂字幕乱码 - 天高不算高的文章 - 知乎</a></li>
-<li><a href="https://echo.solo90.com/archives/1213.html">Jellyfin解决中文字幕乱码的问题！</a></li>
+<li><a href="https://man7.org/linux/man-pages/man7/inotify.7.html">inotify(7) — Linux manual page</a></li>
+<li><a href="https://sugoi.gitbook.io/lanraragi/api-documentation/shinobu-api">LANraragi doc: Shinobu API</a></li>
+<li><a href="https://jellyfin.org/docs/general/administration/troubleshooting#real-time-monitoring">Jellyfin doc: Real Time Monitoring</a></li>
+<li><a href="https://www.reddit.com/r/jellyfin/comments/ke3cmo/jellyfin_not_picking_up_new_files_on_docker_mount/">Jellyfin not picking up new files on docker mount</a></li>
+<li><a href="https://post.smzdm.com/p/a5o645pl/">我的Jellyfin影视库 搭建、信息刮削小记</a></li>
+<li><a href="https://vagrant-up.narkive.com/5sdcgSfL/shared-folders-and-inotify-does-it-work-with-vmware-any-way-to-run-vagrant-vmware-in-trial-period">Shared folders and inotify: Does it work with VMWare + Any way to run Vagrant + VMWare in trial period?</a></li>
+<li><a href="https://www.reddit.com/r/jellyfin/comments/106qtix/how_does_the_scheduled_task_for_scan_media/">How does the Scheduled Task for Scan Media Library work?</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -1422,74 +1655,85 @@
         <tag>NAS</tag>
         <tag>Docker</tag>
         <tag>Jellyfin</tag>
+        <tag>LANraragi</tag>
       </tags>
   </entry>
   <entry>
-    <title>Jellyfin 自定义扫描频率</title>
-    <url>/2024/06/11/Jellyfin-custom-scan-frequency/</url>
+    <title>LocalSend：局域网文件传输利器</title>
+    <url>/2023/09/04/LocalSend-A-powerful-tool-for-local-file-transfer/</url>
     <content><![CDATA[<h1 id="序言">序言</h1>
-<p>在<a href="/2024/02/20/LANraragi-Using-Experience">之前的文章</a>中，我提到“Jellyfin 计划任务『扫描媒体库』并不吃资源，频繁运行也没事”。实际上，这不准确。这个任务对于资源的占用取决于媒体/文件的数量。</p>
-<p>最近我写了一个项目，用来爬取视频，同时自动生成 nfo 文件和视频海报。在这个新的视频目录中，最多有 2000 个文件（大部分是 nfo 和海报图片，视频还没怎么下载），有四级子目录。但此时计划任务的 CPU 占用量已经大幅增加。这显然有问题。</p>
-<p>经过一番研究，我发现使用 crontab 定时调用 Jellyfin API，是目前唯一实现不同媒体库不同扫描频率的解决方案。</p>
+<p>最近准备重装笔记本的系统，因此要备份文件，存到台式机里。我将要备份的文件夹压缩，通过 Windows 自带的文件夹共享（局域网共享），传输这些压缩包。</p>
+<p>但是，传输过程却非常艰难。有的压缩包有 10 几个 GB，传了一分钟，网速就没了，之后就开始报超时之类的错误。更离谱的是，有个压缩包在两台电脑上<a href="#%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%A0%A1%E9%AA%8C">摘要算法</a>的结果不同。</p>
+<p>显然，windows SMB 协议既不能保证速度，也不能保证数据正确性，于是我开始寻找更加好用的局域网传输软件。它，就是本文的主角 —— LocalSend</p>
 <span id="more"></span>
-<h1 id="步骤">步骤</h1>
-<h2 id="关闭计划任务">关闭计划任务</h2>
-<p>进入『控制台 | 计划任务 | 扫描媒体库』，删除现有任务：</p>
-<p><img src="/MarkDownImages/image-20240611131240942.png" alt="image-20240611131240942"></p>
-<h2 id="申请一个-API-密钥">申请一个 API 密钥</h2>
-<p>进入『控制台 | API 密钥』，创建一个：</p>
-<p><img src="/MarkDownImages/image-20240611131529710.png" alt="image-20240611131529710"></p>
-<h2 id="获得-API-端口">获得 API 端口</h2>
-<p>我建议直接用 F12 抓包：</p>
-<img src="/MarkDownImages/image-20240611131657198.png" alt="image-20240611131657198" style="zoom:50%;" />
-<p>点击『刷新』前，先按下 F12。然后找到对应的请求</p>
-<img src="/MarkDownImages/image-20240611131710749.png" alt="image-20240611131710749" style="zoom: 33%;" />
-<p><code>/Items/媒体库ID/Refresh?扫描参数</code>，这个 URL 可以直接拿来用。</p>
-<p><img src="/MarkDownImages/image-20240611131902161.png" alt="image-20240611131902161"></p>
-<h2 id="crontab">crontab</h2>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">编辑</span></span><br><span class="line">crontab -e</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看</span></span><br><span class="line">crontab -l</span><br></pre></td></tr></table></figure>
-<p>curl 格式如下：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">curl -k -X POST <span class="string">&quot;https://IP地址:端口/Items/媒体库ID/Refresh?Recursive=true&amp;ImageRefreshMode=Default&amp;MetadataRefreshMode=Default&amp;ReplaceAllImages=false&amp;ReplaceAllMetadata=false&quot;</span> -H <span class="string">&quot;Authorization: MediaBrowser Token=API密钥&quot;</span></span><br></pre></td></tr></table></figure>
-<p>crontab 格式如下：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新番：每十分钟一次</span></span><br><span class="line">*/10 * * * * curl -k -X POST &quot;https://IP地址:端口/Items/媒体库ID/Refresh?Recursive=true&amp;ImageRefreshMode=Default&amp;MetadataRefreshMode=Default&amp;ReplaceAllImages=false&amp;ReplaceAllMetadata=false&quot; -H &quot;Authorization: MediaBrowser Token=API密钥&quot;</span><br></pre></td></tr></table></figure>
-<p>其他时间配置：</p>
-<ul>
-<li>每小时一次：<code>0 * * * *</code>；</li>
-<li>每周一次：比如 <code>0 17 * * 0</code>，每周天下午 5 点；</li>
-<li>每两周一次：比如 <code>0 11 1,15 * *</code>，每月1号和15号的早上11点；</li>
-</ul>
-<hr>
-<p>查看 crontab 的日志：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1. 使用journalctl</span> </span><br><span class="line">journalctl -u crond</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2. 直接查看日志文件，这个更全</span></span><br><span class="line">cat /var/log/cron</span><br></pre></td></tr></table></figure>
-<h1 id="实际效果">实际效果</h1>
-<p><img src="/MarkDownImages/image-20240611154250550.png" alt="image-20240611154250550"></p>
-<blockquote>
-<p>这个软件是 NetData，我之后会写一篇关于它的博文。</p>
-</blockquote>
-<p>红色的是扫描爬取的视频的媒体库，而蓝色的是扫描本季新番的媒体库。</p>
-<p>可以看到：</p>
-<ul>
+<h1 id="LocalSend-介绍">LocalSend 介绍</h1>
+<p>LocalSend 是一个<strong>跨平台</strong>的局域网传输软件，支持 Windows, Linux, macOS, Android 和 IOS. 这是它的<a href="https://localsend.org/#/">官网</a>；这是它的 <a href="https://github.com/localsend/localsend">GitHub 仓库</a></p>
+<p>作者设计了一个基于 HTTP 的传输协议，在<a href="https://github.com/localsend/protocol">这里</a></p>
+<p>LocalSend 基本上是开箱即用，没必要专门写一节 quickstart</p>
+<p>但是，由于 Windows 防火墙的默认配置，第一次使用该软件时，同局域网内的设备可能无法发现这台 Windows 设备。下面，我将给出解决方案。</p>
+<h1 id="防火墙配置">防火墙配置</h1>
+<h2 id="我的方案">我的方案</h2>
+<ol>
 <li>
-<p>蓝色的平均值不超过 5%，因此每十分钟执行一次没问题 —— 这个频率也可以及时地让 Jellyfin 刮削新下载好的番剧。</p>
+<p>将家庭 WIFI 设置为专用网络（不建议在公共网络使用局域网传输文件，无论软件作者做了怎样的加密，我都认为是不安全的。因此，这里不讨论公用网络的情况）<img src="/MarkDownImages/image-20230904212558782.png" alt="image-20230904212558782"></p>
 </li>
 <li>
-<p>如果按照之前 Jellyfin 的计划任务，所有媒体库都一小时扫描一次，那么对 CPU 的占用显然太大了。</p>
+<p>进入『配置防火墙和安全设置』</p>
+<p><img src="/MarkDownImages/image-20230904212718315.png" alt="image-20230904212718315"></p>
 </li>
-</ul>
-<h1 id="参考">参考</h1>
-<ul>
-<li><a href="https://www.reddit.com/r/jellyfin/comments/jjxbko/disabling_automatic_scan_per_library/">Disabling automatic scan per library</a></li>
-</ul>
+<li>
+<p>『允许应用通过防火墙』——『更改配置』。找到 <code>localsend_app</code>（其他以<code>localsend</code>开头的也可以这样做），将它之前那的单选框选上。以防万一，确保之后的两个单选框也是选上的（应该是默认开启的）。然后点击『确定』</p>
+<p><img src="/MarkDownImages/image-20230904212911221.png" alt="image-20230904212911221"></p>
+</li>
+<li>
+<p>重启 LocalSend，等待找到目标主机</p>
+</li>
+</ol>
+<h2 id="网上的方案（未验证）">网上的方案（未验证）</h2>
+<p>这里也给出网上其他人的解决方法，虽然我觉得全局操作防火墙<strong>很不安全</strong>。</p>
+<ol>
+<li>
+<p>打开『Windows Defender 防火墙』</p>
+<p><img src="/MarkDownImages/image-20230904213446263.png" alt="image-20230904213446263"></p>
+</li>
+<li>
+<p>『高级设置』——『Windows 防火墙属性』。在『专用配置文件』一栏，将『入站连接』改为『允许』，然后『应用』</p>
+<p><img src="/MarkDownImages/image-20230904213728952.png" alt="image-20230904213728952"></p>
+</li>
+<li>
+<p>重启 LocalSend，查看能否找到目标主机。如果不行，再将上述『公用配置文件』一栏的『入站连接』改为『允许』，然后『应用』，再次重启 LocalSend 并检验。</p>
+</li>
+</ol>
+<h1 id="文件传输校验">文件传输校验</h1>
+<p>在网络传输文件后，通常要使用摘要算法（MD5、SHA1、SHA256等）对比两份文件是否一致，防止由于网络导致的数据丢失。很多现成的工具提供这样的服务，这里我介绍 3 个。</p>
+<h2 id="7-zip">7-zip</h2>
+<p>7-zip 虽然是一个开源的压缩软件，但也提供摘要函数。</p>
+<p>右键选中要摘要的文件，点击『CRC SHA』，选择摘要算法</p>
+<p><img src="/MarkDownImages/image-20230904214607556.png" alt="image-20230904214607556"></p>
+<p>如果右键菜单没有该选项，在 7-zip 中配置即可：</p>
+<p><img src="/MarkDownImages/image-20230904214947662.png" alt="image-20230904214947662"></p>
+<h2 id="openssl">openssl</h2>
+<p>Linux 大多数发行版都会自带的工具。也可以在 git bash 中使用这个命令。语法是：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">openssl 摘要算法名 文件路径</span><br></pre></td></tr></table></figure>
+<p>例子：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">Gustav@PC MINGW64 ~/Desktop</span><br><span class="line">$ openssl sha256 generate-random-file.cmd</span><br><span class="line">SHA256(generate-random-file.cmd)= 03f9454e4ee7923d08aefa4957282b62a655e7231ea6f4bdd6cdcc4e9a4c1bd9</span><br></pre></td></tr></table></figure>
+<h2 id="Certutil">Certutil</h2>
+<p>Windows 上的一个用来提供证书服务的工具，也提供了一些摘要算法。语法是：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">certutil <span class="literal">-hashfile</span> 文件路径 摘要算法名</span><br></pre></td></tr></table></figure>
+<p>例子：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Users\Gustav\Desktop&gt; certutil <span class="literal">-hashfile</span> .\generate<span class="literal">-random-file</span>.cmd sha256</span><br><span class="line">SHA256 的 .\generate<span class="literal">-random-file</span>.cmd 哈希:</span><br><span class="line"><span class="number">03</span>f9454e4ee7923d08aefa4957282b62a655e7231ea6f4bdd6cdcc4e9a4c1bd9</span><br><span class="line">CertUtil: <span class="literal">-hashfile</span> 命令成功完成。</span><br></pre></td></tr></table></figure>
+<h1 id="总结">总结</h1>
+<p>在本文中，我介绍了一款开源好用的局域网传输工具 —— LocalSend。之后，我又给出了 Windows 系统中如何配置防火墙，使得其他设备能发现当前的设备。最后，我介绍了一些常见的对文件进行摘要的工具：从网络下载的文件，理论上都要进行一遍校验，防止数据损坏或丢失。</p>
 ]]></content>
       <categories>
-        <category>tech</category>
-        <category>NAS</category>
-        <category>Docker</category>
+        <category>softwares</category>
+        <category>LocalSend</category>
       </categories>
       <tags>
-        <tag>NAS</tag>
-        <tag>Docker</tag>
-        <tag>Jellyfin</tag>
+        <tag>LocalSend</tag>
+        <tag>settings</tag>
+        <tag>Firewall</tag>
+        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -1625,78 +1869,55 @@
       </tags>
   </entry>
   <entry>
-    <title>LANraragi 使用心得</title>
-    <url>/2024/02/20/LANraragi-Using-Experience/</url>
+    <title>MyBatis-Plus 实现 MySQL JSON 类型字段的映射</title>
+    <url>/2023/07/08/MyBatis-Plus-Mapping-MySQL-JSON-Type/</url>
     <content><![CDATA[<h1 id="序言">序言</h1>
-<p>我使用 LANraragi 已经有一段时间了，期间发现了一些问题，都解决了，正好写一篇文章记录一下。读者可以参考我<a href="/2024/01/25/LANraragi-manga-server/">之前安装 LANraragi 的文章</a>。</p>
-<h1 id="问题1：挂载缩略图目录导致缩略图无法生成">问题1：挂载缩略图目录导致缩略图无法生成</h1>
+<p>MySQL 支持 JSON 类型的字段。相比字符串类型的字段， JSON 类型有如下好处：</p>
+<ul>
+<li>自动检查 JSON 语法是否正确</li>
+<li>底层支持快速存取 JSON 中的元素。不需要将整个 字符串 全部读取出来，再解析成 JSON 对象</li>
+</ul>
+<p>在逻辑上，JSON 与 POJO 无异。Spring MVC 已经实现了 Controller 层两者的自动转化，这体现在请求参数和返回值上。那么，Repository 层如何实现两者的自动转换呢？</p>
+<p>本文展示了通过使用 MyBatis-Plus，<strong>无侵入式</strong>地实现持久层 JSON 与 POJO 的自动映射（ORM， Object Relational Mapping）</p>
+<h1 id="案例演示">案例演示</h1>
+<h2 id="数据库表">数据库表</h2>
 <span id="more"></span>
-<p>安装 LANraragi 时，为了保证 <code>content</code> 目录只读，我将缩略图目录设置成了容器内部路径。这意味着，每次删除再重启该容器，都需要重新生成缩略图 —— 这样做浪费计算资源，也不符合 Docker 最佳实践。那就使用一个新的 volume 存放缩略图。</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">lanraragi:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">difegue/lanraragi:v.0.9.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">lanraragi</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/mnt/hgfs/doujinshiArchives:/home/koyomi/lanraragi/content:ro</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">lanraragi-database:/home/koyomi/lanraragi/database</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">lanraragi-thumbnail:/home/koyomi/lanraragi/thumb</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">lanraragi-database:</span></span><br><span class="line">  <span class="attr">lanraragi-thumbnail:</span></span><br></pre></td></tr></table></figure>
-<p><code>lanraragi-thumbnail</code> 就是存放缩略图的 volume。</p>
-<p>启动容器，发现缩略图无法生成。进入『Minion Console』，发现如下错误：</p>
-<p><img src="/MarkDownImages/image-20240220111456968.png" alt="image-20240220111456968"></p>
-<p>为什么 <code>mkdir</code> 会没有权限呢？进入容器：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">/home/koyomi/lanraragi <span class="comment"># ls -lah</span></span><br><span class="line">total 192K   </span><br><span class="line">drwxr-sr-x    1 koyomi   koyomi      4.0K Feb 20 02:14 .</span><br><span class="line">drwxr-sr-x    1 koyomi   koyomi      4.0K Feb 20 02:14 ..</span><br><span class="line">-rw-r--r--    1 root     koyomi        52 Oct 29 21:19 config.log</span><br><span class="line">drwxrwxrwx    1 root     root       16.0K Feb 17 11:44 content</span><br><span class="line">drwxr-xr-x    3 koyomi   root        4.0K Feb 20 03:10 database</span><br><span class="line">drwxr-sr-x    3 koyomi   koyomi      4.0K Oct 31 00:58 lib</span><br><span class="line">drwxr-sr-x    2 koyomi   koyomi      4.0K Feb 20 02:14 <span class="built_in">log</span></span><br><span class="line">-rw-r--r--    1 koyomi   koyomi       186 Oct 31 00:58 lrr.conf</span><br><span class="line">-rw-r--r--    1 koyomi   koyomi         8 Feb 20 02:14 oshino</span><br><span class="line">-rw-r--r--    1 koyomi   koyomi     97.6K Oct 29 21:02 package-lock.json</span><br><span class="line">-rw-r--r--    1 koyomi   koyomi      2.1K Oct 27 23:07 package.json</span><br><span class="line">drwxr-sr-x    1 root     koyomi      4.0K Feb 20 02:14 public</span><br><span class="line">drwxr-sr-x    2 koyomi   koyomi      4.0K Oct 31 00:58 script</span><br><span class="line">drwxr-sr-x    3 koyomi   koyomi      4.0K Oct 31 00:58 templates</span><br><span class="line">drwxr-sr-x    4 koyomi   koyomi      4.0K Oct 31 00:58 tests</span><br><span class="line">drwxr-xr-x  257 root     root        4.0K Feb 20 02:19 thumb</span><br><span class="line">drwxr-sr-x    1 koyomi   koyomi      4.0K Oct 31 00:59 tools</span><br></pre></td></tr></table></figure>
-<p>注意 <code>thumb</code> 目录，它是由 <code>root</code> 用户创建，但运行 LANraragi 的 <code>koyomi</code> 用户没有对该目录的写权限。授权即可：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 thumb</span><br></pre></td></tr></table></figure>
-<p>然后在『Tags and Thumbnails』里点击『Generate Missing Thumbnails』。</p>
-<blockquote>
-<p>也可以看到， <code>content</code> 目录作为默认的漫画目录，被作者人为的提高了权限，因此默认使用 <code>content/thumb</code> 作为缩略图目录并不会产生这个问题。</p>
-</blockquote>
-<h1 id="问题2：无法实时监控文件变动">问题2：无法实时监控文件变动</h1>
-<p>见设置中的『Background Workers』：</p>
-<blockquote>
-<p>This File Watcher is responsible for monitoring your content directory and automatically handling new archives as they come.
-If Shinobu is dead or unresponsive, you can reboot her by clicking this button.</p>
-</blockquote>
-<p>本该实时监控文件变动，但我却用不了这个功能。原因在于该功能的底层使用了 <code>inotify</code> API：</p>
-<blockquote>
-<p>The inotify API provides a mechanism for monitoring filesystem events.  Inotify can be used to monitor individual files, or to monitor directories.  When a directory is monitored, inotify will return events for the directory itself, and for files inside the directory.</p>
-</blockquote>
-<p>如果文件系统不支持这个 API，那么 LANraragi 自然无法监控文件变动。</p>
-<p>我使用 VMware 的共享文件夹将漫画资源映射到 Linux 中，而共享文件夹底层的文件系统不支持 <code>inotify</code>。</p>
-<p>解决方法：点击『Restart File Watcher』，重启后会扫描整个 <code>content</code> 目录；或者写一个定时任务脚本，POST <code>/api/shinobu/restart</code>。</p>
-<hr>
-<p>其实很多软件都是用 <code>inotify</code> 来监控文件变动，因此这是一个普遍的问题。</p>
-<p>我的 Jellyfin 的媒体文件夹同样使用了 VMware 的共享文件夹，因此也有该问题。不过 Jellyfin 知名得多，我从相关帖子中很快发现了这个问题。更重要地是，Jellyfin 明确地写了只有支持 <code>inotify</code> 的文件系统才有这一功能，这一点值得其他软件作者写文档时借鉴。</p>
-<blockquote>
-<h2 id="Real-Time-Monitoring">Real Time Monitoring</h2>
-<p>This will let Jellyfin automatically update libraries when files are added or modified. Unfortunately, this feature is <strong>only supported on certain filesystems</strong>.</p>
-<p>For Linux systems, this is performed by inotify. NFS and rclone do not support inotify, but support can be provided by using a union file system such as mergerfs with your networked file systems.</p>
-</blockquote>
-<p>顺便提一下 Jellyfin 的解决方案：</p>
-<ul>
-<li>提高计划任务『扫描媒体库』的频率 —— 这个任务并不吃资源，频繁运行也没事；</li>
-<li>通过 API 执行刷新；</li>
-</ul>
-<h1 id="收获">收获</h1>
-<p>这个脚本挺好用的：</p>
-<p><img src="/MarkDownImages/image-20240220131323937.png" alt="image-20240220131323937"></p>
-<p>我的漫画目录结构是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">├── 作者1</span><br><span class="line">│   ├── 漫画压缩包1</span><br><span class="line">│   └── 漫画压缩包2</span><br><span class="line">└── 作者2</span><br><span class="line">    ├── 漫画压缩包1</span><br><span class="line">    └── 漫画压缩包2</span><br></pre></td></tr></table></figure>
-<p>这个脚本可以将对应的漫画划分到某一个作者的 Category 中。尽管我没有给漫画打 tag，以作者作为 Category 却起到了相同效果，让我可以根据作者选择漫画。</p>
-<h1 id="参考">参考</h1>
-<ul>
-<li><a href="https://man7.org/linux/man-pages/man7/inotify.7.html">inotify(7) — Linux manual page</a></li>
-<li><a href="https://sugoi.gitbook.io/lanraragi/api-documentation/shinobu-api">LANraragi doc: Shinobu API</a></li>
-<li><a href="https://jellyfin.org/docs/general/administration/troubleshooting#real-time-monitoring">Jellyfin doc: Real Time Monitoring</a></li>
-<li><a href="https://www.reddit.com/r/jellyfin/comments/ke3cmo/jellyfin_not_picking_up_new_files_on_docker_mount/">Jellyfin not picking up new files on docker mount</a></li>
-<li><a href="https://post.smzdm.com/p/a5o645pl/">我的Jellyfin影视库 搭建、信息刮削小记</a></li>
-<li><a href="https://vagrant-up.narkive.com/5sdcgSfL/shared-folders-and-inotify-does-it-work-with-vmware-any-way-to-run-vagrant-vmware-in-trial-period">Shared folders and inotify: Does it work with VMWare + Any way to run Vagrant + VMWare in trial period?</a></li>
-<li><a href="https://www.reddit.com/r/jellyfin/comments/106qtix/how_does_the_scheduled_task_for_scan_media/">How does the Scheduled Task for Scan Media Library work?</a></li>
-</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `person` (</span><br><span class="line">  `id` bigint NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `name` varchar(255) NOT NULL,</span><br><span class="line">  `log` json NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB;</span><br></pre></td></tr></table></figure>
+<h2 id="依赖">依赖</h2>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="entity">entity</h2>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@TableName(value = &quot;person&quot;, autoResultMap = true)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@TableField(typeHandler = JacksonTypeHandler.class)</span></span><br><span class="line">    <span class="keyword">private</span> PersonLog log;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Data</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">PersonLog</span> &#123;</span><br><span class="line">        List&lt;String&gt; hobbies;</span><br><span class="line">        Integer age;</span><br><span class="line">        String address;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的<code>PersonLog</code>是重点讨论的对象，我们要实现它与 JSON 的映射。</p>
+<p><code>Person</code>类上需要标记两个注解，两者通常一起使用：</p>
+<p><code>TableName#autoResultMap</code>：负责在<strong>查询</strong>时候把 JSON 转换为 POJO</p>
+<p><code>TableField#typeHandler</code>：负责在<strong>插入</strong>时将 POJO 转换为 JSON。由于 spring-web-starter 已经导入了 jackson 依赖，直接使用 <code>JacksonTypeHandler</code> 即可。</p>
+<h2 id="mapper-xml">mapper.xml</h2>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">mapper</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span> <span class="string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span> &gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.example.demo.mapper.PersonMapper&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;BaseResultMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;com.example.demo.entity.Person&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span> <span class="attr">column</span>=<span class="string">&quot;id&quot;</span> <span class="attr">property</span>=<span class="string">&quot;id&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;BIGINT&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;name&quot;</span> <span class="attr">property</span>=<span class="string">&quot;name&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;VARCHAR&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;log&quot;</span> <span class="attr">property</span>=<span class="string">&quot;log&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;LONGVARCHAR&quot;</span> <span class="attr">typeHandler</span>=<span class="string">&quot;com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">sql</span> <span class="attr">id</span>=<span class="string">&quot;Base_Column_List&quot;</span>&gt;</span></span><br><span class="line">        id, name, log</span><br><span class="line">    <span class="tag">&lt;/<span class="name">sql</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>mapper 文件中需要指出 <code>log</code> 字段的 typeHandler 的全类名</p>
+<h2 id="测试">测试</h2>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">PersonMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;Person&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>省略了 Service 层</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PersonController</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> PersonMapper personMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping(&quot;/json&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">testJSON2BeanMap</span><span class="params">(<span class="meta">@RequestBody</span> Person person)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> personMapper.insert(person);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/json/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Person <span class="title function_">getPersonById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> personMapper.selectById(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试两个方法，没报错就说明成功，插入时可以再查看一下数据库。</p>
+<p>在<a href="#%E5%BA%8F%E8%A8%80">序言</a>中提到的<strong>无侵入式ORM</strong>，是指我们不需要在代码中手动地执行 JSON 与 PersonLog 的转换。</p>
+<h1 id="总结">总结</h1>
+<p>本文展示了通过使用 MyBatis-Plus<strong>无侵入式</strong>实现持久层 JSON 与 POJO 的自动映射。</p>
+<p>我对这一问题的研究源自实习时业务的要求。当我查询网上的资料时，发现帖子的表述都不太完整、直观，于是我记录下了解决方案，写成了这篇文章。</p>
+<h1 id="参考文章">参考文章</h1>
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/json.html">The JSON Data Type</a></p>
+<p><a href="https://blog.csdn.net/qq_33360626/article/details/119836835">mybatis-plus处理mysql中json格式方法</a></p>
 ]]></content>
       <categories>
         <category>tech</category>
-        <category>NAS</category>
-        <category>Docker</category>
+        <category>Java</category>
       </categories>
       <tags>
-        <tag>NAS</tag>
-        <tag>Docker</tag>
-        <tag>Jellyfin</tag>
-        <tag>LANraragi</tag>
+        <tag>Java</tag>
+        <tag>Spring Boot</tag>
+        <tag>MySQL</tag>
+        <tag>MyBatis-Plus</tag>
+        <tag>JDBC</tag>
+        <tag>Repository</tag>
       </tags>
   </entry>
   <entry>
@@ -1764,140 +1985,6 @@ If Shinobu is dead or unresponsive, you can reboot her by clicking this button.<
         <tag>VS Code</tag>
         <tag>Typora</tag>
         <tag>Markdown</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在 Docker 中安装 MySQL</title>
-    <url>/2024/04/12/MySQL-Docker/</url>
-    <content><![CDATA[<p>对于开发者，安装 MySQL 不是什么难事，但是往往步骤比较多。我记录了一个 Docker compose 模板，能直接启动一个配置好的 MySQL 容器，用于开发。</p>
-<h1 id="Docker-compose">Docker compose</h1>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:5.7</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">mysql</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">&#x27;123456&#x27;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">43306</span><span class="string">:3306</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql_data:/var/lib/mysql</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">mysqld</span> <span class="string">--character-set-server=utf8</span> <span class="string">--collation-server=utf8_general_ci</span> <span class="string">--character-set-client-handshake=FALSE</span></span><br><span class="line">    <span class="attr">healthcheck:</span></span><br><span class="line">      <span class="attr">test:</span> <span class="string">out=$$(mysqladmin</span> <span class="string">ping</span> <span class="string">-h</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="string">-u</span> <span class="string">root</span> <span class="string">--password=$$MYSQL_ROOT_PASSWORD);</span> <span class="string">echo</span> <span class="string">$$out</span> <span class="string">|</span> <span class="string">grep</span> <span class="string">&#x27;mysqld is alive&#x27;</span> <span class="string">||</span> &#123; <span class="string">echo</span> <span class="string">$$out;</span> <span class="string">exit</span> <span class="number">1</span><span class="string">;</span> &#125;</span><br><span class="line">      <span class="attr">start_period:</span> <span class="string">0s</span></span><br><span class="line">      <span class="attr">interval:</span> <span class="string">5s</span></span><br><span class="line">      <span class="attr">timeout:</span> <span class="string">3s</span></span><br><span class="line">      <span class="attr">retries:</span> <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">mysql_data:</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h1 id="配置说明">配置说明</h1>
-<span id="more"></span>
-<h2 id="容器卷">容器卷</h2>
-<p>MySQL 有三个存放数据的目录：</p>
-<ul>
-<li><code>/var/lib/mysql</code>：数据目录</li>
-<li><code>/var/log/mysql</code>：日志目录</li>
-<li><code>/etc/mysql/conf.d</code>：配置文件目录</li>
-</ul>
-<p>1️⃣最重要的当然是数据目录。</p>
-<p>2️⃣配置文件目录可用可不用，因为可以使用启动参数。如果要用的话，创建一个 <code>my.cnf</code>，内容为</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[client]</span></span><br><span class="line"><span class="attr">default_character_set</span>=utf8</span><br><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">collation_server</span> = utf8_general_ci</span><br><span class="line"><span class="attr">character_set_server</span> = utf8</span><br></pre></td></tr></table></figure>
-<p>实际上就是配置了字符集，因此完全可以用启动参数代替。</p>
-<p>3️⃣日志目录最不重要。</p>
-<h2 id="mysqld-启动参数">mysqld 启动参数</h2>
-<p>使用如下命令查看（选项很多，保存到文件中再查看）：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker run -it --<span class="built_in">rm</span> mysql:5.7 --verbose --<span class="built_in">help</span> &gt; mysqld_args.txt</span><br><span class="line">more mysqld_args.txt</span><br></pre></td></tr></table></figure>
-<p>配置文件中的大部分选项都可以被启动参数代替，很适合快速创建容器。</p>
-<p>启动命令是：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mysqld --character-set-server=utf8 --collation-server=utf8_general_ci --character-set-client-handshake=FALSE</span><br></pre></td></tr></table></figure>
-<p><code>--character-set-server</code> 和 <code>--collation-server</code> 很容易理解。</p>
-<p><code>--character-set-client-handshake</code> 的意思是：</p>
-<blockquote>
-<p>Don’t ignore client side character set value sent during handshake.</p>
-</blockquote>
-<p>即优先采用客户端的字符集，默认为 <code>TRUE</code>。我设置为了 <code>FALSE</code>，强制客户端使用服务端的字符集。</p>
-<h2 id="healthcheck">healthcheck</h2>
-<p>测试命令是：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">out=$$(mysqladmin ping -h 127.0.0.1 -u root --password=$<span class="variable">$MYSQL_ROOT_PASSWORD</span>); <span class="built_in">echo</span> $<span class="variable">$out</span> | grep <span class="string">&#x27;mysqld is alive&#x27;</span> || &#123; <span class="built_in">echo</span> $<span class="variable">$out</span>; <span class="built_in">exit</span> 1; &#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>$$</code> 是为了转义 <code>$</code>，因此 shell 命令中的 <code>$</code> 都需要双写；</li>
-<li>如果命令的退出码为 0，则代表 healthy；否则，是 unhealthy；</li>
-<li>这个命令可以当作一个模板：如果 <code>mysqladmin ping</code> 返回内容包括 <code>mysqld is alive</code>，则正常退出。否则，打印返回内容，并设置退出码为 1；</li>
-</ul>
-<h1 id="参考">参考</h1>
-<ul>
-<li><a href="https://hub.docker.com/_/mysql">MySQL Docker doc</a></li>
-<li><a href="https://stackoverflow.com/questions/42567475/docker-compose-check-if-mysql-connection-is-ready">Docker-compose check if mysql connection is ready</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>tech</category>
-        <category>Docker</category>
-        <category>MySQL</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LocalSend：局域网文件传输利器</title>
-    <url>/2023/09/04/LocalSend-A-powerful-tool-for-local-file-transfer/</url>
-    <content><![CDATA[<h1 id="序言">序言</h1>
-<p>最近准备重装笔记本的系统，因此要备份文件，存到台式机里。我将要备份的文件夹压缩，通过 Windows 自带的文件夹共享（局域网共享），传输这些压缩包。</p>
-<p>但是，传输过程却非常艰难。有的压缩包有 10 几个 GB，传了一分钟，网速就没了，之后就开始报超时之类的错误。更离谱的是，有个压缩包在两台电脑上<a href="#%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%A0%A1%E9%AA%8C">摘要算法</a>的结果不同。</p>
-<p>显然，windows SMB 协议既不能保证速度，也不能保证数据正确性，于是我开始寻找更加好用的局域网传输软件。它，就是本文的主角 —— LocalSend</p>
-<span id="more"></span>
-<h1 id="LocalSend-介绍">LocalSend 介绍</h1>
-<p>LocalSend 是一个<strong>跨平台</strong>的局域网传输软件，支持 Windows, Linux, macOS, Android 和 IOS. 这是它的<a href="https://localsend.org/#/">官网</a>；这是它的 <a href="https://github.com/localsend/localsend">GitHub 仓库</a></p>
-<p>作者设计了一个基于 HTTP 的传输协议，在<a href="https://github.com/localsend/protocol">这里</a></p>
-<p>LocalSend 基本上是开箱即用，没必要专门写一节 quickstart</p>
-<p>但是，由于 Windows 防火墙的默认配置，第一次使用该软件时，同局域网内的设备可能无法发现这台 Windows 设备。下面，我将给出解决方案。</p>
-<h1 id="防火墙配置">防火墙配置</h1>
-<h2 id="我的方案">我的方案</h2>
-<ol>
-<li>
-<p>将家庭 WIFI 设置为专用网络（不建议在公共网络使用局域网传输文件，无论软件作者做了怎样的加密，我都认为是不安全的。因此，这里不讨论公用网络的情况）<img src="/MarkDownImages/image-20230904212558782.png" alt="image-20230904212558782"></p>
-</li>
-<li>
-<p>进入『配置防火墙和安全设置』</p>
-<p><img src="/MarkDownImages/image-20230904212718315.png" alt="image-20230904212718315"></p>
-</li>
-<li>
-<p>『允许应用通过防火墙』——『更改配置』。找到 <code>localsend_app</code>（其他以<code>localsend</code>开头的也可以这样做），将它之前那的单选框选上。以防万一，确保之后的两个单选框也是选上的（应该是默认开启的）。然后点击『确定』</p>
-<p><img src="/MarkDownImages/image-20230904212911221.png" alt="image-20230904212911221"></p>
-</li>
-<li>
-<p>重启 LocalSend，等待找到目标主机</p>
-</li>
-</ol>
-<h2 id="网上的方案（未验证）">网上的方案（未验证）</h2>
-<p>这里也给出网上其他人的解决方法，虽然我觉得全局操作防火墙<strong>很不安全</strong>。</p>
-<ol>
-<li>
-<p>打开『Windows Defender 防火墙』</p>
-<p><img src="/MarkDownImages/image-20230904213446263.png" alt="image-20230904213446263"></p>
-</li>
-<li>
-<p>『高级设置』——『Windows 防火墙属性』。在『专用配置文件』一栏，将『入站连接』改为『允许』，然后『应用』</p>
-<p><img src="/MarkDownImages/image-20230904213728952.png" alt="image-20230904213728952"></p>
-</li>
-<li>
-<p>重启 LocalSend，查看能否找到目标主机。如果不行，再将上述『公用配置文件』一栏的『入站连接』改为『允许』，然后『应用』，再次重启 LocalSend 并检验。</p>
-</li>
-</ol>
-<h1 id="文件传输校验">文件传输校验</h1>
-<p>在网络传输文件后，通常要使用摘要算法（MD5、SHA1、SHA256等）对比两份文件是否一致，防止由于网络导致的数据丢失。很多现成的工具提供这样的服务，这里我介绍 3 个。</p>
-<h2 id="7-zip">7-zip</h2>
-<p>7-zip 虽然是一个开源的压缩软件，但也提供摘要函数。</p>
-<p>右键选中要摘要的文件，点击『CRC SHA』，选择摘要算法</p>
-<p><img src="/MarkDownImages/image-20230904214607556.png" alt="image-20230904214607556"></p>
-<p>如果右键菜单没有该选项，在 7-zip 中配置即可：</p>
-<p><img src="/MarkDownImages/image-20230904214947662.png" alt="image-20230904214947662"></p>
-<h2 id="openssl">openssl</h2>
-<p>Linux 大多数发行版都会自带的工具。也可以在 git bash 中使用这个命令。语法是：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">openssl 摘要算法名 文件路径</span><br></pre></td></tr></table></figure>
-<p>例子：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">Gustav@PC MINGW64 ~/Desktop</span><br><span class="line">$ openssl sha256 generate-random-file.cmd</span><br><span class="line">SHA256(generate-random-file.cmd)= 03f9454e4ee7923d08aefa4957282b62a655e7231ea6f4bdd6cdcc4e9a4c1bd9</span><br></pre></td></tr></table></figure>
-<h2 id="Certutil">Certutil</h2>
-<p>Windows 上的一个用来提供证书服务的工具，也提供了一些摘要算法。语法是：</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">certutil <span class="literal">-hashfile</span> 文件路径 摘要算法名</span><br></pre></td></tr></table></figure>
-<p>例子：</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Users\Gustav\Desktop&gt; certutil <span class="literal">-hashfile</span> .\generate<span class="literal">-random-file</span>.cmd sha256</span><br><span class="line">SHA256 的 .\generate<span class="literal">-random-file</span>.cmd 哈希:</span><br><span class="line"><span class="number">03</span>f9454e4ee7923d08aefa4957282b62a655e7231ea6f4bdd6cdcc4e9a4c1bd9</span><br><span class="line">CertUtil: <span class="literal">-hashfile</span> 命令成功完成。</span><br></pre></td></tr></table></figure>
-<h1 id="总结">总结</h1>
-<p>在本文中，我介绍了一款开源好用的局域网传输工具 —— LocalSend。之后，我又给出了 Windows 系统中如何配置防火墙，使得其他设备能发现当前的设备。最后，我介绍了一些常见的对文件进行摘要的工具：从网络下载的文件，理论上都要进行一遍校验，防止数据损坏或丢失。</p>
-]]></content>
-      <categories>
-        <category>softwares</category>
-        <category>LocalSend</category>
-      </categories>
-      <tags>
-        <tag>settings</tag>
-        <tag>LocalSend</tag>
-        <tag>Firewall</tag>
-        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -1991,55 +2078,59 @@ If Shinobu is dead or unresponsive, you can reboot her by clicking this button.<
       </tags>
   </entry>
   <entry>
-    <title>MyBatis-Plus 实现 MySQL JSON 类型字段的映射</title>
-    <url>/2023/07/08/MyBatis-Plus-Mapping-MySQL-JSON-Type/</url>
-    <content><![CDATA[<h1 id="序言">序言</h1>
-<p>MySQL 支持 JSON 类型的字段。相比字符串类型的字段， JSON 类型有如下好处：</p>
-<ul>
-<li>自动检查 JSON 语法是否正确</li>
-<li>底层支持快速存取 JSON 中的元素。不需要将整个 字符串 全部读取出来，再解析成 JSON 对象</li>
-</ul>
-<p>在逻辑上，JSON 与 POJO 无异。Spring MVC 已经实现了 Controller 层两者的自动转化，这体现在请求参数和返回值上。那么，Repository 层如何实现两者的自动转换呢？</p>
-<p>本文展示了通过使用 MyBatis-Plus，<strong>无侵入式</strong>地实现持久层 JSON 与 POJO 的自动映射（ORM， Object Relational Mapping）</p>
-<h1 id="案例演示">案例演示</h1>
-<h2 id="数据库表">数据库表</h2>
+    <title>在 Docker 中安装 MySQL</title>
+    <url>/2024/04/12/MySQL-Docker/</url>
+    <content><![CDATA[<p>对于开发者，安装 MySQL 不是什么难事，但是往往步骤比较多。我记录了一个 Docker compose 模板，能直接启动一个配置好的 MySQL 容器，用于开发。</p>
+<h1 id="Docker-compose">Docker compose</h1>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:5.7</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">mysql</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">&#x27;123456&#x27;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">43306</span><span class="string">:3306</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql_data:/var/lib/mysql</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">mysqld</span> <span class="string">--character-set-server=utf8</span> <span class="string">--collation-server=utf8_general_ci</span> <span class="string">--character-set-client-handshake=FALSE</span></span><br><span class="line">    <span class="attr">healthcheck:</span></span><br><span class="line">      <span class="attr">test:</span> <span class="string">out=$$(mysqladmin</span> <span class="string">ping</span> <span class="string">-h</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="string">-u</span> <span class="string">root</span> <span class="string">--password=$$MYSQL_ROOT_PASSWORD);</span> <span class="string">echo</span> <span class="string">$$out</span> <span class="string">|</span> <span class="string">grep</span> <span class="string">&#x27;mysqld is alive&#x27;</span> <span class="string">||</span> &#123; <span class="string">echo</span> <span class="string">$$out;</span> <span class="string">exit</span> <span class="number">1</span><span class="string">;</span> &#125;</span><br><span class="line">      <span class="attr">start_period:</span> <span class="string">0s</span></span><br><span class="line">      <span class="attr">interval:</span> <span class="string">5s</span></span><br><span class="line">      <span class="attr">timeout:</span> <span class="string">3s</span></span><br><span class="line">      <span class="attr">retries:</span> <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">mysql_data:</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h1 id="配置说明">配置说明</h1>
 <span id="more"></span>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `person` (</span><br><span class="line">  `id` bigint NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `name` varchar(255) NOT NULL,</span><br><span class="line">  `log` json NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB;</span><br></pre></td></tr></table></figure>
-<h2 id="依赖">依赖</h2>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="entity">entity</h2>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@TableName(value = &quot;person&quot;, autoResultMap = true)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@TableField(typeHandler = JacksonTypeHandler.class)</span></span><br><span class="line">    <span class="keyword">private</span> PersonLog log;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Data</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">PersonLog</span> &#123;</span><br><span class="line">        List&lt;String&gt; hobbies;</span><br><span class="line">        Integer age;</span><br><span class="line">        String address;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里的<code>PersonLog</code>是重点讨论的对象，我们要实现它与 JSON 的映射。</p>
-<p><code>Person</code>类上需要标记两个注解，两者通常一起使用：</p>
-<p><code>TableName#autoResultMap</code>：负责在<strong>查询</strong>时候把 JSON 转换为 POJO</p>
-<p><code>TableField#typeHandler</code>：负责在<strong>插入</strong>时将 POJO 转换为 JSON。由于 spring-web-starter 已经导入了 jackson 依赖，直接使用 <code>JacksonTypeHandler</code> 即可。</p>
-<h2 id="mapper-xml">mapper.xml</h2>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">mapper</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span> <span class="string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span> &gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.example.demo.mapper.PersonMapper&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;BaseResultMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;com.example.demo.entity.Person&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span> <span class="attr">column</span>=<span class="string">&quot;id&quot;</span> <span class="attr">property</span>=<span class="string">&quot;id&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;BIGINT&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;name&quot;</span> <span class="attr">property</span>=<span class="string">&quot;name&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;VARCHAR&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;log&quot;</span> <span class="attr">property</span>=<span class="string">&quot;log&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;LONGVARCHAR&quot;</span> <span class="attr">typeHandler</span>=<span class="string">&quot;com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">sql</span> <span class="attr">id</span>=<span class="string">&quot;Base_Column_List&quot;</span>&gt;</span></span><br><span class="line">        id, name, log</span><br><span class="line">    <span class="tag">&lt;/<span class="name">sql</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>mapper 文件中需要指出 <code>log</code> 字段的 typeHandler 的全类名</p>
-<h2 id="测试">测试</h2>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">PersonMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;Person&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>省略了 Service 层</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PersonController</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> PersonMapper personMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping(&quot;/json&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">testJSON2BeanMap</span><span class="params">(<span class="meta">@RequestBody</span> Person person)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> personMapper.insert(person);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/json/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Person <span class="title function_">getPersonById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> personMapper.selectById(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>测试两个方法，没报错就说明成功，插入时可以再查看一下数据库。</p>
-<p>在<a href="#%E5%BA%8F%E8%A8%80">序言</a>中提到的<strong>无侵入式ORM</strong>，是指我们不需要在代码中手动地执行 JSON 与 PersonLog 的转换。</p>
-<h1 id="总结">总结</h1>
-<p>本文展示了通过使用 MyBatis-Plus<strong>无侵入式</strong>实现持久层 JSON 与 POJO 的自动映射。</p>
-<p>我对这一问题的研究源自实习时业务的要求。当我查询网上的资料时，发现帖子的表述都不太完整、直观，于是我记录下了解决方案，写成了这篇文章。</p>
-<h1 id="参考文章">参考文章</h1>
-<p><a href="https://dev.mysql.com/doc/refman/8.0/en/json.html">The JSON Data Type</a></p>
-<p><a href="https://blog.csdn.net/qq_33360626/article/details/119836835">mybatis-plus处理mysql中json格式方法</a></p>
+<h2 id="容器卷">容器卷</h2>
+<p>MySQL 有三个存放数据的目录：</p>
+<ul>
+<li><code>/var/lib/mysql</code>：数据目录</li>
+<li><code>/var/log/mysql</code>：日志目录</li>
+<li><code>/etc/mysql/conf.d</code>：配置文件目录</li>
+</ul>
+<p>1️⃣最重要的当然是数据目录。</p>
+<p>2️⃣配置文件目录可用可不用，因为可以使用启动参数。如果要用的话，创建一个 <code>my.cnf</code>，内容为</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[client]</span></span><br><span class="line"><span class="attr">default_character_set</span>=utf8</span><br><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">collation_server</span> = utf8_general_ci</span><br><span class="line"><span class="attr">character_set_server</span> = utf8</span><br></pre></td></tr></table></figure>
+<p>实际上就是配置了字符集，因此完全可以用启动参数代替。</p>
+<p>3️⃣日志目录最不重要。</p>
+<h2 id="mysqld-启动参数">mysqld 启动参数</h2>
+<p>使用如下命令查看（选项很多，保存到文件中再查看）：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker run -it --<span class="built_in">rm</span> mysql:5.7 --verbose --<span class="built_in">help</span> &gt; mysqld_args.txt</span><br><span class="line">more mysqld_args.txt</span><br></pre></td></tr></table></figure>
+<p>配置文件中的大部分选项都可以被启动参数代替，很适合快速创建容器。</p>
+<p>启动命令是：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mysqld --character-set-server=utf8 --collation-server=utf8_general_ci --character-set-client-handshake=FALSE</span><br></pre></td></tr></table></figure>
+<p><code>--character-set-server</code> 和 <code>--collation-server</code> 很容易理解。</p>
+<p><code>--character-set-client-handshake</code> 的意思是：</p>
+<blockquote>
+<p>Don’t ignore client side character set value sent during handshake.</p>
+</blockquote>
+<p>即优先采用客户端的字符集，默认为 <code>TRUE</code>。我设置为了 <code>FALSE</code>，强制客户端使用服务端的字符集。</p>
+<h2 id="healthcheck">healthcheck</h2>
+<p>测试命令是：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">out=$$(mysqladmin ping -h 127.0.0.1 -u root --password=$<span class="variable">$MYSQL_ROOT_PASSWORD</span>); <span class="built_in">echo</span> $<span class="variable">$out</span> | grep <span class="string">&#x27;mysqld is alive&#x27;</span> || &#123; <span class="built_in">echo</span> $<span class="variable">$out</span>; <span class="built_in">exit</span> 1; &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>$$</code> 是为了转义 <code>$</code>，因此 shell 命令中的 <code>$</code> 都需要双写；</li>
+<li>如果命令的退出码为 0，则代表 healthy；否则，是 unhealthy；</li>
+<li>这个命令可以当作一个模板：如果 <code>mysqladmin ping</code> 返回内容包括 <code>mysqld is alive</code>，则正常退出。否则，打印返回内容，并设置退出码为 1；</li>
+</ul>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://hub.docker.com/_/mysql">MySQL Docker doc</a></li>
+<li><a href="https://stackoverflow.com/questions/42567475/docker-compose-check-if-mysql-connection-is-ready">Docker-compose check if mysql connection is ready</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>tech</category>
-        <category>Java</category>
+        <category>Docker</category>
+        <category>MySQL</category>
       </categories>
       <tags>
+        <tag>Docker</tag>
         <tag>MySQL</tag>
-        <tag>Java</tag>
-        <tag>Spring Boot</tag>
-        <tag>MyBatis-Plus</tag>
-        <tag>JDBC</tag>
-        <tag>Repository</tag>
       </tags>
   </entry>
   <entry>
@@ -2070,6 +2161,67 @@ If Shinobu is dead or unresponsive, you can reboot her by clicking this button.<
       <tags>
         <tag>Python</tag>
         <tag>venv</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring MVC 使用 Validation 注解实现请求参数自动校验</title>
+    <url>/2023/07/05/Spring-MVC-Automatic-Validation-of-Request-Parameters-Using-Validation-Annotations/</url>
+    <content><![CDATA[<h1 id="序言">序言</h1>
+<p>控制器方法（ handler ）中负责请求参数校验。</p>
+<p>传统的写法是在每个方法的开头对所有请求参数进行校验，如果存在参数不满足条件，则抛出异常，或者提前返回错误。</p>
+<p>Validation API 提供了一系列的注解，通过将这些注解标记在 entity 类的属性上，Spring MVC 会根据这些注解的语义，自动完成请求参数校验。如果参数不满足条件，则抛出异常。这节省了开发者手动校验请求参数的麻烦。</p>
+<p>负责自动参数校验的类实际上是由 Spring Boot 自动装配导入的，因此我们要使用对应的 starter 依赖。</p>
+<h1 id="案例演示">案例演示</h1>
+<h2 id="依赖">依赖</h2>
+<span id="more"></span>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-validation<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>validation-api 是本次介绍的重点</p>
+<img src="/MarkDownImages/image-20230705200537754.png" alt="image-20230705200537754" style="zoom:80%;" />
+<h2 id="项目结构">项目结构</h2>
+<p>一个标准的 Spring Initializer 生成的 Spring Boot 项目</p>
+<img src="/MarkDownImages/image-20230705200916180.png" alt="image-20230705200916180" style="zoom: 80%;" />
+<h2 id="entity">entity</h2>
+<h3 id="User">User</h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.gustav.springmvcvalidatordemo.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="meta">@NotBlank</span></span><br><span class="line">    <span class="meta">@Size(max = 5, message = &quot;名字不能超过5个字符&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NotNull</span></span><br><span class="line">    <span class="meta">@Min(value = 0, message = &quot;年龄不能小于0&quot;)</span></span><br><span class="line">    <span class="meta">@Max(value = 200, message = &quot;年龄不能大于200&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>@NotBlank</code>：用在 <code>CharSequence</code> 类型的属性上，表示该字段非空，且长度至少为 1。简单来说，该字符串必须有内容</p>
+<p><code>@Size</code>：用在<code>CharSequence</code>和集合类的属性上，表示该字段的字符数/元素数目。<code>max = 5</code>是数量的上界，不能超过该上界。当属性值不满足条件时，Spring MVC 会抛出异常，如果设置了<code>message</code>属性，则异常内容中会包含 <code>message</code> 的值</p>
+<p><code>@NotNull</code>：字面含义，字段非空</p>
+<p><code>@Min</code>、<code>@Max</code>：用在数值类型上，对数值的大小进行约束。</p>
+<h3 id="Pet">Pet</h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.gustav.springmvcvalidatordemo.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.NotBlank;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Pet</span> &#123;</span><br><span class="line">    <span class="meta">@NotBlank</span></span><br><span class="line">    <span class="keyword">private</span> String type;</span><br><span class="line">    <span class="meta">@NotBlank</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="UserAndPet">UserAndPet</h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.gustav.springmvcvalidatordemo.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.validation.Valid;</span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.NotNull;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserAndPet</span> &#123;</span><br><span class="line">    <span class="meta">@NotNull</span></span><br><span class="line">    <span class="meta">@Valid</span> <span class="comment">// 这个注解保证了User类内部的字段也能被校验</span></span><br><span class="line">    <span class="keyword">private</span> User user;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NotNull</span></span><br><span class="line">    <span class="meta">@Valid</span></span><br><span class="line">    <span class="keyword">private</span> Pet pet;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>@Valid</code>注解告诉 Spring MVC，它标记的类上也有字段需要校验。</p>
+<h2 id="controller">controller</h2>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.gustav.springmvcvalidatordemo.Controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.gustav.springmvcvalidatordemo.entity.UserAndPet;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.validation.annotation.Validated;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoController</span> &#123;</span><br><span class="line">    <span class="meta">@PostMapping(&quot;/test&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> UserAndPet <span class="title function_">test</span><span class="params">(<span class="meta">@Validated</span> <span class="meta">@RequestBody</span> UserAndPet userAndPet)</span> &#123;</span><br><span class="line">        System.out.println(userAndPet);</span><br><span class="line">        <span class="keyword">return</span> userAndPet;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>@Validated</code>指示 Spring MVC：当前请求参数需要被校验</p>
+<h2 id="使用-Postman-发送请求">使用 Postman 发送请求</h2>
+<h3 id="合法请求">合法请求</h3>
+<p>请求体如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;user&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;adam&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">15</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;pet&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cat&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;east wind&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<img src="/MarkDownImages/image-20230705202651511.png" alt="image-20230705202651511" style="zoom:67%;" />
+<h3 id="非法请求">非法请求</h3>
+<p>故意使<code>user.name</code>超过长度限制。请求体如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;user&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;adam williams&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">15</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;pet&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cat&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;east wind&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>服务器返回了 400 错误</p>
+<p><img src="/MarkDownImages/image-20230705202748075.png" alt="image-20230705202748075"></p>
+<p>服务端抛出了<code>MethodArgumentNotValidException</code>的异常。内容是<code>user.name</code>为非法参数，同时展示了我们自己设置的 <code>message</code></p>
+<p><img src="/MarkDownImages/image-20230705202916086.png" alt="image-20230705202916086"></p>
+<h1 id="总结">总结</h1>
+<p>通过使用 Validation 注解，我们可以便捷地实现请求参数校验，无需写很多代码。</p>
+<p>试想，我们使用传统方式校验请求参数，光是校验 <code>user.name</code>，就需要写很多代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/test&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> UserAndPet <span class="title function_">test</span><span class="params">(<span class="meta">@Validated</span> <span class="meta">@RequestBody</span> UserAndPet userAndPet)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (userAndPet == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (userAndPet.getUser() == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> userAndPet.getUser().getName();</span><br><span class="line">    <span class="keyword">if</span> (!(name != <span class="literal">null</span> &amp;&amp; name.length() &gt;= <span class="number">1</span> &amp;&amp; name.length() &lt;= <span class="number">5</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 校验其他请求参数</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 业务逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，方便快捷的 Validation 注解校验建立在 Spring MVC 和 Spring Boot 的基础上。Spring Boot 具体自动装配了哪些类，Spring MVC 又是如何使用这些类完成请求参数校验，就不在本文的讨论范围内了。有兴趣的读者可以自行阅读源码，或者阅读其他文章。</p>
+]]></content>
+      <categories>
+        <category>tech</category>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Spring Boot</tag>
+        <tag>Spring MVC</tag>
+        <tag>Controller</tag>
       </tags>
   </entry>
   <entry>
@@ -2138,67 +2290,6 @@ If Shinobu is dead or unresponsive, you can reboot her by clicking this button.<
         <tag>settings</tag>
         <tag>VS Code</tag>
         <tag>SSH</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Spring MVC 使用 Validation 注解实现请求参数自动校验</title>
-    <url>/2023/07/05/Spring-MVC-Automatic-Validation-of-Request-Parameters-Using-Validation-Annotations/</url>
-    <content><![CDATA[<h1 id="序言">序言</h1>
-<p>控制器方法（ handler ）中负责请求参数校验。</p>
-<p>传统的写法是在每个方法的开头对所有请求参数进行校验，如果存在参数不满足条件，则抛出异常，或者提前返回错误。</p>
-<p>Validation API 提供了一系列的注解，通过将这些注解标记在 entity 类的属性上，Spring MVC 会根据这些注解的语义，自动完成请求参数校验。如果参数不满足条件，则抛出异常。这节省了开发者手动校验请求参数的麻烦。</p>
-<p>负责自动参数校验的类实际上是由 Spring Boot 自动装配导入的，因此我们要使用对应的 starter 依赖。</p>
-<h1 id="案例演示">案例演示</h1>
-<h2 id="依赖">依赖</h2>
-<span id="more"></span>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-validation<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>validation-api 是本次介绍的重点</p>
-<img src="/MarkDownImages/image-20230705200537754.png" alt="image-20230705200537754" style="zoom:80%;" />
-<h2 id="项目结构">项目结构</h2>
-<p>一个标准的 Spring Initializer 生成的 Spring Boot 项目</p>
-<img src="/MarkDownImages/image-20230705200916180.png" alt="image-20230705200916180" style="zoom: 80%;" />
-<h2 id="entity">entity</h2>
-<h3 id="User">User</h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.gustav.springmvcvalidatordemo.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="meta">@NotBlank</span></span><br><span class="line">    <span class="meta">@Size(max = 5, message = &quot;名字不能超过5个字符&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NotNull</span></span><br><span class="line">    <span class="meta">@Min(value = 0, message = &quot;年龄不能小于0&quot;)</span></span><br><span class="line">    <span class="meta">@Max(value = 200, message = &quot;年龄不能大于200&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><code>@NotBlank</code>：用在 <code>CharSequence</code> 类型的属性上，表示该字段非空，且长度至少为 1。简单来说，该字符串必须有内容</p>
-<p><code>@Size</code>：用在<code>CharSequence</code>和集合类的属性上，表示该字段的字符数/元素数目。<code>max = 5</code>是数量的上界，不能超过该上界。当属性值不满足条件时，Spring MVC 会抛出异常，如果设置了<code>message</code>属性，则异常内容中会包含 <code>message</code> 的值</p>
-<p><code>@NotNull</code>：字面含义，字段非空</p>
-<p><code>@Min</code>、<code>@Max</code>：用在数值类型上，对数值的大小进行约束。</p>
-<h3 id="Pet">Pet</h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.gustav.springmvcvalidatordemo.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.NotBlank;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Pet</span> &#123;</span><br><span class="line">    <span class="meta">@NotBlank</span></span><br><span class="line">    <span class="keyword">private</span> String type;</span><br><span class="line">    <span class="meta">@NotBlank</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="UserAndPet">UserAndPet</h3>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.gustav.springmvcvalidatordemo.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.validation.Valid;</span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.NotNull;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserAndPet</span> &#123;</span><br><span class="line">    <span class="meta">@NotNull</span></span><br><span class="line">    <span class="meta">@Valid</span> <span class="comment">// 这个注解保证了User类内部的字段也能被校验</span></span><br><span class="line">    <span class="keyword">private</span> User user;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NotNull</span></span><br><span class="line">    <span class="meta">@Valid</span></span><br><span class="line">    <span class="keyword">private</span> Pet pet;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>@Valid</code>注解告诉 Spring MVC，它标记的类上也有字段需要校验。</p>
-<h2 id="controller">controller</h2>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.gustav.springmvcvalidatordemo.Controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.gustav.springmvcvalidatordemo.entity.UserAndPet;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.validation.annotation.Validated;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoController</span> &#123;</span><br><span class="line">    <span class="meta">@PostMapping(&quot;/test&quot;)</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> UserAndPet <span class="title function_">test</span><span class="params">(<span class="meta">@Validated</span> <span class="meta">@RequestBody</span> UserAndPet userAndPet)</span> &#123;</span><br><span class="line">        System.out.println(userAndPet);</span><br><span class="line">        <span class="keyword">return</span> userAndPet;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>@Validated</code>指示 Spring MVC：当前请求参数需要被校验</p>
-<h2 id="使用-Postman-发送请求">使用 Postman 发送请求</h2>
-<h3 id="合法请求">合法请求</h3>
-<p>请求体如下：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;user&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;adam&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">15</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;pet&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cat&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;east wind&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<img src="/MarkDownImages/image-20230705202651511.png" alt="image-20230705202651511" style="zoom:67%;" />
-<h3 id="非法请求">非法请求</h3>
-<p>故意使<code>user.name</code>超过长度限制。请求体如下：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;user&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;adam williams&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">15</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;pet&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cat&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;east wind&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>服务器返回了 400 错误</p>
-<p><img src="/MarkDownImages/image-20230705202748075.png" alt="image-20230705202748075"></p>
-<p>服务端抛出了<code>MethodArgumentNotValidException</code>的异常。内容是<code>user.name</code>为非法参数，同时展示了我们自己设置的 <code>message</code></p>
-<p><img src="/MarkDownImages/image-20230705202916086.png" alt="image-20230705202916086"></p>
-<h1 id="总结">总结</h1>
-<p>通过使用 Validation 注解，我们可以便捷地实现请求参数校验，无需写很多代码。</p>
-<p>试想，我们使用传统方式校验请求参数，光是校验 <code>user.name</code>，就需要写很多代码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/test&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> UserAndPet <span class="title function_">test</span><span class="params">(<span class="meta">@Validated</span> <span class="meta">@RequestBody</span> UserAndPet userAndPet)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (userAndPet == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (userAndPet.getUser() == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> userAndPet.getUser().getName();</span><br><span class="line">    <span class="keyword">if</span> (!(name != <span class="literal">null</span> &amp;&amp; name.length() &gt;= <span class="number">1</span> &amp;&amp; name.length() &lt;= <span class="number">5</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 校验其他请求参数</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 业务逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当然，方便快捷的 Validation 注解校验建立在 Spring MVC 和 Spring Boot 的基础上。Spring Boot 具体自动装配了哪些类，Spring MVC 又是如何使用这些类完成请求参数校验，就不在本文的讨论范围内了。有兴趣的读者可以自行阅读源码，或者阅读其他文章。</p>
-]]></content>
-      <categories>
-        <category>tech</category>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>Spring Boot</tag>
-        <tag>Spring MVC</tag>
-        <tag>Controller</tag>
       </tags>
   </entry>
   <entry>
@@ -2326,9 +2417,9 @@ If Shinobu is dead or unresponsive, you can reboot her by clicking this button.<
         <category>算法竞赛</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>模拟</tag>
         <tag>动态规划</tag>
+        <tag>树</tag>
         <tag>位运算</tag>
       </tags>
   </entry>
@@ -2400,9 +2491,9 @@ If Shinobu is dead or unresponsive, you can reboot her by clicking this button.<
         <category>算法竞赛</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>模拟</tag>
         <tag>动态规划</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
