@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="FWtJ63eXspf6fS1eJ3SbRLiQVfYelc2G0J0NYIOmgUo">
+  <meta name="msvalidate.01" content="CAECB021ABB77291B191A2118F7C5255">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"gustaavv.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#008000","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="概要  力扣第 369 场周赛   本文只是周赛的总结，我不准备详细地讨论每一道题，只会给出大致思路。重点还是在于自己的总结、反思和提高。  赛后来看，这场比赛难度不大。做题情况简要描述：  第一题：简单模拟，送分题； 第二题：难度不大，但要考虑多种情况，我没有静下心来细想，造成了 3 个 WA 😒； 第三题：难度中等的 DP，一开始没有想出来，转而去做最终没做出来的第四题，浪费了时间。好在后来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="力扣 369 周赛总结">
+<meta property="og:url" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/index.html">
+<meta property="og:site_name" content="Gustav&#39;s blog">
+<meta property="og:description" content="概要  力扣第 369 场周赛   本文只是周赛的总结，我不准备详细地讨论每一道题，只会给出大致思路。重点还是在于自己的总结、反思和提高。  赛后来看，这场比赛难度不大。做题情况简要描述：  第一题：简单模拟，送分题； 第二题：难度不大，但要考虑多种情况，我没有静下心来细想，造成了 3 个 WA 😒； 第三题：难度中等的 DP，一开始没有想出来，转而去做最终没做出来的第四题，浪费了时间。好在后来">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/MDImgs/leetcode-369-weekly-contest-summary/image-20231029195438014.png">
+<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/MDImgs/leetcode-369-weekly-contest-summary/image-20231029195448237.png">
+<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/MDImgs/leetcode-369-weekly-contest-summary/image-20231029195455078.png">
+<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/MDImgs/leetcode-369-weekly-contest-summary/image-20231029195518874.png">
+<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/MDImgs/leetcode-369-weekly-contest-summary/image-20231029195534194.png">
+<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/MDImgs/leetcode-369-weekly-contest-summary/image-20231029195556639.png">
+<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/MDImgs/leetcode-369-weekly-contest-summary/image-20231029195611424.png">
+<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/MDImgs/leetcode-369-weekly-contest-summary/image-20231029195617587.png">
+<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/MDImgs/leetcode-369-weekly-contest-summary/image-20231029195640792.png">
+<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/MDImgs/leetcode-369-weekly-contest-summary/image-20231029195650693.png">
+<meta property="og:image" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/MDImgs/leetcode-369-weekly-contest-summary/image-20231029195700814.png">
+<meta property="article:published_time" content="2023-10-29T06:42:56.000Z">
+<meta property="article:modified_time" content="2023-10-29T06:42:56.000Z">
+<meta property="article:author" content="Gustav">
+<meta property="article:tag" content="模拟">
+<meta property="article:tag" content="动态规划">
+<meta property="article:tag" content="树">
+<meta property="article:tag" content="位运算">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/MDImgs/leetcode-369-weekly-contest-summary/image-20231029195438014.png">
+
+
+<link rel="canonical" href="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/","path":"2023/10/29/leetcode-369-weekly-contest-summary/","title":"力扣 369 周赛总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>力扣 369 周赛总结 | Gustav's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SBFGGZ14VS"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-SBFGGZ14VS","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7b0efd48ab95cb46e5799442746baf90"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Gustav's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于我</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li><li class="menu-item menu-item-switch-to-english"><a href="https://gustaavv.github.io/en/" rel="section"><i class="fa fa-language fa-fw"></i>Switch to English</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E8%A6%81"><span class="nav-number">1.</span> <span class="nav-text">概要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%89%BE%E5%87%BA%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84-K-or-%E5%80%BC"><span class="nav-number">2.</span> <span class="nav-text">一、找出数组中的 K-or 值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%B0%8F%E7%9B%B8%E7%AD%89%E5%92%8C"><span class="nav-number">3.</span> <span class="nav-text">二、数组的最小相等和</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%BD%BF%E6%95%B0%E7%BB%84%E5%8F%98%E7%BE%8E%E7%9A%84%E6%9C%80%E5%B0%8F%E5%A2%9E%E9%87%8F%E8%BF%90%E7%AE%97%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">三、使数组变美的最小增量运算数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%94%B6%E9%9B%86%E6%89%80%E6%9C%89%E9%87%91%E5%B8%81%E5%8F%AF%E8%8E%B7%E5%BE%97%E7%9A%84%E6%9C%80%E5%A4%A7%E7%A7%AF%E5%88%86"><span class="nav-number">5.</span> <span class="nav-text">四、收集所有金币可获得的最大积分</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Gustav"
+      src="https://avatars.githubusercontent.com/u/69737612?v=4">
+  <p class="site-author-name" itemprop="name">Gustav</p>
+  <div class="site-description" itemprop="description">Hi, I am Gustav.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gustaavv" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gustaavv" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gustaavv.git@yahoo.com" title="E-Mail → mailto:gustaavv.git@yahoo.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+<script src="/js/switch_language.js"></script>
+
+        </div>
+      </div>
+    </div>
+
+    
+        <div class="pjax">
+        <div class="sidebar-inner sidebar-post-related">
+          <div class="animated">
+              <div class="links-of-blogroll-title"><i class="fa fa-signs-post fa-fw"></i>
+    相关文章
+  </div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/11/05/leetcode-370-weekly-contest-summary/" rel="bookmark">
+        <time class="popular-posts-time">2023-11-05</time>
+        <br>
+      力扣 370 周赛总结
+      </a>
+    </li>
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/11/06/Algorithm-Problem-005-maximum-balanced-subsequence-sum/" rel="bookmark">
+        <time class="popular-posts-time">2023-11-06</time>
+        <br>
+      算法题005：平衡子序列的最大和
+      </a>
+    </li>
+  </ul>
+
+          </div>
+        </div>
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/69737612?v=4">
+      <meta itemprop="name" content="Gustav">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gustav's blog">
+      <meta itemprop="description" content="Hi, I am Gustav.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="力扣 369 周赛总结 | Gustav's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          力扣 369 周赛总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-29 14:42:56" itemprop="dateCreated datePublished" datetime="2023-10-29T14:42:56+08:00">2023-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法题</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/" itemprop="url" rel="index"><span itemprop="name">算法竞赛</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="概要">概要</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/contest/weekly-contest-369/">力扣第 369 场周赛</a></p>
+</blockquote>
+<blockquote>
+<p>本文只是周赛的总结，我不准备详细地讨论每一道题，只会给出大致思路。重点还是在于自己的总结、反思和提高。</p>
+</blockquote>
+<p>赛后来看，这场比赛难度不大。做题情况简要描述：</p>
+<ul>
+<li>第一题：简单模拟，送分题；</li>
+<li>第二题：难度不大，但要考虑多种情况，我没有静下心来细想，造成了 3 个 WA 😒；</li>
+<li>第三题：难度中等的 DP，一开始没有想出来，转而去做最终没做出来的第四题，浪费了时间。好在后来很快做出来了😋；</li>
+<li>第四题：虽然是困难题，并且没有做出来，但比赛的代码最终也只是超时，赛后我也自己想出来了优化的方法——不难。值得注意的是，写代码时的逻辑混乱还是造成了 2 个 WA 😒；</li>
+</ul>
+<span id="more"></span>
+<h1 id="一、找出数组中的-K-or-值">一、<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/find-the-k-or-of-an-array/">找出数组中的 K-or 值</a></h1>
+<p><img src="./MDImgs/leetcode-369-weekly-contest-summary/image-20231029195438014.png" alt="image-20231029195438014"></p>
+<p><img src="./MDImgs/leetcode-369-weekly-contest-summary/image-20231029195448237.png" alt="image-20231029195448237"></p>
+<p><img src="./MDImgs/leetcode-369-weekly-contest-summary/image-20231029195455078.png" alt="image-20231029195455078"></p>
+<p>题目描述有点难懂，比赛时需要结合示例才能快速读懂</p>
+<p>逐比特模拟：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">findKOr</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">ans</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">32</span>; i++) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> <span class="variable">val</span> <span class="operator">=</span> <span class="number">1</span> &lt;&lt; i;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> num : nums) &#123;</span><br><span class="line">                <span class="keyword">if</span> ((num &amp; val) &gt; <span class="number">0</span>) count++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (count &gt;= k)  &#123;</span><br><span class="line">                ans |= val;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：$O(n)$</p>
+<h1 id="二、数组的最小相等和">二、<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-equal-sum-of-two-arrays-after-replacing-zeros/">数组的最小相等和</a></h1>
+<p><img src="./MDImgs/leetcode-369-weekly-contest-summary/image-20231029195518874.png" alt="image-20231029195518874"></p>
+<p><img src="./MDImgs/leetcode-369-weekly-contest-summary/image-20231029195534194.png" alt="image-20231029195534194"></p>
+<ul>
+<li>如果 <code>nums1</code> 中有 <code>k</code> 个 <code>0</code>，那么它的和在替换后必须要增加至少 <code>k</code></li>
+<li>如果 <code>nums1</code> 中至少有一个 <code>0</code>，那么它在替换后的和可以等于任意大于 <code>sum(nums1)</code> 的值</li>
+<li><code>nums2</code> 同理</li>
+</ul>
+<p>函数的返回类型为 <code>long</code>；数组长度最大为 $10^5$，元素最大为 $10^6$，数组和最大为 $10^{11}$，超过 32-bit int 的上限。这提醒我们中间步骤的计算结果需要用 <code>long</code> 存储。事实上，算法题应该都用 <code>long </code> 代替 <code>int</code>，避免整数溢出，并且开销也不大。</p>
+<p>重点在于判断无法相等的条件，在这上面的失误造成了 3 个 WA：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">minSum</span><span class="params">(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2)</span> &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">sum1</span> <span class="operator">=</span> Arrays.stream(nums1).mapToLong(i -&gt; i).sum();</span><br><span class="line">        <span class="type">long</span> <span class="variable">sum2</span> <span class="operator">=</span> Arrays.stream(nums2).mapToLong(i -&gt; i).sum();</span><br><span class="line">        <span class="type">long</span> <span class="variable">c1</span> <span class="operator">=</span> Arrays.stream(nums1).filter(i -&gt; i == <span class="number">0</span>).count();</span><br><span class="line">        <span class="type">long</span> <span class="variable">c2</span> <span class="operator">=</span> Arrays.stream(nums2).filter(i -&gt; i == <span class="number">0</span>).count();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 判断无法相等的情况</span></span><br><span class="line">        <span class="keyword">if</span> (sum1 &gt; sum2) &#123;</span><br><span class="line">            <span class="comment">// sum2 无法增加</span></span><br><span class="line">            <span class="keyword">if</span> (c2 == <span class="number">0</span>) <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">            <span class="comment">// sum1 无法增加，sum2 有 c2 个 0，至少会增加 c2</span></span><br><span class="line">            <span class="keyword">if</span> (c1 == <span class="number">0</span> &amp;&amp; c2 + sum2 &gt; sum1) <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sum1 == sum2) &#123;</span><br><span class="line">            <span class="comment">// sum1 或 sum2 一方必须增加，但另一方不会变</span></span><br><span class="line">            <span class="keyword">if</span> (c1 == <span class="number">0</span> &amp;&amp; c2 != <span class="number">0</span>) <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (c1 != <span class="number">0</span> &amp;&amp; c2 == <span class="number">0</span>) <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 和 sum1 &gt; sum2 的代码逻辑一致</span></span><br><span class="line">            <span class="keyword">if</span> (c1 == <span class="number">0</span>) <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (c2 == <span class="number">0</span> &amp;&amp; c1 + sum1 &gt; sum2) <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Math.max(sum1 + c1, sum2 + c2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="三、使数组变美的最小增量运算数">三、<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-increment-operations-to-make-array-beautiful/">使数组变美的最小增量运算数</a></h1>
+<p><img src="./MDImgs/leetcode-369-weekly-contest-summary/image-20231029195556639.png" alt="image-20231029195556639"></p>
+<p><img src="./MDImgs/leetcode-369-weekly-contest-summary/image-20231029195611424.png" alt="image-20231029195611424"></p>
+<p><img src="./MDImgs/leetcode-369-weekly-contest-summary/image-20231029195617587.png" alt="image-20231029195617587"></p>
+<blockquote>
+<p>如果数组中任何长度 <strong>大于或等于 3</strong> 的子数组，其 <strong>最大</strong> 元素都大于或等于 <code>k</code> ，则认为数组是一个 <strong>美丽数组</strong> 。</p>
+</blockquote>
+<p>上述条件等价于 <strong>每个长度为 3 的子数组</strong> 中的最大元素都 $\ge k$</p>
+<p>很明显，我们应该尽量地使每 3 个连续元素中，有一个元素 $\ge k$。但是应该使哪些元素增加到 $k$ 呢？不清楚，那就用 DP —— 局部暴力解</p>
+<p>1️⃣DP定义：<code>dp[i]</code>：使得 <strong><code>nums[0:i]</code></strong> 为美丽数组，并且 <strong><code>nums[i]</code></strong> $\ge k$ 的<strong>最小</strong>递增运算数。—— 这里有 3 个加粗的重点</p>
+<p><code>nums[i]</code> $\ge k$，那么 <code>nums[i - 2 : i]</code> 这个长度为 3 的子数组肯定能被覆盖，满足美丽数组的条件。这一覆盖同时表明，我们至少需要保证<code>nums[0:(i-3)]</code> 是美丽数组，才能使得 <code>nums[0:i]</code> 成为美丽数组。<code>dp[i - 3]</code>、<code>dp[i - 2]</code>、<code>dp[i - 1]</code> 的结果都可以满足这一点，取最小值值即可：</p>
+<p>2️⃣递归式：$dp[i] = \max\set{0,k-nums[i]} + \min\set{dp[i - 1], dp[i - 2], dp[i - 3]}$</p>
+<p>3️⃣答案：<code>dp[n - 3]</code>、<code>dp[n - 2]</code> 和 <code>dp[n - 1]</code> 按照定义都可以使 <code>nums</code> 成为美丽数组，取三者最小值即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">minIncrementOperations</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> nums.length;</span><br><span class="line">        <span class="type">long</span>[] dp = <span class="keyword">new</span> <span class="title class_">long</span>[n];</span><br><span class="line">        <span class="comment">// base case</span></span><br><span class="line">        Arrays.fill(dp, Long.MAX_VALUE);</span><br><span class="line">        <span class="comment">// n &gt;= 3 保证了初始条件不需要根据 n 判断元素是否存在</span></span><br><span class="line">        dp[<span class="number">0</span>] = Math.max(<span class="number">0</span>, k - nums[<span class="number">0</span>]);</span><br><span class="line">        dp[<span class="number">1</span>] = Math.max(<span class="number">0</span>, k - nums[<span class="number">1</span>]);</span><br><span class="line">        dp[<span class="number">2</span>] = Math.max(<span class="number">0</span>, k - nums[<span class="number">2</span>]);</span><br><span class="line">        <span class="comment">// recursively</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">3</span>; i &lt; n; i++) &#123;</span><br><span class="line">            <span class="type">long</span> <span class="variable">v</span> <span class="operator">=</span> Math.max(<span class="number">0</span>, k - nums[i]);</span><br><span class="line">            dp[i] = Math.min(dp[i], dp[i - <span class="number">1</span>] + v);</span><br><span class="line">            dp[i] = Math.min(dp[i], dp[i - <span class="number">2</span>] + v);</span><br><span class="line">            dp[i] = Math.min(dp[i], dp[i - <span class="number">3</span>] + v);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// answer</span></span><br><span class="line">        <span class="keyword">return</span> Math.min(dp[n - <span class="number">1</span>], Math.min(dp[n - <span class="number">2</span>], dp[n - <span class="number">3</span>]));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="四、收集所有金币可获得的最大积分">四、<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/maximum-points-after-collecting-coins-from-all-nodes/">收集所有金币可获得的最大积分</a></h1>
+<p><img src="./MDImgs/leetcode-369-weekly-contest-summary/image-20231029195640792.png" alt="image-20231029195640792"></p>
+<p><img src="./MDImgs/leetcode-369-weekly-contest-summary/image-20231029195650693.png" alt="image-20231029195650693"></p>
+<p><img src="./MDImgs/leetcode-369-weekly-contest-summary/image-20231029195700814.png" alt="image-20231029195700814"></p>
+<p>1️⃣建树。其实是建图，只是我们要从节点 0 开始 dfs，模拟树遍历的过程</p>
+<p>2️⃣收集金币的两个方案（题目故意写得复杂，需要化简）：</p>
+<ul>
+<li>方案 1：当前收集到的金币加上 <code>coins[i] - k</code> （无论正负）</li>
+<li>方案 2：<code>floor(coins[i] / 2)</code> 就是整数除法，需要用位运算优化，即 <code>coins[i] &gt;&gt; 1</code>。位运算还有一个好处，假设当前节点有 $k$ 个祖先节点选择了方案 2，那么该节点的金币数就是 <code>coins[i] &gt;&gt; k</code>，免去了计算和除以 $2^k$ 的开销。</li>
+</ul>
+<p>根据这两个方案，我们可以写出一个前序遍历的递归函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 前序遍历，收集金币</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> root 子树的根节点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> half 子树的祖先节点选择过多少次方案 2</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 该子树能够收集的最大金币数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">long</span> <span class="title function_">recur</span><span class="params">(Node root, <span class="type">long</span> half)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="literal">null</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// node 是图中的节点，遍历需要 visited 数组辅助</span></span><br><span class="line">    <span class="comment">// 前序遍历本质上是 dfs</span></span><br><span class="line">    visited[root.index] = <span class="literal">true</span>;</span><br><span class="line">    <span class="comment">// 方案一</span></span><br><span class="line">    <span class="type">long</span> <span class="variable">res1</span> <span class="operator">=</span> (root.val &gt;&gt; half) - k;</span><br><span class="line">    <span class="keyword">for</span> (Node child : root.children) &#123;</span><br><span class="line">        <span class="keyword">if</span> (visited[child.index]) <span class="keyword">continue</span>;</span><br><span class="line">        res1 += recur(child, half);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方案二</span></span><br><span class="line">    <span class="type">long</span> <span class="variable">res2</span> <span class="operator">=</span> (root.val &gt;&gt; (<span class="number">1</span> + half));</span><br><span class="line">    <span class="keyword">for</span> (Node child : root.children) &#123;</span><br><span class="line">        <span class="keyword">if</span> (visited[child.index]) <span class="keyword">continue</span>;</span><br><span class="line">        res2 += recur(child, half + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    visited[root.index] = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">return</span> Math.max(res1, res2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到这一步为止，我在比赛中都写了出来，但还是超时了。之后，我又想到了如下的优化思路：</p>
+<p>3️⃣ $\forall i, coins[i] \le 10^4$ ，并且 $\log_2(10^4) \approx 13.8$ ，因此，只要当前子树的祖先节点选择了至少 14 次方案 2，该子树中的所有节点的金币数都会不断减半至 0</p>
+<p>这相当于一个剪枝，在 <code>recur</code> 函数开始处判断：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (half &gt;= <span class="number">14</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>4️⃣说到递归，就想到分治算法范式，又会联想到 DP 算法范式。两者的区别是什么？—— DP 会复用子问题的结果，因此效率更高。</p>
+<p>尽管遍历树的过程没法写成迭代，但我们可以用 map 来缓存子问题的结果：key 是 <code>(nodes[i], half)</code>，value 是收集到的金币数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> HashMap&lt;Node, HashMap&lt;Long, Long&gt;&gt; dpMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">long</span> <span class="title function_">recur</span><span class="params">(Node root, <span class="type">long</span> half)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="literal">null</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 查询缓存，查到就直接返回</span></span><br><span class="line">    HashMap&lt;Long, Long&gt; mp = dpMap.get(root);</span><br><span class="line">    <span class="keyword">if</span> (mp != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="type">Long</span> <span class="variable">ans</span> <span class="operator">=</span> mp.get(half);</span><br><span class="line">        <span class="keyword">if</span> (ans != <span class="literal">null</span>) <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 方案 1 和方案 2 的代码......</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 插入缓存</span></span><br><span class="line">    <span class="type">long</span> <span class="variable">ans</span> <span class="operator">=</span> Math.max(res1, res2);</span><br><span class="line">    dpMap.putIfAbsent(root, <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;());</span><br><span class="line">    dpMap.get(root).put(half, ans);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>加上了这两步优化，成功 AC 了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.stream.IntStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">        List&lt;Node&gt; children = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="type">int</span> val;</span><br><span class="line">        <span class="type">int</span> index;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(<span class="type">int</span> val, <span class="type">int</span> index)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.val = val;</span><br><span class="line">            <span class="built_in">this</span>.index = index;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> k;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span>[] visited;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">maximumPoints</span><span class="params">(<span class="type">int</span>[][] edges, <span class="type">int</span>[] coins, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.k = k;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> coins.length;</span><br><span class="line">        visited = <span class="keyword">new</span> <span class="title class_">boolean</span>[n];</span><br><span class="line">        Node[] nodes = IntStream.range(<span class="number">0</span>, n).mapToObj(i -&gt; <span class="keyword">new</span> <span class="title class_">Node</span>(coins[i], i)).toArray(Node[]::<span class="keyword">new</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span>[] e : edges) &#123;</span><br><span class="line">            nodes[e[<span class="number">0</span>]].children.add(nodes[e[<span class="number">1</span>]]);</span><br><span class="line">            nodes[e[<span class="number">1</span>]].children.add(nodes[e[<span class="number">0</span>]]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (<span class="type">int</span>) recur(nodes[<span class="number">0</span>], <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 递归结果缓存，通过缓存将分治算法晋升为DP算法，提升效率</span></span><br><span class="line"><span class="comment">     * &lt;node, &lt;half, result&gt;&gt;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> HashMap&lt;Node, HashMap&lt;Long, Long&gt;&gt; dpMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 前序遍历，收集金币</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> root 子树的根节点</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> half 子树的祖先节点选择过多少次方案 2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 该子树能够收集的最大金币数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">long</span> <span class="title function_">recur</span><span class="params">(Node root, <span class="type">long</span> half)</span> &#123;</span><br><span class="line">        <span class="comment">// coins[i] &lt;= 10^4 -&gt; log_2 (10^4) &lt; 14</span></span><br><span class="line">        <span class="keyword">if</span> (half &gt;= <span class="number">14</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">null</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 查询缓存，查到就直接返回</span></span><br><span class="line">        HashMap&lt;Long, Long&gt; mp = dpMap.get(root);</span><br><span class="line">        <span class="keyword">if</span> (mp != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="type">Long</span> <span class="variable">ans</span> <span class="operator">=</span> mp.get(half);</span><br><span class="line">            <span class="keyword">if</span> (ans != <span class="literal">null</span>) <span class="keyword">return</span> ans;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// node 是图中的节点，遍历需要 visited 数组辅助</span></span><br><span class="line">        <span class="comment">// 前序遍历本质上是 dfs</span></span><br><span class="line">        visited[root.index] = <span class="literal">true</span>;</span><br><span class="line">        <span class="comment">// 方案一</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">res1</span> <span class="operator">=</span> (root.val &gt;&gt; half) - k;</span><br><span class="line">        <span class="keyword">for</span> (Node child : root.children) &#123;</span><br><span class="line">            <span class="keyword">if</span> (visited[child.index]) <span class="keyword">continue</span>;</span><br><span class="line">            res1 += recur(child, half);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 方案二</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">res2</span> <span class="operator">=</span> (root.val &gt;&gt; (<span class="number">1</span> + half));</span><br><span class="line">        <span class="keyword">for</span> (Node child : root.children) &#123;</span><br><span class="line">            <span class="keyword">if</span> (visited[child.index]) <span class="keyword">continue</span>;</span><br><span class="line">            res2 += recur(child, half + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        visited[root.index] = <span class="literal">false</span>;</span><br><span class="line">        <span class="comment">// 插入缓存</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">ans</span> <span class="operator">=</span> Math.max(res1, res2);</span><br><span class="line">        dpMap.putIfAbsent(root, <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;());</span><br><span class="line">        dpMap.get(root).put(half, ans);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Gustav
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/" title="力扣 369 周赛总结">https://gustaavv.github.io/2023/10/29/leetcode-369-weekly-contest-summary/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%A8%A1%E6%8B%9F/" rel="tag"><i class="fa fa-tag"></i> 模拟</a>
+              <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"><i class="fa fa-tag"></i> 动态规划</a>
+              <a href="/tags/%E6%A0%91/" rel="tag"><i class="fa fa-tag"></i> 树</a>
+              <a href="/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/" rel="tag"><i class="fa fa-tag"></i> 位运算</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_telegram"></a>
+      <a class="a2a_button_wechat"></a>
+      <a class="a2a_button_sina_weibo"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/29/Algorithm-Problem-003-diagonal-traverse-ii/" rel="prev" title="算法题003：对角线遍历 II">
+                  <i class="fa fa-angle-left"></i> 算法题003：对角线遍历 II
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/11/01/Algorithm-Problem-004-maximum-employees-to-be-invited-to-a-meeting/" rel="next" title="算法题004：参加会议的最多员工数">
+                  算法题004：参加会议的最多员工数 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Gustav</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">41k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:28</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/gustaavv" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js","integrity":"sha256-stuqcu2FrjYCXDOytWFA5SoUE/r3nkp6gTglzNSlavU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":"enable","tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
