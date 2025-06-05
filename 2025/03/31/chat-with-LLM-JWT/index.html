@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="FWtJ63eXspf6fS1eJ3SbRLiQVfYelc2G0J0NYIOmgUo">
+  <meta name="msvalidate.01" content="CAECB021ABB77291B191A2118F7C5255">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"gustaavv.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#008000","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="序言  『对话 LLM』是指在与 LLM 聊天工具（如 DeepSeek、ChatGPT）的对话中学习知识。通过 Q&amp;A 的方式学习，效率更高。『对话 LLM』的博文内容主要源自于我与 LLM 聊天工具的对话。  本文讲述了 JWT 的原理、工作流程、优缺点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对话 LLM：JWT 原理">
+<meta property="og:url" content="https://gustaavv.github.io/2025/03/31/chat-with-LLM-JWT/index.html">
+<meta property="og:site_name" content="Gustav&#39;s blog">
+<meta property="og:description" content="序言  『对话 LLM』是指在与 LLM 聊天工具（如 DeepSeek、ChatGPT）的对话中学习知识。通过 Q&amp;A 的方式学习，效率更高。『对话 LLM』的博文内容主要源自于我与 LLM 聊天工具的对话。  本文讲述了 JWT 的原理、工作流程、优缺点。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-30T23:35:31.000Z">
+<meta property="article:modified_time" content="2025-03-30T23:35:31.000Z">
+<meta property="article:author" content="Gustav">
+<meta property="article:tag" content="对话 LLM">
+<meta property="article:tag" content="JWT">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://gustaavv.github.io/2025/03/31/chat-with-LLM-JWT/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://gustaavv.github.io/2025/03/31/chat-with-LLM-JWT/","path":"2025/03/31/chat-with-LLM-JWT/","title":"对话 LLM：JWT 原理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>对话 LLM：JWT 原理 | Gustav's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SBFGGZ14VS"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-SBFGGZ14VS","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7b0efd48ab95cb46e5799442746baf90"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Gustav's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于我</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>所有文章</a></li><li class="menu-item menu-item-switch-to-english"><a href="https://gustaavv.github.io/en/" rel="section"><i class="fa fa-language fa-fw"></i>Switch to English</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q1-JWT-%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">Q1. JWT 原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q2-%E5%93%AA%E4%BA%9B%E9%83%A8%E5%88%86%E6%98%AF%E6%98%8E%E6%96%87%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">Q2. 哪些部分是明文？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q3-%E5%93%88%E5%B8%8C%E4%B8%8E%E5%8A%A0%E5%AF%86"><span class="nav-number">4.</span> <span class="nav-text">Q3. 哈希与加密</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q4-%E5%89%8D%E5%90%91%E4%BF%9D%E5%AF%86"><span class="nav-number">5.</span> <span class="nav-text">Q4. 前向保密</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q5-JWT-%E7%9A%84%E5%8F%A6%E4%B8%80%E7%A7%8D%E8%A1%A8%E8%BF%B0"><span class="nav-number">6.</span> <span class="nav-text">Q5. JWT 的另一种表述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q6-JWT-%E5%A4%B4%E9%83%A8%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">7.</span> <span class="nav-text">Q6. JWT 头部的作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q7-%E5%8F%AF%E4%BB%A5%E5%8E%BB%E6%8E%89-JWT-%E5%A4%B4%E9%83%A8%E5%90%97%EF%BC%9F"><span class="nav-number">8.</span> <span class="nav-text">Q7. 可以去掉 JWT 头部吗？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">9.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">10.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Gustav"
+      src="https://avatars.githubusercontent.com/u/69737612?v=4">
+  <p class="site-author-name" itemprop="name">Gustav</p>
+  <div class="site-description" itemprop="description">Hi, I am Gustav.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">65</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gustaavv" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gustaavv" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gustaavv.git@yahoo.com" title="E-Mail → mailto:gustaavv.git@yahoo.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+<script src="/js/switch_language.js"></script>
+
+        </div>
+      </div>
+    </div>
+
+    
+        <div class="pjax">
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://gustaavv.github.io/2025/03/31/chat-with-LLM-JWT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/69737612?v=4">
+      <meta itemprop="name" content="Gustav">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gustav's blog">
+      <meta itemprop="description" content="Hi, I am Gustav.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="对话 LLM：JWT 原理 | Gustav's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          对话 LLM：JWT 原理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-03-31 07:35:31" itemprop="dateCreated datePublished" datetime="2025-03-31T07:35:31+08:00">2025-03-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>19 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="序言">序言</h1>
+<blockquote>
+<p>『对话 LLM』是指在与 LLM 聊天工具（如 DeepSeek、ChatGPT）的对话中学习知识。通过 Q&amp;A 的方式学习，效率更高。『对话 LLM』的博文内容主要源自于我与 LLM 聊天工具的对话。</p>
+</blockquote>
+<p>本文讲述了 JWT 的原理、工作流程、优缺点。</p>
+<span id="more"></span>
+<h1 id="Q1-JWT-原理">Q1. JWT 原理</h1>
+<p>Q:</p>
+<p>介绍一下 JWT 的原理</p>
+<p>A:</p>
+<p>JSON Web Token（JWT）是一种开放标准（RFC 7519），用于在网络应用间安全地传输信息。其核心原理是通过数字签名或加密确保信息的完整性和可信性，常用于身份验证和授权。以下是JWT的详细原理和工作流程：</p>
+<hr>
+<p><strong>1. JWT的结构</strong>
+JWT由三部分组成，用点（<code>.</code>）分隔，形式为：<code>Header.Payload.Signature</code> 。示例：<code>xxxxx.yyyyy.zzzzz</code></p>
+<p><strong>1.1 Header（头部）</strong></p>
+<ul>
+<li><strong>作用</strong>：声明令牌类型（JWT）和签名算法（如HMAC SHA256或RSA）。</li>
+<li><strong>格式</strong>：JSON对象经过Base64Url编码。</li>
+<li>示例：<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span>  <span class="comment">// 签名算法</span></span><br><span class="line">  <span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JWT&quot;</span>     <span class="comment">// 令牌类型</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>1.2 Payload（负载）</strong></p>
+<ul>
+<li><strong>作用</strong>：携带实际需要传递的数据（称为“声明”，Claims）。</li>
+<li><strong>格式</strong>：JSON对象经过Base64Url编码。</li>
+<li><strong>声明类型</strong>：
+<ul>
+<li><strong>预注册声明</strong>（Registered Claims）：标准字段，如<code>iss</code>（签发者）、<code>exp</code>（过期时间）、<code>sub</code>（主题）等。</li>
+<li><strong>公共声明</strong>（Public Claims）：可自定义，但需避免冲突。</li>
+<li><strong>私有声明</strong>（Private Claims）：双方协商的字段。</li>
+</ul>
+</li>
+<li>示例：<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;sub&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user123&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Alice&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;exp&quot;</span><span class="punctuation">:</span> <span class="number">1620000000</span>  <span class="comment">// 过期时间戳</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>1.3 Signature（签名）</strong></p>
+<ul>
+<li><strong>作用</strong>：验证消息未被篡改，确保发送方的可信性。</li>
+<li><strong>生成方式</strong>：将Base64Url编码后的Header和Payload用<code>.</code>拼接，再通过Header中指定的算法和密钥（Secret）生成签名。</li>
+<li><strong>示例</strong>（使用HS256算法）：<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">HMACSHA256</span>(</span><br><span class="line">  <span class="title function_">base64UrlEncode</span>(header) + <span class="string">&quot;.&quot;</span> + <span class="title function_">base64UrlEncode</span>(payload),</span><br><span class="line">  secretKey</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<p><strong>2. JWT的工作流程</strong></p>
+<ol>
+<li>
+<p><strong>用户登录</strong>：客户端提交身份信息（如用户名密码）到服务器。</p>
+</li>
+<li>
+<p><strong>生成JWT</strong>：服务器验证身份后，生成JWT：</p>
+<ul>
+<li>构造Header和Payload。</li>
+<li>用密钥生成签名，组合三者形成完整的JWT。</li>
+</ul>
+</li>
+<li>
+<p><strong>返回JWT给客户端</strong>：客户端将JWT存储在本地（如LocalStorage或Cookie）。</p>
+</li>
+<li>
+<p><strong>客户端携带JWT请求资源</strong> ：后续请求在<code>Authorization</code>头中以<code>Bearer</code>模式携带JWT：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Authorization: Bearer &lt;JWT&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>服务器验证JWT</strong></p>
+<ul>
+<li>解码Header和Payload，检查签名是否有效（防止篡改）。</li>
+<li>验证声明（如<code>exp</code>是否过期、<code>iss</code>是否合法）。</li>
+<li>验证通过后，返回请求的资源。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><strong>3. JWT的安全性</strong></p>
+<ul>
+<li><strong>信息暴露</strong>：Header和Payload仅经过Base64编码，<strong>未加密</strong>，敏感信息（如密码）不应放入。</li>
+<li><strong>传输安全</strong>：必须通过HTTPS传输，防止中间人攻击。</li>
+<li><strong>密钥管理</strong>：
+<ul>
+<li>对称算法（如HS256）：需严格保护密钥。</li>
+<li>非对称算法（如RS256）：用私钥签名，公钥验证，更安全。</li>
+</ul>
+</li>
+<li><strong>防篡改</strong>：签名确保数据完整性，但需防止密钥泄露。</li>
+</ul>
+<hr>
+<p><strong>4. JWT的优缺点</strong></p>
+<p><strong>优点</strong></p>
+<ul>
+<li><strong>无状态</strong>：服务端无需存储会话信息，适合分布式系统。</li>
+<li><strong>跨域支持</strong>：可轻松用于跨域场景（如微服务、单点登录）。</li>
+<li><strong>灵活性</strong>：Payload可自定义扩展数据。</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li><strong>无法废止</strong>：签发后有效期结束前无法强制失效（需结合Token黑名单或短有效期）。</li>
+<li><strong>存储风险</strong>：客户端存储可能被XSS攻击窃取（建议用HttpOnly Cookie）。</li>
+</ul>
+<hr>
+<p><strong>5. 典型应用场景</strong></p>
+<ol>
+<li>用户身份认证（如OAuth 2.0的Bearer Token）。</li>
+<li>服务间API鉴权（微服务架构）。</li>
+<li>单点登录（SSO）。</li>
+</ol>
+<hr>
+<p>通过上述原理，JWT以紧凑、自包含的方式实现了安全的信息传输，成为现代Web开发中广泛使用的身份验证方案。</p>
+<h1 id="Q2-哪些部分是明文？">Q2. 哪些部分是明文？</h1>
+<p>Q:</p>
+<p>三部分中哪些部分对于用户来说相当于是明文？</p>
+<p>A:</p>
+<p>在 JWT 的三部分（Header、Payload、Signature）中，<strong>Header 和 Payload 对用户来说是明文</strong>，而 Signature 是加密签名，无法直接解读。以下是详细解释：</p>
+<hr>
+<p><strong>1. Header 和 Payload 是明文</strong></p>
+<ul>
+<li>
+<p><strong>原因</strong>：Header 和 Payload 仅经过 <strong>Base64Url 编码</strong>（一种 URL 安全的编码方式），<strong>并未加密</strong>。</p>
+</li>
+<li>
+<p><strong>特点</strong>：</p>
+<ul>
+<li><strong>可逆性</strong>：任何人均可通过 Base64Url 解码工具（如 <a target="_blank" rel="noopener" href="https://jwt.io">jwt.io</a>）直接解码，得到原始的 JSON 数据。</li>
+<li><strong>透明性</strong>：解码后的内容可被直接查看，例如：<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Header 解码后：</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JWT&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Payload 解码后：</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;sub&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user123&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Alice&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;exp&quot;</span><span class="punctuation">:</span> <span class="number">1620000000</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>风险</strong>：</p>
+<ul>
+<li><strong>敏感信息泄露</strong>：如果在 Payload 中存储了敏感数据（如用户 ID、邮箱、权限），攻击者可轻易读取。</li>
+<li><strong>篡改风险</strong>：虽然可被解码和修改，但无法伪造有效签名（需依赖密钥）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>2. Signature 是密文</strong></p>
+<ul>
+<li><strong>原因</strong>：Signature 是 Header 和 Payload 的<strong>加密签名</strong>，由密钥和指定算法（如 HS256、RS256）生成。</li>
+<li><strong>特点</strong>：
+<ul>
+<li><strong>不可逆性</strong>：无法通过解码直接获取原始信息，其本质是哈希值或加密后的二进制数据。</li>
+<li><strong>防篡改作用</strong>：服务器通过验证 Signature 确保 Header 和 Payload 未被篡改。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>3. 用户视角的示例</strong></p>
+<p>假设一个 JWT 如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkFsaWNlIiwiZXhwIjoxNjIwMDAwMDAwfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><strong>Header</strong>：<code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</code> 。解码后：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JWT&quot;</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>Payload</strong>：<code>eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkFsaWNlIiwiZXhwIjoxNjIwMDAwMDAwfQ</code> 。解码后：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;sub&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user123&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Alice&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;exp&quot;</span><span class="punctuation">:</span> <span class="number">1620000000</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>Signature</strong>：<code>SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</code> 。无法直接解码，需用密钥验证。</p>
+</li>
+</ul>
+<hr>
+<p><strong>4. 安全建议</strong></p>
+<ol>
+<li><strong>避免敏感数据</strong>：不要在 Header 或 Payload 中存储密码、密钥等敏感信息。</li>
+<li><strong>使用 HTTPS</strong>：防止 JWT 在传输中被窃取。</li>
+<li><strong>短有效期</strong>：通过 <code>exp</code> 字段设置合理过期时间，减少泄露风险。</li>
+<li><strong>加密敏感字段</strong>：如需存储敏感数据，可对 Payload 进行额外加密（如 JWE）。</li>
+</ol>
+<hr>
+<p><strong>总结</strong></p>
+<ul>
+<li><strong>明文部分</strong>：Header 和 Payload（Base64Url 编码，可逆）。</li>
+<li><strong>密文部分</strong>：Signature（加密签名，不可逆）。</li>
+<li><strong>核心安全机制</strong>：依赖 Signature 防止数据篡改，而非隐藏数据本身。</li>
+</ul>
+<h1 id="Q3-哈希与加密">Q3. 哈希与加密</h1>
+<p>Q:</p>
+<p>所以 Signature 会将 Header + Payload先哈希，再对哈希值进行加密？
+服务端收到 Signature 后，先解密，再验证哈希值是否正确？</p>
+<p>A:</p>
+<p>你的问题涉及 JWT 签名生成和验证的核心机制，但需要明确区分 <strong>哈希（Hash）</strong> 和 <strong>加密（Encryption）</strong> 的概念。不同签名算法（如 <code>HS256</code> 和 <code>RS256</code>）的实现方式不同，具体流程如下：</p>
+<hr>
+<p><strong>1. JWT 签名的生成过程</strong></p>
+<p><strong>(1) HMAC 算法（如 HS256）</strong></p>
+<ul>
+<li><strong>核心机制</strong>：基于密钥的哈希（<strong>无需加密</strong>）。</li>
+<li><strong>步骤</strong>：
+<ol>
+<li>将 Header 和 Payload 进行 Base64Url 编码，并用 <code>.</code> 拼接（得到 <code>header_b64.payload_b64</code>）。</li>
+<li><strong>对拼接后的字符串计算哈希</strong>：使用 HMAC + 哈希算法（如 SHA256）和密钥生成消息认证码（MAC）。</li>
+<li><strong>生成签名</strong>：将哈希结果进行 Base64Url 编码，得到 Signature。</li>
+</ol>
+</li>
+<li><strong>公式</strong>：<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Signature = Base64UrlEncode(HMAC_SHA256(header_b64.payload_b64, secret_key))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>(2) RSA 算法（如 RS256）</strong></p>
+<ul>
+<li><strong>核心机制</strong>：基于非对称加密的签名（<strong>涉及加密</strong>）。</li>
+<li><strong>步骤</strong>：
+<ol>
+<li>将 Header 和 Payload 进行 Base64Url 编码并拼接（<code>header_b64.payload_b64</code>）。</li>
+<li><strong>对拼接后的字符串计算哈希</strong>：使用哈希算法（如 SHA256）生成哈希值。</li>
+<li><strong>加密哈希值</strong>：用私钥对哈希值进行加密（即数字签名）。</li>
+<li><strong>生成签名</strong>：将加密后的结果进行 Base64Url 编码，得到 Signature。</li>
+</ol>
+</li>
+<li><strong>公式</strong>：<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Signature = Base64UrlEncode(RSA_Encrypt(SHA256(header_b64.payload_b64), private_key))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<p><strong>2. 服务端的验证过程</strong></p>
+<p>服务端收到 JWT 后，验证签名的逻辑如下：</p>
+<p><strong>(1) HMAC 算法（HS256）</strong></p>
+<ul>
+<li><strong>无需解密</strong>：因为 HMAC 是密钥哈希，不是加密。</li>
+<li><strong>验证步骤</strong>：
+<ol>
+<li>重新计算 <code>header_b64.payload_b64</code> 的 HMAC 哈希（使用相同的密钥）。</li>
+<li>将计算结果与客户端传来的 Signature 解码后的值对比。</li>
+<li>若一致，则数据未被篡改。</li>
+</ol>
+</li>
+</ul>
+<p><strong>(2) RSA 算法（RS256）</strong></p>
+<ul>
+<li><strong>需要“解密”</strong>：这里的“解密”实质是验证签名。</li>
+<li><strong>验证步骤</strong>：
+<ol>
+<li>用公钥对 Signature 解码后的密文进行解密，得到原始哈希值。</li>
+<li>重新计算 <code>header_b64.payload_b64</code> 的哈希值（如 SHA256）。</li>
+<li>对比解密后的哈希值与重新计算的哈希值。</li>
+<li>若一致，则数据未被篡改。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<p><strong>3. 关键区别总结</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>算法类型</strong></th>
+<th>哈希（HMAC）</th>
+<th>非对称加密（RSA）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>签名生成</strong></td>
+<td>基于密钥的哈希，无需加密</td>
+<td>私钥加密哈希值</td>
+</tr>
+<tr>
+<td><strong>签名验证</strong></td>
+<td>重新计算哈希对比</td>
+<td>公钥解密签名，对比哈希值</td>
+</tr>
+<tr>
+<td><strong>密钥管理</strong></td>
+<td>对称密钥（服务端保管）</td>
+<td>非对称密钥（私钥签名，公钥验证）</td>
+</tr>
+<tr>
+<td><strong>安全性</strong></td>
+<td>依赖密钥保密性</td>
+<td>依赖私钥安全性</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>4. 回答你的问题</strong></p>
+<ul>
+<li>
+<p><strong>问题 1</strong>：<em>“Signature 会将 Header + Payload 先哈希，再对哈希值进行加密？”</em></p>
+<ul>
+<li><strong>答案</strong>：
+<ul>
+<li>对于 <strong>HMAC（如 HS256）</strong>：<strong>仅哈希，不加密</strong>（但哈希过程依赖密钥）。</li>
+<li>对于 <strong>RSA（如 RS256）</strong>：<strong>先哈希，再加密哈希值</strong>（用私钥加密）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>问题 2</strong>：<em>“服务端收到 Signature 后，先解密，再验证哈希值是否正确？”</em></p>
+<ul>
+<li><strong>答案</strong>：
+<ul>
+<li>对于 <strong>HMAC</strong>：<strong>无需解密</strong>，直接重新计算哈希对比。</li>
+<li>对于 <strong>RSA</strong>：<strong>需要解密</strong>（用公钥解密签名，得到哈希值后再对比）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>5. 技术误区澄清</strong></p>
+<ul>
+<li><strong>哈希 ≠ 加密</strong>：
+<ul>
+<li>哈希是单向不可逆的（如 SHA256），用于确保数据完整性。</li>
+<li>加密是双向可逆的（如 RSA），用于保护数据机密性。</li>
+</ul>
+</li>
+<li><strong>JWT 签名的本质</strong>：
+<ul>
+<li>HMAC 是 <strong>密钥化哈希</strong>（完整性 + 身份验证）。</li>
+<li>RSA 是 <strong>加密哈希值</strong>（完整性 + 非抵赖性）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>6. 实际代码示例（伪代码）</strong></p>
+<p><strong>HS256 签名验证</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">verify_hmac</span>(<span class="params">jwt, secret_key</span>):</span><br><span class="line">    header_b64, payload_b64, signature_b64 = jwt.split(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">    data = header_b64 + <span class="string">&quot;.&quot;</span> + payload_b64</span><br><span class="line">    expected_signature = HMAC_SHA256(data, secret_key)</span><br><span class="line">    <span class="keyword">return</span> expected_signature == base64url_decode(signature_b64)</span><br></pre></td></tr></table></figure>
+<p><strong>RS256 签名验证</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">verify_rsa</span>(<span class="params">jwt, public_key</span>):</span><br><span class="line">    header_b64, payload_b64, signature_b64 = jwt.split(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">    data = header_b64 + <span class="string">&quot;.&quot;</span> + payload_b64</span><br><span class="line">    decoded_signature = base64url_decode(signature_b64)</span><br><span class="line">    decrypted_hash = RSA_Decrypt(decoded_signature, public_key)  <span class="comment"># 用公钥“解密”</span></span><br><span class="line">    actual_hash = SHA256(data)</span><br><span class="line">    <span class="keyword">return</span> decrypted_hash == actual_hash</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>总结</strong></p>
+<ul>
+<li>JWT 的签名机制根据算法不同，流程有所差异：
+<ul>
+<li><strong>HMAC</strong>：依赖密钥哈希，验证时直接对比哈希值。</li>
+<li><strong>RSA</strong>：用私钥加密哈希值，验证时用公钥解密并对比。</li>
+</ul>
+</li>
+<li><strong>核心目标</strong>：确保 Header 和 Payload 未被篡改，而非加密数据本身。</li>
+<li><strong>安全建议</strong>：根据场景选择算法（HS256 简单高效，RS256 更适合分布式系统）。</li>
+</ul>
+<h1 id="Q4-前向保密">Q4. 前向保密</h1>
+<p>Q:</p>
+<p>按照你的说法，无论 HMAC 或是 RSA，JWT 都不支持前向保密</p>
+<p>A:</p>
+<p>是的，你的理解是正确的。<strong>JWT（无论是使用 HMAC 还是 RSA 签名算法）本身并不支持前向保密（Forward Secrecy, FS）</strong>。以下是详细解释：</p>
+<hr>
+<p><strong>1. 前向保密（Forward Secrecy）的核心概念</strong></p>
+<p>前向保密是一种安全特性，要求即使长期密钥（如服务器的私钥或 HMAC 的共享密钥）在未来被泄露，攻击者也无法解密过去的通信数据或伪造历史会话。<br>
+<strong>实现前向保密的关键</strong>：每次会话使用临时生成的密钥（如 TLS 中的 ECDHE 密钥交换），会话结束后密钥立即销毁，不依赖长期密钥。</p>
+<hr>
+<p><strong>2. JWT 的签名机制为何不支持前向保密</strong></p>
+<p><strong>(1) HMAC（对称签名算法，如 HS256）</strong></p>
+<ul>
+<li><strong>依赖长期密钥</strong>：HMAC 的签名和验证使用同一个共享密钥（<code>secret_key</code>），且该密钥通常长期有效。</li>
+<li><strong>风险</strong>：一旦 <code>secret_key</code> 泄露，攻击者可伪造任意历史或未来的 JWT。</li>
+<li><strong>无临时密钥机制</strong>：HMAC 的密钥不随会话变化，无法实现前向保密。</li>
+</ul>
+<p><strong>(2) RSA（非对称签名算法，如 RS256）</strong></p>
+<ul>
+<li><strong>依赖长期私钥</strong>：签名使用固定的私钥，公钥用于验证。</li>
+<li><strong>风险</strong>：私钥泄露后，攻击者可伪造历史或未来的 JWT。</li>
+<li><strong>密钥固定性</strong>：RSA 私钥通常长期不变，签名过程不涉及临时密钥。</li>
+</ul>
+<hr>
+<p><strong>3. 为什么 JWT 不原生支持前向保密？</strong></p>
+<ul>
+<li><strong>设计目标不同</strong>：JWT 的核心目标是实现无状态、自包含的令牌机制，而非动态会话管理。</li>
+<li><strong>静态令牌特性</strong>：JWT 一旦签发，其有效性完全依赖签名和声明（如 <code>exp</code>），无法动态更新密钥。</li>
+<li><strong>场景限制</strong>：JWT 常用于身份认证和授权，而非端到端加密通信，因此未引入复杂的密钥协商机制。</li>
+</ul>
+<hr>
+<p><strong>4. 如何缓解 JWT 缺乏前向保密的风险？</strong></p>
+<p>虽然 JWT 本身不支持前向保密，但可通过以下策略降低风险：</p>
+<p><strong>(1) 短期令牌有效期</strong></p>
+<ul>
+<li>设置较短的 <code>exp</code>（过期时间），例如 15 分钟到 1 小时，减少密钥泄露后的攻击窗口。</li>
+<li>配合刷新令牌（Refresh Token）机制，动态更新访问令牌。</li>
+</ul>
+<p><strong>(2) 密钥轮换（Key Rotation）</strong></p>
+<ul>
+<li>定期更换 HMAC 的共享密钥或 RSA 的私钥。</li>
+<li>对于已签发的 JWT，需在密钥轮换后强制失效（例如结合黑名单或短有效期）。</li>
+</ul>
+<p><strong>(3) 结合 TLS 的前向保密</strong></p>
+<ul>
+<li>在传输层使用 TLS 1.3，启用支持前向保密的密码套件（如 <code>ECDHE-ECDSA-AES128-GCM-SHA256</code>）。</li>
+<li>确保 JWT 在传输过程中通过安全通道（HTTPS），防止窃听和中间人攻击。</li>
+</ul>
+<p><strong>(4) 使用无状态短期令牌</strong></p>
+<ul>
+<li>例如 OAuth 2.0 的 <code>access_token</code>（通常为 JWT）设计为短期有效，结合服务端状态管理（如数据库记录令牌状态）。</li>
+</ul>
+<p><strong>(5) 敏感数据加密</strong></p>
+<ul>
+<li>对 JWT 的 Payload 敏感字段额外加密（如使用 JWE）。</li>
+<li>使用混合方案：JWT 签名确保完整性，加密确保机密性。</li>
+</ul>
+<hr>
+<p><strong>5. 替代方案：支持前向保密的令牌机制</strong></p>
+<p>如果业务场景对前向保密有严格要求，可考虑其他方案：</p>
+<ul>
+<li><strong>动态会话密钥</strong>：在服务端为每个会话生成临时密钥，签名后传递给客户端（但违背 JWT 无状态的设计理念）。</li>
+<li><strong>基于会话的令牌</strong>：改用有状态的会话 Cookie，结合服务端存储的临时密钥（牺牲无状态性，换取前向保密）。</li>
+<li><strong>端到端加密协议</strong>：在应用层实现前向保密（如 Signal 协议），但复杂度较高。</li>
+</ul>
+<hr>
+<p><strong>6. 总结</strong></p>
+<ul>
+<li><strong>JWT 不支持前向保密</strong>：因其依赖长期有效的密钥（HMAC 的共享密钥或 RSA 的私钥）。</li>
+<li><strong>缓解措施</strong>：通过短期令牌、密钥轮换、TLS 前向保密等方式降低风险。</li>
+<li><strong>权衡设计</strong>：JWT 的简洁性和无状态特性与安全性需结合业务场景权衡。</li>
+</ul>
+<hr>
+<p>若业务对前向保密有强需求，建议在传输层（TLS）或应用层协议（如 OAuth 2.0 的短期令牌）中实现，而非依赖 JWT 自身机制。</p>
+<h1 id="Q5-JWT-的另一种表述">Q5. JWT 的另一种表述</h1>
+<p>Q:</p>
+<p>在登录场景中，我是否可以将 JWT 技术理解为：服务端不使用 session，完全使用 cookie 存放一些用户相关的信息，同时该 cookie 无法被用户篡改。</p>
+<p>A:</p>
+<p>在登录场景中，你的理解基本正确。</p>
+<h1 id="Q6-JWT-头部的作用">Q6. JWT 头部的作用</h1>
+<p>Q:</p>
+<p>为啥要在 Header（头部）中声明令牌类型（JWT）和签名算法（如HMAC SHA256或RSA）？</p>
+<p>验证 payload 是否被篡改完全是服务端的工作，我的理解正确吗？那这样的话，为什么要把这个信息在客户端、服务端之间传输呢？</p>
+<p>这是为了让服务端兼容多种验证方式吗？</p>
+<p>A:</p>
+<p><strong>1. Header 中声明令牌类型和算法的原因</strong></p>
+<p>JWT 的 Header 中必须包含 <code>alg</code>（签名算法）和 <code>typ</code>（令牌类型）字段，这是由 <strong>JWT 标准（RFC 7519）</strong> 明确规定的。其必要性体现在以下几个方面：</p>
+<hr>
+<p><strong>(1) 服务端需要动态选择验证方式</strong></p>
+<ul>
+<li><strong>场景</strong>：服务端可能支持多种签名算法（如同时兼容 <code>HS256</code> 和 <code>RS256</code>）。</li>
+<li><strong>问题</strong>：如果 Header 不声明算法，服务端无法知道该用哪种算法和密钥去验证签名。</li>
+<li><strong>示例</strong>：<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Header</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;RS256&quot;</span><span class="punctuation">,</span>  <span class="comment">// 服务端看到此字段后，选择公钥验证 RSA 签名</span></span><br><span class="line">  <span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JWT&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<p><strong>(2) 防止算法混淆攻击（Algorithm Confusion Attack）</strong></p>
+<ul>
+<li><strong>背景</strong>：攻击者可能篡改 Header 中的 <code>alg</code> 字段，诱导服务端使用错误的算法验证签名（例如将 <code>RS256</code> 改为 <code>HS256</code>）。</li>
+<li><strong>防御措施</strong>：
+<ul>
+<li>服务端应严格校验 <code>alg</code> 字段是否为预期值（如只允许 <code>RS256</code>）。</li>
+<li><strong>绝不依赖客户端声明的算法</strong>，而是通过配置固定服务端支持的算法。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>(3) 明确令牌类型</strong></p>
+<ul>
+<li><strong>作用</strong>：<code>typ: &quot;JWT&quot;</code> 表明这是一个标准的 JWT 令牌，避免与其他类型令牌（如加密的 JWE）混淆。</li>
+<li><strong>扩展性</strong>：如果未来需要支持新类型的令牌（如 <code>JWT+XML</code>），可通过此字段区分。</li>
+</ul>
+<hr>
+<p><strong>2. 为什么需要将 Header 传输到客户端？</strong></p>
+<ul>
+<li><strong>核心逻辑</strong>：JWT 是 <strong>自包含的令牌</strong>，服务端无需存储额外信息即可验证它。
+<ul>
+<li><strong>验证签名</strong>：服务端需要 Header 中的 <code>alg</code> 字段知道如何验证签名。</li>
+<li><strong>解码 Payload</strong>：服务端需要 Header 中的声明（如 <code>cty</code> 自定义内容类型）来正确解析 Payload。</li>
+</ul>
+</li>
+<li><strong>无状态设计</strong>：若 Header 不包含算法信息，服务端需额外存储每个令牌的元数据，违背 JWT 的无状态原则。</li>
+</ul>
+<hr>
+<p><strong>3. 验证篡改是否完全是服务端的工作？</strong></p>
+<ul>
+<li><strong>正确性</strong>：是的，客户端无法验证 JWT 的合法性，这是服务端的职责。</li>
+<li><strong>客户端角色</strong>：
+<ul>
+<li>仅存储和传输 JWT（如通过 Cookie）。</li>
+<li><strong>不参与签名验证</strong>（即使客户端解码 Header/Payload，也无法确保签名有效）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>4. 为什么 Header 信息需要传输？</strong></p>
+<p><strong>(1) 技术必要性</strong></p>
+<ul>
+<li><strong>签名验证依赖 Header</strong>：签名的生成基于完整的 Header 和 Payload，服务端必须获取原始的 Header 和 Payload 才能重新计算签名进行对比。</li>
+</ul>
+<p><strong>(2) 安全风险与误区</strong></p>
+<ul>
+<li><strong>误区</strong>：“Header 传输算法信息会导致安全隐患”。
+<ul>
+<li><strong>事实</strong>：攻击者无法通过篡改 <code>alg</code> 字段绕过验证，因为服务端会强制校验签名是否与声明的算法一致。</li>
+<li><strong>安全实践</strong>：服务端应配置允许的算法白名单（如只允许 <code>RS256</code>），忽略客户端声明的其他算法。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>5. 是否为了兼容多种验证方式？</strong></p>
+<ul>
+<li><strong>部分正确</strong>：Header 中的 <code>alg</code> 允许服务端支持多算法，但这不是主要目的。</li>
+<li><strong>核心目的</strong>：
+<ol>
+<li><strong>无状态验证</strong>：服务端无需预先知道令牌的签名方式。</li>
+<li><strong>算法声明</strong>：确保签名生成和验证过程的一致性。</li>
+<li><strong>防止算法混淆</strong>：明确约束签名机制。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<p><strong>6. 实际场景示例</strong></p>
+<p><strong>(1) 多租户系统</strong></p>
+<ul>
+<li>不同租户使用不同签名算法（如租户 A 用 <code>HS256</code>，租户 B 用 <code>RS256</code>）。</li>
+<li>服务端根据 Header 中的 <code>alg</code> 动态选择对应的验证方式。</li>
+</ul>
+<p><strong>(2) 算法升级</strong></p>
+<ul>
+<li>旧系统使用 <code>HS256</code>，新系统升级到 <code>RS256</code>。</li>
+<li>服务端通过 Header 中的 <code>alg</code> 兼容新旧令牌，逐步淘汰旧算法。</li>
+</ul>
+<hr>
+<p><strong>总结</strong></p>
+<ul>
+<li><strong>Header 中的 <code>alg</code> 和 <code>typ</code> 是必要的</strong>：服务端需要这些信息正确验证签名和解析令牌。</li>
+<li><strong>安全责任在服务端</strong>：必须严格校验算法、签名和声明，而非依赖客户端传递的信息。</li>
+<li><strong>传输 Header 无额外风险</strong>：攻击者无法通过篡改 Header 绕过验证（只要服务端实现正确）。</li>
+</ul>
+<h1 id="Q7-可以去掉-JWT-头部吗？">Q7. 可以去掉 JWT 头部吗？</h1>
+<p>Q:</p>
+<p>如果服务端只支持 JWT，且只有一种加密算法。不考虑 JWT 规范，我们是否可以不要传递 header？</p>
+<p>A:</p>
+<p><strong>分步解析与建议</strong></p>
+<p><strong>1. 技术可行性分析</strong></p>
+<p>如果服务端<strong>仅支持一种固定算法</strong>（如 <code>HS256</code>）且<strong>不遵循 JWT 标准</strong>，理论上可以移除 Header 字段，但需重新设计令牌结构。以下是两种方案的对比：</p>
+<table>
+<thead>
+<tr>
+<th><strong>方案</strong></th>
+<th>标准 JWT（带 Header）</th>
+<th>无 Header 的自定义令牌</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>结构</strong></td>
+<td><code>Header.Payload.Signature</code></td>
+<td><code>Payload.Signature</code></td>
+</tr>
+<tr>
+<td><strong>签名生成方式</strong></td>
+<td><code>HMAC(Header_b64.Payload_b64)</code></td>
+<td><code>HMAC(Payload_b64)</code></td>
+</tr>
+<tr>
+<td><strong>服务端验证</strong></td>
+<td>读取 Header 中的算法，动态验证</td>
+<td>固定算法（如 <code>HS256</code>）直接验证</td>
+</tr>
+<tr>
+<td><strong>兼容性</strong></td>
+<td>兼容 JWT 生态工具（如库、调试器）</td>
+<td>需完全自定义实现</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>2. 潜在风险与限制</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>风险/限制</strong></th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>签名范围不一致</strong></td>
+<td>签名未包含 Header，若未来需扩展元数据（如令牌版本），需重新设计签名逻辑，可能导致兼容性问题。</td>
+</tr>
+<tr>
+<td><strong>算法升级困难</strong></td>
+<td>硬编码算法后，若需更换算法（如迁移到 <code>RS256</code>），需强制所有客户端升级，无法平滑过渡。</td>
+</tr>
+<tr>
+<td><strong>生态工具不兼容</strong></td>
+<td>无法使用标准 JWT 库（如 <code>jsonwebtoken</code>），需自行实现编解码和签名验证，增加开发成本。</td>
+</tr>
+<tr>
+<td><strong>安全审计复杂性</strong></td>
+<td>自定义方案需独立安全评估，而标准 JWT 的安全性已被广泛验证。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>总结</strong></p>
+<ul>
+<li><strong>可以移除 Header</strong>：在服务端严格固定算法的场景下，技术上可行。</li>
+<li><strong>代价</strong>：牺牲标准化、灵活性和工具兼容性，需自行承担安全风险。</li>
+<li><strong>推荐场景</strong>：仅适用于封闭、小规模系统，且需长期维护自定义实现。</li>
+</ul>
+<h1 id="其他">其他</h1>
+<p>常见的两种解决集群部署 web 服务器时 session 共享问题的方案：</p>
+<ul>
+<li>一种解决方案是 session 数据持久化，写入数据库或别的持久层。各种服务收到请求后，都向持久层请求数据。这种方案的优点是架构清晰，缺点是工程量比较大。另外，持久层万一挂了，就会单点失败。</li>
+<li>另一种方案是服务器索性不保存 session 数据了，所有数据都保存在客户端，每次请求都发回服务器。JWT 就是这种方案的一个代表。</li>
+</ul>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://xiaolincoding.com/interview/network.html#%E5%89%8D%E7%AB%AF%E6%98%AF%E5%A6%82%E4%BD%95%E5%AD%98%E5%82%A8jwt%E7%9A%84">小林 coding：前端是如何存储JWT的？</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Gustav
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://gustaavv.github.io/2025/03/31/chat-with-LLM-JWT/" title="对话 LLM：JWT 原理">https://gustaavv.github.io/2025/03/31/chat-with-LLM-JWT/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%AF%B9%E8%AF%9D-LLM/" rel="tag"><i class="fa fa-tag"></i> 对话 LLM</a>
+              <a href="/tags/JWT/" rel="tag"><i class="fa fa-tag"></i> JWT</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_telegram"></a>
+      <a class="a2a_button_wechat"></a>
+      <a class="a2a_button_sina_weibo"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/01/15/Algorithm-Problem-007-substring-with-concatenation-of-all-words/" rel="prev" title="算法题007：串联所有单词的子串">
+                  <i class="fa fa-angle-left"></i> 算法题007：串联所有单词的子串
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/06/04/Developer-Diary-1/" rel="next" title="开发随笔 1">
+                  开发随笔 1 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Gustav</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">48k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:55</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/gustaavv" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js","integrity":"sha256-stuqcu2FrjYCXDOytWFA5SoUE/r3nkp6gTglzNSlavU="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":"enable","tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
